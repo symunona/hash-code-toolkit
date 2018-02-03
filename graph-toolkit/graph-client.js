@@ -1,8 +1,14 @@
 var consts = {
-    width: 1200,
-    height: 700,
+    width: 2000,
+    height: 1000,
     padding: 40
 };
+
+var CONST_KEY = 'consts'
+if (localStorage.getItem(CONST_KEY)) {
+    consts = JSON.parse(localStorage.getItem(CONST_KEY));
+}
+
 var vis;
 
 ko.bindingHandlers.json = {
@@ -37,11 +43,16 @@ ko.applyBindings(vm);
 
 function updateConsts(val) {
     consts[this._key] = val
+    localStorage.setItem(CONST_KEY, JSON.stringify(consts));
 }
 
+/**
+ * Loads a given input json cache from the server and feeds it to the graph function.
+ * @param {String} name 
+ */
 function loadInput(name) {
     $.ajax({
-        url: name,
+        url: `/${task}/${serverConsts.inputFolder}/${name}.cache.json`,
         contentType: 'json'
     }).then(function (data) {
         $('#graph').html('').css({ width: consts.width, height: consts.height });
@@ -52,8 +63,9 @@ function loadInput(name) {
 
             vis.attr("width", consts.width)
                 .attr("height", consts.height);
-
+            var startTime = new Date()
             draw(data, vis)
+            console.warn('Rendered in', (new Date() - startTime)/1000)
         } catch (e) {
             console.error(e)
         }
@@ -141,7 +153,6 @@ function createDistributedDotsOfList(array, axis, otherDistance, type, cls, text
     size = size || 10
     type = type || 'rect'
     cls = cls || ''
-    var centerAttr = type === 'circle' ? 'c' : ''
 
     var node = vis.selectAll("circle .nodes" + cls ? '.' + cls : '')
         .data(array)
@@ -149,20 +160,37 @@ function createDistributedDotsOfList(array, axis, otherDistance, type, cls, text
         .append('g')
         .attr('class', 'nodes ' + cls);
 
-    if (['rect', 'circle'].includes(type)) {
+
+    if (type === 'circle') {
         node
             .append('svg:' + type)
-            .attr(centerAttr + 'x', function (d) { return d.x; })
-            .attr(centerAttr + 'y', function (d) { return d.y; })
+            .attr('cx', function (d) { return d.x; })
+            .attr('cy', function (d) { return d.y; })
+            .attr('r', size);
+
+    } else if (type === 'rect') {
+        node
+            .append('svg:' + type)
+            .attr('x', function (d) { return d.x - (size / 2); })
+            .attr('y', function (d) { return d.y - (size / 2); })
             .attr('width', size)
-            .attr('height', size)
-            .attr('r', size)
+            .attr('height', size);
     }
     else if (type === 'triangle') {
         node.append('svg:polygon')
             .attr('points', function (e) {
                 return triangle(e.x, e.y, size)
             })
+    }
+    else if (type === 'v') {
+        node.append('svg:polygon')
+            .attr('points', function (e) {
+                return triangle(e.x, e.y, size)
+            })
+            .attr('transform', (e) => 'rotate(180 ' + e.x + ',' + e.y + ')')
+    }
+    else {
+        throw new Error('What should be shape?')
     }
 
     if (textField) {
@@ -192,6 +220,10 @@ function triangle(x, y, r) {
     ].join(' ')
 }
 
+/**
+ * Creates an array of object with their index as their id property.
+ * @param {Number} objectCount 
+ */
 function newArray(objectCount) {
     var ret = []
     for (var i = 0; i < objectCount; i++) {
@@ -200,14 +232,16 @@ function newArray(objectCount) {
     return ret;
 }
 
-// ----------------------------------------------------------------------------------------------
-
-function createLinkBetweenTwoSets(array) {
-
-}
-
+/**
+ * Draws edges between nodes.
+ * @param {Array} links - of Objects, containing a source and a target
+ *                          object, which both have x and y coordinates.
+ * @param {String} cls - selector class of the edge. Has to be different, than any
+ *                          other set of edges.
+ * @param {String} [textField] - if provided, the edge will have a caption.
+ */
 function linkNodes(links, cls, textField) {
-    var lineGroup = vis.selectAll(".edge")
+    var lineGroup = vis.selectAll(".edge" + '.' + cls)
         .data(links)
         .enter()
         .append('g')
@@ -220,13 +254,21 @@ function linkNodes(links, cls, textField) {
         .attr("x2", function (d) { return d.target.x })
         .attr("y2", function (d) { return d.target.y })
 
-    lineGroup
-        .append('text')
-        .text(function (node) {
-            console.warn(node, textField)
-            return node[textField]
-        })
-        .attr('class', 'node-text ' + cls)
-        .attr('x', function (d) { return (d.source.x + d.target.x) / 2 })
-        .attr('y', function (d) { return (d.source.y + d.target.y) / 2 })
+    if (textField) {
+        lineGroup
+            .append('text')
+            .text(function (node) {
+                return node[textField]
+            })
+            .attr('class', 'node-text ' + cls)
+            .attr('x', function (d) { return (d.source.x + d.target.x) / 2 })
+            .attr('y', function (d) { return (d.source.y + d.target.y) / 2 })
+            .attr('transform', (d) => {
+                var cx = (d.source.x + d.target.x) / 2;
+                var cy = (d.source.y + d.target.y) / 2;
+                var angle = Math.tanh((d.target.y - d.source.y) / (d.target.x - d.source.x)) * (180 / Math.PI)
+
+                return `rotate(${angle} ${cx},${cy})`;
+            })
+    }
 }

@@ -1,3 +1,8 @@
+/**
+ * This file starts a static server, which serves the library root,
+ * and renders the main graph page with the data given to it.
+ */
+
 const static = require('node-static')
     opn = require('opn');
     DEFAULT_PORT = 1123
@@ -5,29 +10,36 @@ const static = require('node-static')
     fileServer = new static.Server('./')
     http = require('http'),
     server = http.createServer().listen(port)
-    fs = require('fs')
+    fs = require('fs'),
+    consts = require('../consts')
 
-let datasets = []
+let datasets = [];
+let task = '', algorithms = []
 
 server.on('request', (req, res) => {
 
-    if (req.url.startsWith('/?')){
-        var graph = fs.readFileSync('./ghash-toolkit/graph.html', 'utf8');
-        renderHtml(graph, {datasets: JSON.stringify(datasets)}, res)
-        return;
+    if (req.url === '/'){
+        var graph = fs.readFileSync('./graph-toolkit/graph.html', 'utf8');
+        renderHtml(graph, {
+            datasets: JSON.stringify(datasets),
+            consts: JSON.stringify(consts),
+            task
+        }, res)
+        
+        return
     }
 
-    req.addListener('end', function () {
+    req.addListener('end', ()=> {
         fileServer.serve(req, res);
-    }).resume();
+    }).resume()
 })
 
-module.exports = function graph(name){
-
-    datasets.push(name);
-    
+module.exports = function graph(_task, _algorithms, _datasets){
+    task = _task
+    algorithms = _algorithms, 
+    datasets = _datasets
     if (datasets.length === 1){
-        opn(`http://127.0.0.1:${port}/?input=${name}`);
+        opn(`http://127.0.0.1:${port}/`);
     }
 }
 
