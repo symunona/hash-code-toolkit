@@ -1,0 +1,79 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - test",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube",
+                "input":"test",
+                "solvers": "solver1"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - me_at_the_zoo",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube",
+                "input":"test me_at_the_zoo",
+                "solvers": "solver1"                
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - test graph",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube",
+                "input":"test me_at_the_zoo",
+                "solvers": "solver1",
+                "graph": "true"                
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - parse-all",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube",               
+                "solvers": "solver1"                               
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - all-solvers-test-1",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube", 
+                "input":"test",              
+                "solvers": "all"                               
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - test-output-with-one-solver",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube", 
+                "input": "test",              
+                "solvers": "solver1",
+                "output": "solver1",
+                "doNotCacheSolutions": "true"
+            }
+        }
+        
+        
+    ]
+}

@@ -24,9 +24,14 @@ server.on('request', (req, res) => {
             datasets: JSON.stringify(datasets),
             consts: JSON.stringify(consts),
             task
-        }, res)
-        
+        }, res)        
         return
+    }
+
+    // We can replace solvers from the GUI in the future, so we can 
+    // roll the version back easily.
+    if (req.url.startsWith('/replace')){        
+        
     }
 
     req.addListener('end', ()=> {

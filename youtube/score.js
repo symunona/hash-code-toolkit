@@ -18,11 +18,10 @@ module.exports = function score(algorithmOutput, parsedValue) {
             shortestTimeToVideo = _.min([shortestTimeToVideo, dataServerLatency])    
             return (dataServerLatency - shortestTimeToVideo) * r.requestCount
         }
-        return 0
-        
+        return 0    
     })
 
-    console.warn(savedTimesPerRequest, savedTimesPerRequest.length)
+    // console.warn(savedTimesPerRequest, savedTimesPerRequest.length)
 
     return _.reduce(savedTimesPerRequest, (r, l)=>r+l, 0)/savedTimesPerRequest.length
 }
