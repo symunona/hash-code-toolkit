@@ -4,5 +4,6 @@ module.exports = {
     inputFolder: 'input-data-set', 
     outputFolder: 'output',
     solversFolderName: 'solvers',
-    statFileName: 'stats.json'
+    statFileName: 'stats.json',
+    magicConstantFile: 'magic.json'
 }
