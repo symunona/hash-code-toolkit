@@ -31,18 +31,23 @@ function ViewModel() {
     Object.keys(consts).map((key) => {
         this.consts[key] = ko.observable(consts[key])
         this.consts[key]._key = key;
-        this.consts[key].subscribe(updateConsts)
+        this.consts[key].subscribe(updateConsts, this.consts[key])
     })
 
     this.inputData = ko.observable('')
+    this.stats = ko.observable({})
+    this.solvers = ko.observable(solvers);
+    
     return this;
 }
 
 var vm = new ViewModel
 ko.applyBindings(vm);
 
+getStats();
+
 function updateConsts(val) {
-    consts[this._key] = val
+    consts[this._key] = Number(val)
     localStorage.setItem(CONST_KEY, JSON.stringify(consts));
 }
 
@@ -64,13 +69,21 @@ function loadInput(name) {
             vis.attr("width", consts.width)
                 .attr("height", consts.height);
             var startTime = new Date()
-            draw(data, vis)
+            draw(data.parsedValue)
             console.warn('Rendered in', (new Date() - startTime)/1000)
         } catch (e) {
             console.error(e)
         }
     })
 }
+
+function getStats(){
+    $.ajax({
+        url: `/${task}/${hostname}.${serverConsts.statFileName}`,
+        contentType: 'json'
+    }).then(vm.stats)
+}
+
 
 /**
  * Converts an array with basic elements to an array with object
@@ -272,3 +285,8 @@ function linkNodes(links, cls, textField) {
             })
     }
 }
+
+
+$('.flipper').on('click', function(){
+    $(this).next().slideToggle()
+})

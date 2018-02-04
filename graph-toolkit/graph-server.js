@@ -12,6 +12,7 @@ const static = require('node-static')
     server = http.createServer().listen(port)
     fs = require('fs'),
     consts = require('../consts')
+    os = require('os')
 
 let datasets = [];
 let task = '', algorithms = []
@@ -23,6 +24,7 @@ server.on('request', (req, res) => {
         renderHtml(graph, {
             datasets: JSON.stringify(datasets),
             consts: JSON.stringify(consts),
+            hostname: os.hostname(),
             task
         }, res)        
         return

@@ -1,24 +1,24 @@
 
-function draw(dataset, vis) {
+function draw(dataset) {
 
-    dataset.parsedValue.cacheServers = newArray(dataset.parsedValue.cacheServerCount)    
-    createDistributedDotsOfList(dataset.parsedValue.cacheServers, 'x', consts.height/10, 'circle', 'cache', 'id', 20)
+    dataset.cacheServers = newArray(dataset.cacheServerCount)    
+    createDistributedDotsOfList(dataset.cacheServers, 'x', consts.height/10, 'circle', 'cache', 'id', 20)
     
 
-    fillArrayKeyWithValue(dataset.parsedValue.endpoints, 'id', 'index')
-    createDistributedDotsOfList(dataset.parsedValue.endpoints, 'x', consts.height/2, 'rect', 'endpoint', 'id')
+    fillArrayKeyWithValue(dataset.endpoints, 'id', 'index')
+    createDistributedDotsOfList(dataset.endpoints, 'x', consts.height/2, 'rect', 'endpoint', 'id')
         
-    dataset.parsedValue.videos = convertToObject(dataset.parsedValue.videoSizes, 'size')
-    fillArrayKeyWithValue(dataset.parsedValue.videos, 'id', 'index')
-    createDistributedDotsOfList(dataset.parsedValue.videos, 'x', consts.height*9/10, 'v', 'video', 'id')
+    dataset.videos = convertToObject(dataset.videoSizes, 'size')
+    fillArrayKeyWithValue(dataset.videos, 'id', 'index')
+    createDistributedDotsOfList(dataset.videos, 'x', consts.height*9/10, 'v', 'video', 'id')
 
     var edges = []
     
-    dataset.parsedValue.endpoints.map((e) =>{
+    dataset.endpoints.map((e) =>{
         e.cacheServerLatencies.map((c)=>{
             edges.push({
                 source: e, 
-                target: dataset.parsedValue.cacheServers[c.cacheServerId],
+                target: dataset.cacheServers[c.cacheServerId],
                 text: c.latency
             })
         })
@@ -26,16 +26,16 @@ function draw(dataset, vis) {
     
     linkNodes(edges, 'cache-endpoint', 'text');
 
-    var videoRequestsFromEndpoints = dataset.parsedValue.requests.map((req) => {
+    var videoRequestsFromEndpoints = dataset.requests.map((req) => {
         var requestLine = {}
-        requestLine.source = dataset.parsedValue.videos[req.videoId];
-        requestLine.target = dataset.parsedValue.endpoints[req.endpointId];
+        requestLine.source = dataset.videos[req.videoId];
+        requestLine.target = dataset.endpoints[req.endpointId];
         requestLine.text = req.requestCount;
         return requestLine;
     });    
 
     linkNodes(videoRequestsFromEndpoints, 'endpoint-video', 'text');
 
-    vm.inputData(dataset.parsedValue)
+    vm.inputData(dataset)
 
 }

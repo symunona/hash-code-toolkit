@@ -18,6 +18,7 @@ const graph = process.env.graph // If true, starts a server with some goodies.
 // Generic stuff
 const consts = require('./consts')
 const fs = require('fs')
+const os = require('os')
 const bostich = require('bostich')
 const graphServer = require('./graph-toolkit/graph-server')
 
@@ -104,14 +105,15 @@ else{
 
 function backUpSolverIfNecessary(name, input, score, timeFinished){
     let stats = {}
+    let statFileName = `./${currentTask}/${os.hostname()}.${consts.statFileName}`
     try{
-        let statFile = fs.readFileSync(`/${currentTask}/${consts.statFileName}`, 'utf8')
+        let statFile = fs.readFileSync(statFileName, 'utf8')
         stats = JSON.parse(statFile)
     } catch(e){} // File does not exists yet, ignore.
     
     let now = new Date()
     let dateString = `${padString(now.getMonth()+1)}${padString(now.getDate())}-${padString(now.getHours())}${padString(now.getMinutes())}${padString(now.getSeconds())}`
-    let fileName = `_${dateString}.${name}.backup.js`
+    let solverBackupFileName = `_${dateString}.${os.hostname()}.${name}.backup.js`
     let currentSolver = fs.readFileSync(`./${currentTask}/${consts.solversFolderName}/${name}.js`, 'utf8')
 
     // Check if the last one is the same as the current. If so, do not save it again.
@@ -120,24 +122,29 @@ function backUpSolverIfNecessary(name, input, score, timeFinished){
         .filter((fn)=>fn.includes(`${name}.backup.js`))
         .sort()
     let cachedFileName = cachedFiles.length?cachedFiles[cachedFiles.length-1]:false;
-        
-    if (cachedFileName){
-        let parts = cachedFileName.split('.')
-        let lastCachedScore = Number(parts[1])        
+    
+    if (cachedFileName){        
         let cachedFile = fs.readFileSync(`./${currentTask}/${consts.solversFolderName}/${cachedFileName}`, 'utf8')
         // Compare the two files without the spaces, if they are the same, do not back up.
         if (compareTwoFilesWithoutSpaces(currentSolver, cachedFile)){
-            return;
+            // Make it the same, so we get consistent stats.
+            solverBackupFileName = cachedFileName;
         }
-    }
+    }    
+
     stats[name] = stats[name] || {}
-    stats[name][fileName] = stats[name][fileName] || {}
-    stats[name][fileName][input] = {
+    stats[name][solverBackupFileName] = stats[name][solverBackupFileName] || {}
+    stats[name][solverBackupFileName][input] = {
         score: score,
         time: timeFinished
     }
-    fs.writeFileSync(`./${currentTask}/${consts.statFileName}`, JSON.stringify(stats, null, 2));
-    fs.writeFileSync(`./${currentTask}/${consts.solversFolderName}/${fileName}`, currentSolver)
+    fs.writeFileSync(statFileName, JSON.stringify(stats, null, 2));
+
+    // Only copy, it we did not conclude that it is the same.
+    if (solverBackupFileName !== cachedFileName){
+        fs.writeFileSync(`./${currentTask}/${consts.solversFolderName}/${solverBackupFileName}`, currentSolver)
+    }
+    
 }
 
 function compareTwoFilesWithoutSpaces(file1, file2){
