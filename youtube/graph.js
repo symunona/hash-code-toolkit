@@ -6,7 +6,8 @@ function draw(dataset) {
     
 
     fillArrayKeyWithValue(dataset.endpoints, 'id', 'index')
-    createDistributedDotsOfList(dataset.endpoints, 'x', consts.height/2, 'rect', 'endpoint', 'id')
+    dataset.endpoints.map((e)=>e.text=`${e.id} ${e.toDataServerLatency}`)
+    createDistributedDotsOfList(dataset.endpoints, 'x', consts.height/2, 'rect', 'endpoint', 'text')
         
     dataset.videos = convertToObject(dataset.videoSizes, 'size')
     fillArrayKeyWithValue(dataset.videos, 'id', 'index')

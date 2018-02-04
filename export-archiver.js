@@ -11,8 +11,7 @@ module.exports = function (outputFileName, fileList, callback, cutPath) {
 
     // listen for all archive data to be written
     // 'close' event is fired only when a file descriptor is involved
-    output.on('close', function () {
-        console.log(archive.pointer() + ' total bytes');
+    output.on('close', function () {        
         callback(archive.pointer() + ' total bytes');
     });
 
@@ -38,10 +37,6 @@ module.exports = function (outputFileName, fileList, callback, cutPath) {
     archive.on('error', function (err) {
         throw err;
     });
-
-    
-    // append a file from stream
-    var file1 = __dirname + '/file1.txt';
     
     fileList.map((fileName)=>archive.file(fileName, { 
         name: cutPath?fileName.substr(fileName.lastIndexOf('/')):fileName }));

@@ -61,6 +61,11 @@
     </table>    
 
     <h2 class="flipper">magic consts +</h2>
+    <div data-bind="foreach: Object.keys(magic())">
+        <label data-bind="text: $data"></label><input data-bind="value: $parent.magic()[$data]">
+    </div>
+
+    <h3>client-only</h3>
     <div data-bind="foreach: Object.keys(consts)">
         <label data-bind="text: $data"></label><input data-bind="value: $parent.consts[$data]">
     </div>

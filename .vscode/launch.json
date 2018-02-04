@@ -13,7 +13,8 @@
             "env":{
                 "task": "youtube",
                 "input":"test",
-                "solvers": "solver1"
+                "solvers": "all",
+                "graph": "true"
             }
         },
         {

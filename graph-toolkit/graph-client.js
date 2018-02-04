@@ -37,6 +37,7 @@ function ViewModel() {
     this.inputData = ko.observable('')
     this.stats = ko.observable({})
     this.solvers = ko.observable(solvers);
+    this.magic = ko.observable({});
     
     return this;
 }
@@ -45,6 +46,7 @@ var vm = new ViewModel
 ko.applyBindings(vm);
 
 getStats();
+getMagic();
 
 function updateConsts(val) {
     consts[this._key] = Number(val)
@@ -70,19 +72,62 @@ function loadInput(name) {
                 .attr("height", consts.height);
             var startTime = new Date()
             draw(data.parsedValue)
+            
+            $('#graph .nodes').on('mouseenter', function(){
+                this.parentElement.appendChild(this)
+            });
+            
             console.warn('Rendered in', (new Date() - startTime)/1000)
         } catch (e) {
             console.error(e)
         }
     })
 }
+function loadSolution(name){
+    
+}
 
 function getStats(){
-    $.ajax({
+    return $.ajax({
         url: `/${task}/${hostname}.${serverConsts.statFileName}`,
         contentType: 'json'
     }).then(vm.stats)
 }
+
+function getMagic(){
+    return $.ajax({
+        url: `/${task}/${hostname}.${serverConsts.magicConstantFile}`,
+        contentType: 'json'
+    }).then(function(magic){        
+        vm.magic(wrapWithSaveNumbers(magic, saveMagic));
+    })
+}
+
+function wrapWithSaveNumbers(originalObject, callback){
+    Object.keys(originalObject).map((key) => {
+        originalObject[key] = ko.observable(originalObject[key])        
+        originalObject[key].subscribe(function(val){
+            var objectToSave = {}
+            Object.keys(originalObject).map((origKey)=>{
+                objectToSave[origKey] = Number(ko.unwrap(originalObject[origKey]))
+            })
+            callback(objectToSave);
+        }, originalObject[key])
+    });
+    return originalObject
+}
+
+function saveMagic(magic){
+    return $.ajax({
+        type: 'post',
+        url: `/magic`,
+        contentType: 'json',
+        data: JSON.stringify(magic)
+    });
+}
+
+
+
 
 
 /**
@@ -233,6 +278,11 @@ function triangle(x, y, r) {
     ].join(' ')
 }
 
+
+// /////////////////////////////////////////////////////////
+// ///////////////////// DATA FUNCTIONS ////////////////////
+// /////////////////////////////////////////////////////////
+
 /**
  * Creates an array of object with their index as their id property.
  * @param {Number} objectCount 
@@ -244,6 +294,15 @@ function newArray(objectCount) {
     }
     return ret;
 }
+
+function wrapArray(array, variableName){
+    return array.map((elementValue, i)=>{
+        let element = {id: i}
+        element[variableName] = elementValue
+        return element
+    })
+}
+
 
 /**
  * Draws edges between nodes.
@@ -290,3 +349,4 @@ function linkNodes(links, cls, textField) {
 $('.flipper').on('click', function(){
     $(this).next().slideToggle()
 })
+

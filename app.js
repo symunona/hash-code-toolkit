@@ -23,8 +23,10 @@ const consts = require('./consts')
 const fs = require('fs')
 const os = require('os')
 const bostich = require('bostich')
+const magicLoader = require('./magic')
 const archiver = require('./export-archiver')
-const reload = require('require-reload')(require)    
+const reload = require('require-reload')(require)
+
 
 // If no input files are provided, search for all the input files in the input dir.
 if (!input.length) {
@@ -79,7 +81,7 @@ for (let i in input) {
     let solutions = {}
 
     for (let s in solvers) {
-        solutions[solvers[s]] = runSolver(solvers[s], input[i], parsedData)
+        solutions[solvers[s]] = runSolver(solvers[s], input[i], parsedData, magicLoader(currentTask))
     }
 
     if (doOutput && solutions[doOutput]) {
@@ -91,7 +93,7 @@ for (let i in input) {
     console.log('</>--------------------------------------</>')
 }
 
-if (doExport){
+if (doExport) {
     packCode();
     packOutputFolder();
 }
@@ -123,23 +125,25 @@ function packCode() {
         'app.js',
         'consts.js',
         `${currentTask}/output.js`,
-        `${currentTask}/parser.js`        
+        `${currentTask}/parser.js`
     ]
     // Pack all the solvers to it
     solvers = fs.readdirSync(`./${currentTask}/${consts.solversFolderName}/`)
         .filter((fn) => fn.endsWith('.js'))
         // We are storing past versions of algorithms beginning with underscore, ignore those
         .filter((fn) => !fn.startsWith('_'))
-        .map((solverFileName)=>fileList.push(`${currentTask}/${consts.solversFolderName}/${solverFileName}`))
+        .map((solverFileName) => fileList.push(`${currentTask}/${consts.solversFolderName}/${solverFileName}`))
 
-    archiver(`./${currentTask}/${consts.outputFolder}/output-code.zip`, fileList, ()=>{
-        console.log(`Exported code to ${consts.outputFolder}/output-code.zip`)
+    archiver(`./${currentTask}/${consts.outputFolder}/output-code.zip`, fileList, (res) => {
+        console.log(`Exported code to ${consts.outputFolder}/output-code.zip ${res}`)
     })
 }
 
 
 /**
- * Takes the .out files in the output folder and packs them into a zip, so it can be exported easily.
+ * Takes the .out files in the output folder and packs them into a zip, 
+ * so it can be exported quickly.
+ * It displays warnings, if not all the input data has been converted.
  * I am always so lost with packing. https://xkcd.com/1168/
  */
 function packOutputFolder() {
@@ -156,13 +160,12 @@ function packOutputFolder() {
             return false;
         }
         return `./${currentTask}/${consts.outputFolder}/${outputFileName}`;
-    }).filter((f)=>f)    
+    }).filter((f) => f)
     // TODO: pack files in output folder to an output.zip file. tar params magic reference to XKCD
-    archiver(`./${currentTask}/${consts.outputFolder}/output-data.zip`, inputFiles, ()=>{
-        console.log(`Exported data to ${consts.outputFolder}/output-data.zip`)
+    archiver(`./${currentTask}/${consts.outputFolder}/output-data.zip`, inputFiles, (res) => {
+        console.log(`Exported data to ${consts.outputFolder}/output-data.zip ${res}`)
     }, true)
 }
-
 
 
 /**
@@ -177,17 +180,22 @@ function output(inputDataSetName, solution) {
     fs.writeFileSync(outputFileName, fileData);
 }
 
+
 /**
  * Runs the solver with the given name, then scores the output and saves the stats 
  * and backs up the current algorithm version to the hard drive.
  * Also saves the output JSON file, so it can be visualized and played with.
  * @param {String} solverName - to be run.
+ * @param {String} inputDataSetName - the name of the input file used to identify and export file names.
+ * @param {Object} parsedValue - the parsedValue parameter of jolicitron's output
+ * @param {Object} [magic] - a set of magic constants provided to the algorithm
+ * @returns {Object} the solution JS Object
  */
-function runSolver(solverName, inputDataSetName, parsedValue) {
+function runSolver(solverName, inputDataSetName, parsedValue, magic) {
     let algorithm = reLoadSolver(solverName);
     console.log(`Solving with ${solverName}...`)
     let startTime = new Date()
-    let solution = algorithm(parsedData.parsedValue)
+    let solution = algorithm(parsedData.parsedValue, magic)
     let solveTime = (new Date() - startTime) / 1000;
     console.log(`Solved in ${solveTime}`)
     let solutionScore = 0
@@ -196,7 +204,7 @@ function runSolver(solverName, inputDataSetName, parsedValue) {
     } catch (e) { }    // ignore if no scoring is in place.
     console.warn('Score:', solutionScore)
     console.log('Backing up algorithm version...')
-    let backupFileName = backUpSolverIfNecessary(solverName, inputDataSetName, solutionScore, solveTime)
+    let backupFileName = backUpSolverIfNecessaryAndExportStats(solverName, inputDataSetName, solutionScore, solveTime)
     console.log('Saving the output JSON')
     let solutionObjectFileName = `${backupFileName.substr(0, backupFileName.length - '.backup.js'.length)}.${inputDataSetName}.output.json`
 
@@ -205,15 +213,16 @@ function runSolver(solverName, inputDataSetName, parsedValue) {
     return solution
 }
 
+
 /**
  * Live reloads the solver module from the hard drive.
- * TODO: live reload!
  * @param {String} solverName 
- * @returns {Function} solver.
+ * @returns {Function} solver module function.
  */
 function reLoadSolver(solverName) {
     return reload(`./${currentTask}/${consts.solversFolderName}/${solverName}`)
 }
+
 
 /**
  * Checks the last backed up file to date, if it's content has changed, backs it up again, 
@@ -223,14 +232,9 @@ function reLoadSolver(solverName) {
  * @param {String} inputDataSetName - the input dataset's name
  * @param {Number} score - how well this algorithm performed
  * @param {Number} timeFinished - in seconds for the stats
+ * @param {Object} [magic] - variables used in this run
  */
-function backUpSolverIfNecessary(solverName, inputDataSetName, score, timeFinished) {
-    let stats = {}
-    let statFileName = `./${currentTask}/${os.hostname()}.${consts.statFileName}`
-    try {
-        let statFile = fs.readFileSync(statFileName, 'utf8')
-        stats = JSON.parse(statFile)
-    } catch (e) { } // File does not exists yet, ignore.
+function backUpSolverIfNecessaryAndExportStats(solverName, inputDataSetName, score, timeFinished, magic) {
 
     let now = new Date()
     let dateString = `${padString(now.getMonth() + 1)}${padString(now.getDate())}-${padString(now.getHours())}${padString(now.getMinutes())}${padString(now.getSeconds())}`
@@ -253,21 +257,86 @@ function backUpSolverIfNecessary(solverName, inputDataSetName, score, timeFinish
         }
     }
 
-    // Write the stats to the stats file.
-    stats[solverName] = stats[solverName] || {}
-    stats[solverName][solverBackupFileName] = stats[solverName][solverBackupFileName] || {}
-    stats[solverName][solverBackupFileName][inputDataSetName] = {
-        score: score,
-        time: timeFinished
-    }
-    fs.writeFileSync(statFileName, JSON.stringify(stats, null, 2));
-
     // Only copy, it we did not conclude that it is the same.
     if (solverBackupFileName !== cachedFileName) {
         fs.writeFileSync(`./${currentTask}/${consts.solversFolderName}/${solverBackupFileName}`, currentSolver)
     }
+
+    exportStats(solverName, solverBackupFileName, inputDataSetName, score, timeFinished, magic)
+
     return solverBackupFileName;
 }
+
+/**
+ * Exports the stats to the stat file.
+ * Deals with magic.
+ * @param {String} solverName 
+ * @param {String} solverBackupFileName 
+ * @param {String} inputDataSetName 
+ * @param {Number} score 
+ * @param {Number} timeFinished 
+ * @param {Object} magic 
+ */
+function exportStats(solverName, solverBackupFileName, inputDataSetName, score, timeFinished, magic) {
+    let stats = {}
+    let statFileName = `./${currentTask}/${os.hostname()}.${consts.statFileName}`
+    try {
+        let statFile = fs.readFileSync(statFileName, 'utf8')
+        stats = JSON.parse(statFile)
+    } catch (e) { } // File does not exists yet, ignore.
+
+    // Write the stats to the stats file.
+    stats[solverName] = stats[solverName] || {}
+    stats[solverName][solverBackupFileName] = stats[solverName][solverBackupFileName] || {}
+    stats[solverName][solverBackupFileName][inputDataSetName] = stats[solverName][solverBackupFileName][inputDataSetName] || {}
+
+
+    // If we used magic variables for the algorithm, back them up, that is a distinctive 
+    // stat there..
+    if (magic && Object.keys(magic).length) {
+
+        stats[solverName][solverBackupFileName][inputDataSetName] =
+            stats[solverName][solverBackupFileName][inputDataSetName] || { score: 0 }
+
+        let isThisRunBetter = stats[solverName][solverBackupFileName][inputDataSetName].score < score
+
+        // If the output is better with other magic numbers, mark which one is the data set, 
+        // and update the main.
+        if (isThisRunBetter) {
+            stats[solverName][solverBackupFileName][inputDataSetName].score = score;
+            stats[solverName][solverBackupFileName][inputDataSetName].timeFinished = timeFinished
+            stats[solverName][solverBackupFileName][inputDataSetName].magic = magic
+        }
+        else {
+            // Save it as "nice try"
+            let magicKey = generateMagicKey(magic)
+            stats[solverName][solverBackupFileName][inputDataSetName].magicVersions =
+                stats[solverName][solverBackupFileName][inputDataSetName].magicVersions || {}
+            stats[solverName][solverBackupFileName][inputDataSetName].magicVersions[magicKey] =
+                stats[solverName][solverBackupFileName][inputDataSetName].magicVersions[magicKey] || {}
+
+            stats[solverName][solverBackupFileName][inputDataSetName][magicKey].score = score;
+            stats[solverName][solverBackupFileName][inputDataSetName][magicKey].timeFinished = timeFinished
+            stats[solverName][solverBackupFileName][inputDataSetName][magicKey].magic = magic
+        }
+    } else {
+        stats[solverName][solverBackupFileName][inputDataSetName].score = score;
+        stats[solverName][solverBackupFileName][inputDataSetName].timeFinished = timeFinished
+        stats[solverName][solverBackupFileName][inputDataSetName].magic = magic
+    }
+
+    fs.writeFileSync(statFileName, JSON.stringify(stats, null, 2));
+}
+
+/**
+ * Generates a simple "magic-hash" string from an object to 
+ * serve as an identifier of the magic versions.
+ * @param {Object} magic 
+ */
+function generateMagicKey(magic) {
+    return Object.keys(magic).map((k) => magic[k]).join('-');
+}
+
 
 /**
  * Returns true if the two files are identical witout their spaces.
