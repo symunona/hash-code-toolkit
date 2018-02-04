@@ -12,6 +12,9 @@ const doOutput = process.env.output // default false
 // If this is true, the file will not use cache, it will re-parse the original input
 const force = process.env.force // Scotty!... oh wait, that's another one.
 
+// If this is true, the file will not use cache, it will re-parse the original input
+const doExport = process.env.export // Default: do not export.
+
 // Graphic interface and file server
 const graph = process.env.graph // If true, starts a server with some goodies.
 
@@ -20,6 +23,8 @@ const consts = require('./consts')
 const fs = require('fs')
 const os = require('os')
 const bostich = require('bostich')
+const archiver = require('./export-archiver')
+const reload = require('require-reload')(require)    
 
 // If no input files are provided, search for all the input files in the input dir.
 if (!input.length) {
@@ -86,6 +91,11 @@ for (let i in input) {
     console.log('</>--------------------------------------</>')
 }
 
+if (doExport){
+    packCode();
+    packOutputFolder();
+}
+
 const toolkit = {
     runSolver,
     output,
@@ -100,7 +110,7 @@ if (graph) {
     console.log('Started GUI')
 }
 else {
-    process.exit();
+    // process.exit();
 }
 
 
@@ -113,8 +123,7 @@ function packCode() {
         'app.js',
         'consts.js',
         `${currentTask}/output.js`,
-        `${currentTask}/parser.js`,
-        `${currentTask}/.js`,
+        `${currentTask}/parser.js`        
     ]
     // Pack all the solvers to it
     solvers = fs.readdirSync(`./${currentTask}/${consts.solversFolderName}/`)
@@ -123,13 +132,15 @@ function packCode() {
         .filter((fn) => !fn.startsWith('_'))
         .map((solverFileName)=>fileList.push(`${currentTask}/${consts.solversFolderName}/${solverFileName}`))
 
-    // TODO: pack the file list into the ZIP.
-    
+    archiver(`./${currentTask}/${consts.outputFolder}/output-code.zip`, fileList, ()=>{
+        console.log(`Exported code to ${consts.outputFolder}/output-code.zip`)
+    })
 }
 
 
 /**
  * Takes the .out files in the output folder and packs them into a zip, so it can be exported easily.
+ * I am always so lost with packing. https://xkcd.com/1168/
  */
 function packOutputFolder() {
     let inputFiles = fs.readdirSync(`./${currentTask}/${consts.inputFolder}/`)
@@ -138,13 +149,18 @@ function packOutputFolder() {
 
     let outputFiles = fs.readdirSync(`./${currentTask}/${consts.outputFolder}/`)
         .filter((fn) => fn.endsWith(consts.outputExtension))
-    inputFiles.map((inputFileName) => {
+    inputFiles = inputFiles.map((inputFileName) => {
         let outputFileName = inputFileName + consts.outputExtension;
         if (!outputFiles.includes(outputFileName)) {
             console.warn(`Missing file in the output folder: ${outputFileName}! You sure you ran all the conversions?`)
+            return false;
         }
-    })
+        return `./${currentTask}/${consts.outputFolder}/${outputFileName}`;
+    }).filter((f)=>f)    
     // TODO: pack files in output folder to an output.zip file. tar params magic reference to XKCD
+    archiver(`./${currentTask}/${consts.outputFolder}/output-data.zip`, inputFiles, ()=>{
+        console.log(`Exported data to ${consts.outputFolder}/output-data.zip`)
+    }, true)
 }
 
 
@@ -168,7 +184,7 @@ function output(inputDataSetName, solution) {
  * @param {String} solverName - to be run.
  */
 function runSolver(solverName, inputDataSetName, parsedValue) {
-    let algorithm = loadSolver(solverName);
+    let algorithm = reLoadSolver(solverName);
     console.log(`Solving with ${solverName}...`)
     let startTime = new Date()
     let solution = algorithm(parsedData.parsedValue)
@@ -195,8 +211,8 @@ function runSolver(solverName, inputDataSetName, parsedValue) {
  * @param {String} solverName 
  * @returns {Function} solver.
  */
-function loadSolver(solverName) {
-    return require(`./${currentTask}/${consts.solversFolderName}/${solverName}`)
+function reLoadSolver(solverName) {
+    return reload(`./${currentTask}/${consts.solversFolderName}/${solverName}`)
 }
 
 /**

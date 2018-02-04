@@ -72,6 +72,19 @@
                 "output": "solver1",
                 "doNotCacheSolutions": "true"
             }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - test-whole-pipeline",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube",
+                "input":"test me_at_the_zoo",
+                "solvers": "solver1",
+                "output": "solver1",
+                "export": "true"
+            }
         }
         
         
