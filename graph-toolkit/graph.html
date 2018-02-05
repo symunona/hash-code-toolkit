@@ -21,7 +21,9 @@
     #graph g.edge:hover text{ fill: #aff; font-weight: bolder;}
     #graph g.edge:hover line{ stroke: #888}
     table {width: 100%}
-    table td.score {width: 55%}
+    span.score, span.time { display: inline-block;}
+    span.score{ width: 55% }
+    table td{ vertical-align: top}
 
     a:hover{ text-decoration: underline; cursor: pointer}
 
@@ -70,25 +72,35 @@
                     <!-- /ko -->
                     
                     <!-- ko if: stats()[algo][ver][dataset].magicVersions -->
-                    <td colspan="2">
-                        <table data-bind="with: stats()[algo][ver][dataset]">
-                            <tr><td colspan="2" class="best">Best: <span data-bind="text: $parent.flatMagic(magic)"></span></td></tr>
-                            <tr>
-                                <td class="score" data-bind="text: score"></td>
-                                <td class="time" data-bind="text: time"></td>                                    
-                            </tr>      
-                            <!-- ko if: Object.keys(magicVersions).length > 1 -->
-                                <!-- ko foreach: {data: Object.keys(magicVersions), as: 'magicVer'} -->
-                                    <tr><td colspan="2" class="best">
-                                        <span data-bind="text: $parent.flatMagic(magic)"></span>
-                                    </td></tr>
-                                    <tr>
-                                        <td data-bind="text: magicVersions[magicVer].score"></td>
-                                        <td data-bind="text: magicVersions[magicVer].time"></td>
-                                    </tr>
-                                <!-- /ko -->
+                    <td colspan="2" data-bind="with: stats()[algo][ver][dataset]">
+                        <!-- <span data-bind="text: JSON.stringify($data)"></span> -->
+                        
+                                
+                            <!-- ko if: Object.keys($data.magicVersions).length > 1 -->
+                                <div>                                    
+                                    Best: <span data-bind="text: $parent.flatMagic($data.magic)"></span>
+                                </div>
+                                <div>
+                                    <span class="score" data-bind="text: score"></span>
+                                    <span class="time" data-bind="text: time"></span>                                    
+                                </div>    
+                        
                             <!-- /ko -->
-                        </table>
+                            <!-- ko foreach: {data: Object.keys(magicVersions), as: 'magicVer'} -->
+                                <div>
+                                    <div>
+                                        <a data-bind="
+                                            text: $parent.flatMagic(magic),
+                                            click: $parent.loadSolution.bind(this, getSolutionFileName(algo, ver, dataset, magicVer))
+                                            "></a>                                        
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="score" data-bind="text: magicVersions[magicVer].score"></span>
+                                    <span class="time" data-bind="text: magicVersions[magicVer].time"></span>
+                                </div>
+                            <!-- /ko -->  
+                        
                     </td>                    
                     <!-- /ko -->
                 <!-- /ko -->
@@ -115,10 +127,10 @@
         </tr>
         <tr>
             <td>    
-                <pre class="hidden" data-bind="json: inputData">data</pre>
+                <pre data-bind="json: inputData">data</pre>
             </td>
             <td>    
-                <pre class="hidden" data-bind="json: outputData">data</pre>
+                <pre data-bind="json: outputData">data</pre>
             </td>
         </tr>
     </table>

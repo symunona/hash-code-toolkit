@@ -2,19 +2,46 @@
   "cache-server-perspective": {
     "0204-175732": {
       "test": {
+        "score": 0,
+        "time": 0.002,
+        "magic": {
+          "dummy": 5
+        },
         "magicVersions": {
           "5": {
             "score": 0,
-            "timeFinished": 0.002,
+            "time": 0.001,
             "magic": {
               "dummy": 5
             }
           }
-        },
+        }
+      }
+    },
+    "0204-211029": {
+      "test": {
         "score": 0,
-        "time": 0.003,
+        "time": 4.19,
         "magic": {
           "dummy": 5
+        }
+      }
+    },
+    "0204-211246": {
+      "test": {
+        "score": 262500,
+        "time": 0.004,
+        "magic": {
+          "dummy": 5
+        },
+        "magicVersions": {
+          "5": {
+            "score": 262500,
+            "time": 0.003,
+            "magic": {
+              "dummy": 5
+            }
+          }
         }
       }
     }
@@ -23,7 +50,7 @@
     "0204-175737": {
       "test": {
         "score": 437500,
-        "time": 0.001
+        "time": 0
       }
     }
   }

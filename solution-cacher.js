@@ -140,18 +140,18 @@ function exportStats(task, solverName, version, inputDataSetName, score, timeFin
             stats[solverName][version][inputDataSetName].time = timeFinished
             stats[solverName][version][inputDataSetName].magic = magic
         }
-        else {
-            // Save it as "nice try"
-            let magicKey = generateMagicKey(magic)
-            stats[solverName][version][inputDataSetName].magicVersions =
-                stats[solverName][version][inputDataSetName].magicVersions || {}
-            stats[solverName][version][inputDataSetName].magicVersions[magicKey] =
-                stats[solverName][version][inputDataSetName].magicVersions[magicKey] || {}
+        
+        // Save it as "nice try"
+        let magicKey = generateMagicKey(magic)
+        stats[solverName][version][inputDataSetName].magicVersions =
+            stats[solverName][version][inputDataSetName].magicVersions || {}
+        stats[solverName][version][inputDataSetName].magicVersions[magicKey] =
+            stats[solverName][version][inputDataSetName].magicVersions[magicKey] || {}
 
-            stats[solverName][version][inputDataSetName].magicVersions[magicKey].score = score;
-            stats[solverName][version][inputDataSetName].magicVersions[magicKey].timeFinished = timeFinished
-            stats[solverName][version][inputDataSetName].magicVersions[magicKey].magic = magic
-        }
+        stats[solverName][version][inputDataSetName].magicVersions[magicKey].score = score;
+        stats[solverName][version][inputDataSetName].magicVersions[magicKey].time = timeFinished
+        stats[solverName][version][inputDataSetName].magicVersions[magicKey].magic = magic
+    
     } else {
         stats[solverName][version][inputDataSetName].score = score;
         stats[solverName][version][inputDataSetName].time = timeFinished

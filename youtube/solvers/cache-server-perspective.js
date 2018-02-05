@@ -25,10 +25,10 @@ module.exports = function(p) {
         let videosRequestedOnCacheServerSorted = _.sortBy(
             Object.keys(videosRequestedOnCacheServerMap).map((v) => {
                 return {
-                    videoId: v,
+                    videoId: Number(v),
                     requestCount: videosRequestedOnCacheServerMap[v]
                 }
-            }), 'requestCount')
+            }), 'requestCount').reverse()
 
         for (let videoIndexInRequested = 0; videoIndexInRequested < videosRequestedOnCacheServerSorted.length; videosRequestedOnCacheServerSorted++) {
             if (server.remaining === 0) break;
@@ -63,19 +63,19 @@ function getConnectedEndpoints(serverId) {
 }
 
 function addVideoToServer(server, videoId) {
-    let video = videos[videoId]
-    if (doesItFitTheServer(server, video)) {
+    let videoSize = videos[videoId].size
+    if (doesItFitTheServer(server, videoSize)) {
         if (!server.videos.includes(videoId)) { } {
             server.videos.push(videoId)
-            server.remaining -= video
+            server.remaining -= videoSize
         }
         return true
     }
     return false
 }
 
-function doesItFitTheServer(server, video) {
-    return server.remaining >= video
+function doesItFitTheServer(server, videoSize) {
+    return server.remaining >= videoSize
 }
 
 

@@ -48,6 +48,10 @@ function ViewModel() {
     return this;
 }
 
+ko.onError = function(e){
+    console.error
+}
+
 var vm = new ViewModel
 ko.applyBindings(vm);
 
@@ -59,7 +63,7 @@ function updateConsts(val) {
 }
 
 function getSolutionFileName(algo, ver, dataset, magic){
-
+    return `${task}/${serverConsts.solutionCacheFolderName}/${algo}/${ver}/${dataset}/${magic?magic:'default'}.json`
 }
 
 /**
@@ -92,9 +96,9 @@ function loadInput(name) {
         }
     })
 }
-function loadSolution(name){
+function loadSolution(path){
     $.ajax({
-        url: `/${task}/${serverConsts.inputFolder}/${name}.output.json`,
+        url: path,
         contentType: 'json'
     }).then(function (data) {
         
