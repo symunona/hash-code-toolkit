@@ -40,3 +40,16 @@ function draw(dataset) {
     vm.inputData(dataset)
 
 }
+
+function drawSolution(solution){
+    let links = []
+    let dataset = vm.inputData();
+    solution.cacheServers.map((c, i)=>{        
+        c.videos.map((videoId)=>{
+            links.push({source: dataset.videos[videoId], target: dataset.cacheServers[i]})
+        })
+    })
+
+    linkNodes(links, 'solution');
+
+}

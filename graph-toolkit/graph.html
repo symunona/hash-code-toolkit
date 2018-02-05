@@ -17,6 +17,7 @@
     #graph .nodes.video { stroke: red;}
     #graph .nodes.cache { stroke: blueviolet;}
     #graph line { stroke: #555; stroke-width: 4px;}
+    #graph g.solution line { stroke: #5c5; stroke-width: 5px;}
     #graph g.edge text { stroke:0; fill: #aaa; background: #444;}
     #graph g.edge:hover text{ fill: #aff; font-weight: bolder;}
     #graph g.edge:hover line{ stroke: #888}
@@ -25,6 +26,7 @@
     span.score{ width: 55% }
     table td{ vertical-align: top}
 
+    a{ background: #131; padding: 3px; display: inline-block}
     a:hover{ text-decoration: underline; cursor: pointer}
 
     td, th{border: 1px solid #262; margin: 0}
@@ -34,20 +36,17 @@
     <div data-bind="visible: false">loading...</div>    
     <div id="graph">graph</div>
     
-    <h2 class="flipper">draw +</h2>
-    <div id="dataSetList" data-bind="foreach: datasets">
-        <button data-bind="click: loadInput, text: $data"></button>
-    </div>
-    <button style="background: #922; position: fixed; right: 0; bottom: 0"
-        data-bind="click: cleanStats"
-            >Clear stats and backup algos</button>
+    
+
     <table> 
         <thead>
             <tr>                
                 <th rowspan="2">Algo</th>
                 <th rowspan="2">Ver</th>
                 <!-- ko foreach: datasets -->
-                <th colspan="2" data-bind="text: $data"></th>
+                <th colspan="2">
+                    <a data-bind="click: loadInput, text: $data"></a>
+                </th>
                 <!-- /ko -->
             </tr>
             <tr data-bind="foreach: datasets">
@@ -109,12 +108,8 @@
         </tbody>
     </table>    
 
-    <h2 class="flipper">magic consts +</h2>
-    <div data-bind="foreach: Object.keys(magic())">
-        <label data-bind="text: $data"></label><input data-bind="value: $parent.magic()[$data]">
-    </div>
-
-    <h3>client-only</h3>
+    
+    <h3>client-consts</h3>
     <div data-bind="foreach: Object.keys(consts)">
         <label data-bind="text: $data"></label><input data-bind="value: $parent.consts[$data]">
     </div>
@@ -135,6 +130,9 @@
         </tr>
     </table>
 
+    <button style="background: #922; position: fixed; right: 0; bottom: 0"
+        data-bind="click: cleanStats"
+            >Clear stats and backup algos</button>
 
     <script src="node_modules/d3/build/d3.min.js"></script>
     <script src="node_modules/knockout/build/output/knockout-latest.debug.js"></script>
