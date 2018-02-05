@@ -46,6 +46,18 @@ server.on('request', (req, res) => {
         return
     }
 
+    if (req.url.startsWith('/export/')) {
+        if (req.method == 'POST') {
+            let versionName = req.url.substr(req.url.lastIndexOf('/'));
+            
+            // toolkit.out
+            
+            success(res)
+            
+        }
+        return
+    }
+
     if (req.url.startsWith('/magic/')) {
         if (req.method == 'POST') {
             let solverName = req.url.substr(req.url.lastIndexOf('/'));

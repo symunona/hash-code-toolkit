@@ -31,6 +31,7 @@ function ViewModel() {
     this.flatMagic = flatMagic;
     this.allInputs = inputs;
     this.formatSize = formatSize;
+    this.exportSolution = exportSolution;
 
     // Map constants to observables.
     this.consts = {}
@@ -109,6 +110,8 @@ function loadInput(name) {
         }
     })
 }
+
+
 function loadSolution(solutionName, path) {
     return loadInput(solutionName).then(()=>{
         return $.ajax({
@@ -126,6 +129,13 @@ function loadSolution(solutionName, path) {
             }
         })
     })
+}
+
+
+function exportSolution(solutionName){
+    return $.ajax({
+        url: `/export/${solutionName}`        
+    }).then(console.warn).catch(console.error)
 }
 
 function cleanStats() {
@@ -409,6 +419,7 @@ $('.flipper').on('click', function () {
 })
 
 function formatSize(size){
+    if (size === undefined) return ''
     if (size < 1024) return size + 'B'
     if (size < 1024*1024) return Math.round(size/1024) + 'KB'
     return Math.round(size/1024/1024) + 'MB'
