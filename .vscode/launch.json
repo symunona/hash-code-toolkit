@@ -86,6 +86,16 @@
                 "output": "solver1",
                 "export": "true"
             }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "youtube - optimize ALL",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "task": "youtube",                
+                "solvers": "ordered-by-request-quantities endpoint-perspective"                
+            }
         }
         
         

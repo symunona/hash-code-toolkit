@@ -43,7 +43,7 @@
                 <th rowspan="2">Ver</th>
                 <!-- ko foreach: datasets -->
                 <th colspan="2">
-                    <a data-bind="click: loadInput, text: $data"></a>
+                    <a data-bind="click: loadInput, text: `${$data} (${formatSize($parent.allInputs[$data])})`"></a>
                 </th>
                 <!-- /ko -->
             </tr>
@@ -143,6 +143,7 @@
         var solvers = {{solvers}};
         var serverConsts = {{consts}};
         var hostname = "{{hostname}}";
+        var inputs = {{inputs}}
     </script>
 
     <script src="graph-toolkit/graph-client.js"></script>

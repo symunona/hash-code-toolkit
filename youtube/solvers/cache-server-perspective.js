@@ -31,7 +31,7 @@ module.exports = function(p) {
                 }
             }), 'requestCount').reverse()
 
-            console.warn('videos requested from server', server, videosRequestedOnCacheServerSorted)
+            // console.warn('videos requested from server', server, videosRequestedOnCacheServerSorted)
         for (let videoIndexInRequested = 0; videoIndexInRequested < videosRequestedOnCacheServerSorted.length; videoIndexInRequested++) {
             if (server.remaining === 0) break;            
             // console.log('trying to add', server, videosRequestedOnCacheServerSorted[videoIndexInRequested].videoId,
@@ -73,11 +73,11 @@ function addVideoToServer(server, videoId) {
             server.videos.push(videoId)
             server.remaining -= videoSize
         }
-        console.log('video added:', videos[videoId], server)
+        // console.log('video added:', videos[videoId], server)
         return true
     }
     else{
-        console.log('video does not fit:', videos[videoId], server)
+        // console.log('video does not fit:', videos[videoId], server)
     }
     return false
 }

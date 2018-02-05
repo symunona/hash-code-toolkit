@@ -24,11 +24,13 @@ ko.bindingHandlers.json = {
 }
 
 function ViewModel() {
-    this.datasets = window.datasets;
+    
     this.loadInput = loadInput;
     this.cleanStats = cleanStats;
     this.loadSolution = loadSolution;
     this.flatMagic = flatMagic;
+    this.allInputs = inputs;
+    this.formatSize = formatSize;
 
     // Map constants to observables.
     this.consts = {}
@@ -44,6 +46,17 @@ function ViewModel() {
     this.stats = ko.observable({})
     this.solvers = ko.observable(solvers);
     this.magic = ko.observable({});
+
+    this.datasets = ko.computed(function(){
+        if (!this.stats()) return window.datasets
+        let datasets = []
+        Object.keys(this.stats()).map((algo)=>{
+            Object.keys(this.stats()[algo]).map((ver)=>{
+                datasets = datasets.concat(Object.keys(this.stats()[algo][ver]))
+            })
+        })
+        return _.uniq(datasets)
+    }, this)
 
     return this;
 }
@@ -136,7 +149,6 @@ function getStats() {
         vm.magic(magic)
         vm.stats(stats)
     })
-
 }
 
 function getMagic(solverName) {
@@ -396,3 +408,8 @@ $('.flipper').on('click', function () {
     $(this).next().slideToggle()
 })
 
+function formatSize(size){
+    if (size < 1024) return size + 'B'
+    if (size < 1024*1024) return Math.round(size/1024) + 'KB'
+    return Math.round(size/1024/1024) + 'MB'
+}

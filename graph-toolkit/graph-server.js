@@ -17,7 +17,7 @@ const static = require('node-static'),
     del = require('node-delete')
 
 
-let datasets = [], task = '', algorithms = [], toolkit = {}
+let datasets = [], task = '', algorithms = [], toolkit = {}, inputs = {}
 
 server.on('request', (req, res) => {
 
@@ -27,7 +27,8 @@ server.on('request', (req, res) => {
             datasets: JSON.stringify(datasets),
             consts: JSON.stringify(consts),
             hostname: os.hostname(),
-            task
+            task,
+            inputs: JSON.stringify(inputs)
         }, res)
         return
     }
@@ -85,6 +86,13 @@ module.exports = function graph(_task, _algorithms, _datasets, _toolkit) {
     datasets = _datasets
     toolkit = _toolkit
 
+    fs.readdirSync(`./${task}/${consts.inputFolder}/`)
+        .filter((fn) => fn.endsWith(consts.inputExtension))
+        .map((fileName) => {
+            inputs[fileName.substr(0, fileName.length - consts.inputExtension.length)] =
+                fs.statSync(`./${task}/${consts.inputFolder}/${fileName}`).size
+        })
+
     opn(`http://127.0.0.1:${port}/`);
 }
 
@@ -109,7 +117,7 @@ function renderHtml(html, data, res) {
     res.end();
 }
 
-function success(res){
+function success(res) {
     res.writeHead(200, {
         'content-type': 'application/json'
     });
