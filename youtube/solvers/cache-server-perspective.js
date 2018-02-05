@@ -3,7 +3,7 @@ const _ = require('underscore')
 
 let servers, serverSize, videos, endpoints, requests
 
-module.exports = function algorithm1(p) {
+module.exports = function(p) {
 
     serverSize = p.cacheServerSize
     servers = _.range(p.cacheServerCount).map((i) => { return { videos: [], remaining: serverSize } })

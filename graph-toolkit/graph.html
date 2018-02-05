@@ -20,6 +20,10 @@
     #graph g.edge text { stroke:0; fill: #aaa; background: #444;}
     #graph g.edge:hover text{ fill: #aff; font-weight: bolder;}
     #graph g.edge:hover line{ stroke: #888}
+    table {width: 100%}
+    table td.score {width: 55%}
+
+    a:hover{ text-decoration: underline; cursor: pointer}
 
     td, th{border: 1px solid #262; margin: 0}
 
@@ -32,6 +36,9 @@
     <div id="dataSetList" data-bind="foreach: datasets">
         <button data-bind="click: loadInput, text: $data"></button>
     </div>
+    <button style="background: #922; position: fixed; right: 0; bottom: 0"
+        data-bind="click: cleanStats"
+            >Clear stats and backup algos</button>
     <table> 
         <thead>
             <tr>                
@@ -50,10 +57,40 @@
             <!-- ko foreach: { data: Object.keys(stats()[algo]), as: 'ver'} -->
             <tr>
                 <td data-bind="text: algo"></td>
-                <td data-bind="text: ver.substr()"></td>
-                <!-- ko foreach: {data: Object.keys(stats()[algo][ver]), as: 'dataset'} -->                
-                    <td data-bind="text: stats()[algo][ver][dataset].score"></td>
+                <td data-bind="text: ver"></td>
+                
+                <!-- ko foreach: {data: Object.keys(stats()[algo][ver]), as: 'dataset'} -->         
+                    <!-- ko if: !stats()[algo][ver][dataset].magicVersions -->
+                    <td>
+                        <a data-bind="
+                            text: stats()[algo][ver][dataset].score, 
+                            click: loadSolution.bind(this, getSolutionFileName(algo, ver, dataset, ''))"></a>
+                    </td>
                     <td data-bind="text: stats()[algo][ver][dataset].time"></td>
+                    <!-- /ko -->
+                    
+                    <!-- ko if: stats()[algo][ver][dataset].magicVersions -->
+                    <td colspan="2">
+                        <table data-bind="with: stats()[algo][ver][dataset]">
+                            <tr><td colspan="2" class="best">Best: <span data-bind="text: $parent.flatMagic(magic)"></span></td></tr>
+                            <tr>
+                                <td class="score" data-bind="text: score"></td>
+                                <td class="time" data-bind="text: time"></td>                                    
+                            </tr>      
+                            <!-- ko if: Object.keys(magicVersions).length > 1 -->
+                                <!-- ko foreach: {data: Object.keys(magicVersions), as: 'magicVer'} -->
+                                    <tr><td colspan="2" class="best">
+                                        <span data-bind="text: $parent.flatMagic(magic)"></span>
+                                    </td></tr>
+                                    <tr>
+                                        <td data-bind="text: magicVersions[magicVer].score"></td>
+                                        <td data-bind="text: magicVersions[magicVer].time"></td>
+                                    </tr>
+                                <!-- /ko -->
+                            <!-- /ko -->
+                        </table>
+                    </td>                    
+                    <!-- /ko -->
                 <!-- /ko -->
             </tr>
             <!-- /ko -->            
@@ -70,8 +107,21 @@
         <label data-bind="text: $data"></label><input data-bind="value: $parent.consts[$data]">
     </div>
 
-    <h2 class="flipper">input +</h2>
-    <pre class="hidden" data-bind="json: inputData">data</pre>
+    <h2 class="flipper">input/output +</h2>
+    <table>
+        <tr>
+            <th>in</th>
+            <th>out</th>
+        </tr>
+        <tr>
+            <td>    
+                <pre class="hidden" data-bind="json: inputData">data</pre>
+            </td>
+            <td>    
+                <pre class="hidden" data-bind="json: outputData">data</pre>
+            </td>
+        </tr>
+    </table>
 
 
     <script src="node_modules/d3/build/d3.min.js"></script>

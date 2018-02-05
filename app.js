@@ -26,6 +26,7 @@ const bostich = require('bostich')
 const magicLoader = require('./magic')
 const archiver = require('./export-archiver')
 const reload = require('require-reload')(require)
+const solutionCacher = require('./solution-cacher')
 
 
 // If no input files are provided, search for all the input files in the input dir.
@@ -81,7 +82,7 @@ for (let i in input) {
     let solutions = {}
 
     for (let s in solvers) {
-        solutions[solvers[s]] = runSolver(solvers[s], input[i], parsedData, magicLoader(currentTask))
+        solutions[solvers[s]] = runSolver(solvers[s], input[i], parsedData)
     }
 
     if (doOutput && solutions[doOutput]) {
@@ -191,25 +192,23 @@ function output(inputDataSetName, solution) {
  * @param {Object} [magic] - a set of magic constants provided to the algorithm
  * @returns {Object} the solution JS Object
  */
-function runSolver(solverName, inputDataSetName, parsedValue, magic) {
-    let algorithm = reLoadSolver(solverName);
+function runSolver(solverName, inputDataSetName, parsedValue) {
     console.log(`Solving with ${solverName}...`)
+    let algorithm = reLoadSolver(solverName);    
     let startTime = new Date()
+    let magic = magicLoader(currentTask, solverName);
+    if (Object.keys(magic).length) console.log('Magic parameters:', Object.keys(magic).map((mkey)=>`${mkey}: ${magic[mkey]}`).join(', '))
     let solution = algorithm(parsedData.parsedValue, magic)
     let solveTime = (new Date() - startTime) / 1000;
     console.log(`Solved in ${solveTime}`)
     let solutionScore = 0
     try {
-        let solutionScore = score(solution, parsedData.parsedValue)
+        solutionScore = score(solution, parsedData.parsedValue)
     } catch (e) { }    // ignore if no scoring is in place.
     console.warn('Score:', solutionScore)
-    console.log('Backing up algorithm version...')
-    let backupFileName = backUpSolverIfNecessaryAndExportStats(solverName, inputDataSetName, solutionScore, solveTime)
-    console.log('Saving the output JSON')
-    let solutionObjectFileName = `${backupFileName.substr(0, backupFileName.length - '.backup.js'.length)}.${inputDataSetName}.output.json`
-
-    // We save it next to the input folder, so that the output folder is kept clean.
-    fs.writeFileSync(`./${currentTask}/${consts.inputFolder}/${solutionObjectFileName}`, JSON.stringify(solution, null, 2))
+    // console.log('Backing up algorithm version...')    
+    solutionCacher(currentTask, solverName, inputDataSetName, solution, solutionScore, solveTime, magic)
+    console.log('>-----------------')    
     return solution
 }
 
@@ -221,144 +220,4 @@ function runSolver(solverName, inputDataSetName, parsedValue, magic) {
  */
 function reLoadSolver(solverName) {
     return reload(`./${currentTask}/${consts.solversFolderName}/${solverName}`)
-}
-
-
-/**
- * Checks the last backed up file to date, if it's content has changed, backs it up again, 
- * and saves the data and it's name to the cache file with it's success and time data.
- * Writes [currentTaskFolder]/[hostname].stats.json file for stats.
- * @param {String} solverName - which has been used
- * @param {String} inputDataSetName - the input dataset's name
- * @param {Number} score - how well this algorithm performed
- * @param {Number} timeFinished - in seconds for the stats
- * @param {Object} [magic] - variables used in this run
- */
-function backUpSolverIfNecessaryAndExportStats(solverName, inputDataSetName, score, timeFinished, magic) {
-
-    let now = new Date()
-    let dateString = `${padString(now.getMonth() + 1)}${padString(now.getDate())}-${padString(now.getHours())}${padString(now.getMinutes())}${padString(now.getSeconds())}`
-    let solverBackupFileName = `_${dateString}.${os.hostname()}.${solverName}.backup.js`
-    let currentSolver = fs.readFileSync(`./${currentTask}/${consts.solversFolderName}/${solverName}.js`, 'utf8')
-
-    // Check if the last one is the same as the current. If so, do not save it again.
-    let cachedFiles = fs.readdirSync(`./${currentTask}/${consts.solversFolderName}/`)
-        .filter((fn) => fn.startsWith('_'))
-        .filter((fn) => fn.includes(`${solverName}.backup.js`))
-        .sort()
-    let cachedFileName = cachedFiles.length ? cachedFiles[cachedFiles.length - 1] : false;
-
-    if (cachedFileName) {
-        let cachedFile = fs.readFileSync(`./${currentTask}/${consts.solversFolderName}/${cachedFileName}`, 'utf8')
-        // Compare the two files without the spaces, if they are the same, do not back up.
-        if (compareTwoFilesWithoutSpaces(currentSolver, cachedFile)) {
-            // Make it the same, so we get consistent stats.
-            solverBackupFileName = cachedFileName;
-        }
-    }
-
-    // Only copy, it we did not conclude that it is the same.
-    if (solverBackupFileName !== cachedFileName) {
-        fs.writeFileSync(`./${currentTask}/${consts.solversFolderName}/${solverBackupFileName}`, currentSolver)
-    }
-
-    exportStats(solverName, solverBackupFileName, inputDataSetName, score, timeFinished, magic)
-
-    return solverBackupFileName;
-}
-
-/**
- * Exports the stats to the stat file.
- * Deals with magic.
- * @param {String} solverName 
- * @param {String} solverBackupFileName 
- * @param {String} inputDataSetName 
- * @param {Number} score 
- * @param {Number} timeFinished 
- * @param {Object} magic 
- */
-function exportStats(solverName, solverBackupFileName, inputDataSetName, score, timeFinished, magic) {
-    let stats = {}
-    let statFileName = `./${currentTask}/${os.hostname()}.${consts.statFileName}`
-    try {
-        let statFile = fs.readFileSync(statFileName, 'utf8')
-        stats = JSON.parse(statFile)
-    } catch (e) { } // File does not exists yet, ignore.
-
-    // Write the stats to the stats file.
-    stats[solverName] = stats[solverName] || {}
-    stats[solverName][solverBackupFileName] = stats[solverName][solverBackupFileName] || {}
-    stats[solverName][solverBackupFileName][inputDataSetName] = stats[solverName][solverBackupFileName][inputDataSetName] || {}
-
-
-    // If we used magic variables for the algorithm, back them up, that is a distinctive 
-    // stat there..
-    if (magic && Object.keys(magic).length) {
-
-        stats[solverName][solverBackupFileName][inputDataSetName] =
-            stats[solverName][solverBackupFileName][inputDataSetName] || { score: 0 }
-
-        let isThisRunBetter = stats[solverName][solverBackupFileName][inputDataSetName].score < score
-
-        // If the output is better with other magic numbers, mark which one is the data set, 
-        // and update the main.
-        if (isThisRunBetter) {
-            stats[solverName][solverBackupFileName][inputDataSetName].score = score;
-            stats[solverName][solverBackupFileName][inputDataSetName].timeFinished = timeFinished
-            stats[solverName][solverBackupFileName][inputDataSetName].magic = magic
-        }
-        else {
-            // Save it as "nice try"
-            let magicKey = generateMagicKey(magic)
-            stats[solverName][solverBackupFileName][inputDataSetName].magicVersions =
-                stats[solverName][solverBackupFileName][inputDataSetName].magicVersions || {}
-            stats[solverName][solverBackupFileName][inputDataSetName].magicVersions[magicKey] =
-                stats[solverName][solverBackupFileName][inputDataSetName].magicVersions[magicKey] || {}
-
-            stats[solverName][solverBackupFileName][inputDataSetName][magicKey].score = score;
-            stats[solverName][solverBackupFileName][inputDataSetName][magicKey].timeFinished = timeFinished
-            stats[solverName][solverBackupFileName][inputDataSetName][magicKey].magic = magic
-        }
-    } else {
-        stats[solverName][solverBackupFileName][inputDataSetName].score = score;
-        stats[solverName][solverBackupFileName][inputDataSetName].timeFinished = timeFinished
-        stats[solverName][solverBackupFileName][inputDataSetName].magic = magic
-    }
-
-    fs.writeFileSync(statFileName, JSON.stringify(stats, null, 2));
-}
-
-/**
- * Generates a simple "magic-hash" string from an object to 
- * serve as an identifier of the magic versions.
- * @param {Object} magic 
- */
-function generateMagicKey(magic) {
-    return Object.keys(magic).map((k) => magic[k]).join('-');
-}
-
-
-/**
- * Returns true if the two files are identical witout their spaces.
- * @param {String} file1 
- * @param {String} file2 
- */
-function compareTwoFilesWithoutSpaces(file1, file2) {
-    const whitespaceReplacer = /\s/g
-    return file1.replace(whitespaceReplacer, '') === file2.replace(whitespaceReplacer, '')
-}
-
-/**
- * Pads a number to a certain length, so if there are less characters in it, it will fill it up with 
- * the characters given.
- * Example with default length and character: 1 -> 01, 5 -> 05, 11 -> 11
- * @param {Number} number 
- * @param {Number} [length] - to be filled. Default: 2
- * @param {String} [character] - to be filled with. Default: '`0'
- */
-function padString(number, length, character) {
-    length = length || 2
-    character = character ? String(character) : '0'
-    number = String(number)
-    return number.length < length ? character.repeat(length - number.length) + number : number;
 }

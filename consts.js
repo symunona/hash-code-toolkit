@@ -5,5 +5,6 @@ module.exports = {
     outputFolder: 'output',
     solversFolderName: 'solvers',
     statFileName: 'stats.json',
-    magicConstantFile: 'magic.json'
+    magicConstantFile: 'magic.json',
+    solutionCacheFolderName: 'solutions'
 }

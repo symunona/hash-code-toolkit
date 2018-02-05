@@ -13,7 +13,8 @@ const static = require('node-static'),
     fs = require('fs'),
     consts = require('../consts'),
     os = require('os'),
-    formidable = require("formidable")
+    formidable = require("formidable"),
+    del = require('node-delete')
 
 
 let datasets = [], task = '', algorithms = [], toolkit = {}
@@ -21,7 +22,7 @@ let datasets = [], task = '', algorithms = [], toolkit = {}
 server.on('request', (req, res) => {
 
     if (req.url === '/') {
-        var graph = fs.readFileSync('./graph-toolkit/graph.html', 'utf8');
+        let graph = fs.readFileSync('./graph-toolkit/graph.html', 'utf8');
         renderHtml(graph, {
             datasets: JSON.stringify(datasets),
             consts: JSON.stringify(consts),
@@ -39,33 +40,38 @@ server.on('request', (req, res) => {
 
             console.log('[RUNNER] with blades: ', fields);
 
-            
-
-            res.writeHead(200, {
-                'content-type': 'application/json'
-            });
-            res.write('{"succes": true}');
-            res.end();
+            success(res)
         });
+        return
     }
 
-    if (req.url == '/magic') {
+    if (req.url.startsWith('/magic/')) {
         if (req.method == 'POST') {
-            var form = new formidable.IncomingForm();
+            let solverName = req.url.substr(req.url.lastIndexOf('/'));
+            let form = new formidable.IncomingForm();
             form.parse(req, function (err, fields, files) {
 
                 console.log('[MAGIC] Saving new magic values', fields);
 
-                require(`../magic`).save(task, fields)
+                require(`../magic`).save(task, solverName, fields)
 
-                res.writeHead(200, {
-                    'content-type': 'application/json'
-                });
-                res.write('{"succes": true}');
-                res.end();
+                success(res)
             });
-
         }
+        return
+    }
+
+    if (req.url == '/cleanstats') {
+        if (req.method == 'POST') {
+
+            console.log('[STATS] Cleaning up stats, solution cache and solver backups. Clean slate.');
+            fs.writeFileSync(`./${task}/${os.hostname()}.${consts.statFileName}`, '{}');
+            console.log(del.sync(`${task}/${consts.solversFolderName}/_*\.backup\.js`))
+            console.log(del.sync(`${task}/${consts.inputFolder}/_*\.output\.json`))
+
+            success(res)
+        }
+        return
     }
 
     req.addListener('end', () => {
@@ -79,7 +85,7 @@ module.exports = function graph(_task, _algorithms, _datasets, _toolkit) {
     datasets = _datasets
     toolkit = _toolkit
 
-    opn(`http://127.0.0.1:${port}/`);    
+    opn(`http://127.0.0.1:${port}/`);
 }
 
 /**
@@ -100,6 +106,14 @@ function renderHtml(html, data, res) {
         replaced = replaced.replaceAll(toReplace, data[keyword]);
     }
     res.write(replaced);
+    res.end();
+}
+
+function success(res){
+    res.writeHead(200, {
+        'content-type': 'application/json'
+    });
+    res.write('{"succes": true}');
     res.end();
 }
 

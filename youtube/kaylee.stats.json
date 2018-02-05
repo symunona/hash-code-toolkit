@@ -1,23 +1,29 @@
 {
   "cache-server-perspective": {
-    "_0204-125341.kaylee.cache-server-perspective.backup.js": {
+    "0204-175732": {
       "test": {
+        "magicVersions": {
+          "5": {
+            "score": 0,
+            "timeFinished": 0.002,
+            "magic": {
+              "dummy": 5
+            }
+          }
+        },
         "score": 0,
-        "timeFinished": 0.001
-      }
-    },
-    "_0204-125355.kaylee.cache-server-perspective.backup.js": {
-      "test": {
-        "score": 0,
-        "timeFinished": 0.002
+        "time": 0.003,
+        "magic": {
+          "dummy": 5
+        }
       }
     }
   },
   "ordered-by-request-quantities": {
-    "_0204-125341.kaylee.ordered-by-request-quantities.backup.js": {
+    "0204-175737": {
       "test": {
-        "score": 0,
-        "timeFinished": 0.001
+        "score": 437500,
+        "time": 0.001
       }
     }
   }

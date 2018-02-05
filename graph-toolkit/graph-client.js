@@ -26,6 +26,10 @@ ko.bindingHandlers.json = {
 function ViewModel() {
     this.datasets = window.datasets;
     this.loadInput = loadInput;
+    this.cleanStats = cleanStats;
+    this.loadSolution = loadSolution;
+    this.flatMagic = flatMagic;
+
     // Map constants to observables.
     this.consts = {}
     Object.keys(consts).map((key) => {
@@ -34,7 +38,9 @@ function ViewModel() {
         this.consts[key].subscribe(updateConsts, this.consts[key])
     })
 
+    
     this.inputData = ko.observable('')
+    this.outputData = ko.observable('')
     this.stats = ko.observable({})
     this.solvers = ko.observable(solvers);
     this.magic = ko.observable({});
@@ -46,11 +52,14 @@ var vm = new ViewModel
 ko.applyBindings(vm);
 
 getStats();
-getMagic();
 
 function updateConsts(val) {
     consts[this._key] = Number(val)
     localStorage.setItem(CONST_KEY, JSON.stringify(consts));
+}
+
+function getSolutionFileName(algo, ver, dataset, magic){
+
 }
 
 /**
@@ -84,23 +93,61 @@ function loadInput(name) {
     })
 }
 function loadSolution(name){
-    
+    $.ajax({
+        url: `/${task}/${serverConsts.inputFolder}/${name}.output.json`,
+        contentType: 'json'
+    }).then(function (data) {
+        
+        vm.outputData(JSON.stringify(data, null, 2));
+        try {            
+            var startTime = new Date()
+            drawSolution(data)            
+            console.warn('Rendered in', (new Date() - startTime)/1000)
+        } catch (e) {
+            console.error(e)
+        }
+    })
 }
+
+function cleanStats(){
+    return confirm('Sure?')?$.ajax({
+        type: 'post',
+        url: `/cleanstats`
+    }).then(getStats):false;
+}
+
 
 function getStats(){
     return $.ajax({
         url: `/${task}/${hostname}.${serverConsts.statFileName}`,
         contentType: 'json'
-    }).then(vm.stats)
+    }).then((stats)=>{        
+        let magic = {}
+        Object.keys(stats).map((solverName)=>{
+            magic[solverName] = ko.observable()
+            getMagic(solverName).then(magic[solverName])
+        })
+        vm.magic(magic)
+        vm.stats(stats)        
+    })
 }
 
-function getMagic(){
+function getMagic(solverName){
     return $.ajax({
-        url: `/${task}/${hostname}.${serverConsts.magicConstantFile}`,
+        url: `/${task}/${serverConsts.solversFolderName}/${solverName}.${serverConsts.magicConstantFile}`,
         contentType: 'json'
-    }).then(function(magic){        
-        vm.magic(wrapWithSaveNumbers(magic, saveMagic));
+    }).then(function(magic){                
+        return wrapWithSaveNumbers(magic, saveMagic.bind(this, solverName));
     })
+}
+
+function saveMagic(solverName, magic){
+    return $.ajax({
+        type: 'post',
+        url: `/magic/${solverName}`,
+        contentType: 'json',
+        data: JSON.stringify(magic)
+    });
 }
 
 function wrapWithSaveNumbers(originalObject, callback){
@@ -117,17 +164,9 @@ function wrapWithSaveNumbers(originalObject, callback){
     return originalObject
 }
 
-function saveMagic(magic){
-    return $.ajax({
-        type: 'post',
-        url: `/magic`,
-        contentType: 'json',
-        data: JSON.stringify(magic)
-    });
+function flatMagic(magic){
+    return Object.keys(magic).map((m)=>`${m}: ${magic[m]}`).join(', ')
 }
-
-
-
 
 
 /**
