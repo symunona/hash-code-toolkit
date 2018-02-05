@@ -17,13 +17,101 @@
           }
         }
       }
+    },
+    "0204-223521": {
+      "test": {
+        "score": 262500,
+        "time": 9.127,
+        "magic": {
+          "dummy": 5
+        },
+        "magicVersions": {
+          "5": {
+            "score": 262500,
+            "time": 9.127,
+            "magic": {
+              "dummy": 5
+            }
+          }
+        }
+      }
+    },
+    "0204-223639": {
+      "test": {
+        "score": 437500,
+        "time": 0.005,
+        "magic": {
+          "dummy": 5
+        },
+        "magicVersions": {
+          "5": {
+            "score": 437500,
+            "time": 0.017,
+            "magic": {
+              "dummy": 5
+            }
+          }
+        }
+      },
+      "me_at_the_zoo": {
+        "score": 188468.74,
+        "time": 0.055,
+        "magic": {
+          "dummy": 5
+        },
+        "magicVersions": {
+          "5": {
+            "score": 188468.74,
+            "time": 0.078,
+            "magic": {
+              "dummy": 5
+            }
+          }
+        }
+      }
     }
   },
   "ordered-by-request-quantities": {
     "0204-175737": {
       "test": {
         "score": 437500,
+        "time": 0
+      },
+      "me_at_the_zoo": {
+        "score": 145936.06,
+        "time": 0.005
+      }
+    },
+    "0204-223947": {
+      "test": {
+        "score": 562500,
         "time": 0.001
+      },
+      "me_at_the_zoo": {
+        "score": 178170.13,
+        "time": 0.001
+      }
+    }
+  },
+  "endpoint-perspective": {
+    "0204-233730": {
+      "test": {
+        "score": 0,
+        "time": 0.001
+      },
+      "me_at_the_zoo": {
+        "score": 0,
+        "time": 0.006
+      }
+    },
+    "0204-233949": {
+      "test": {
+        "score": 562500,
+        "time": 6.167
+      },
+      "me_at_the_zoo": {
+        "score": 252502.05,
+        "time": 0.006
       }
     }
   }

@@ -11,7 +11,8 @@ function draw(dataset) {
         
     dataset.videos = convertToObject(dataset.videoSizes, 'size')
     fillArrayKeyWithValue(dataset.videos, 'id', 'index')
-    createDistributedDotsOfList(dataset.videos, 'x', consts.height*9/10, 'v', 'video', 'id')
+    fillArrayKeyWithValue(dataset.videos, 'text', (v)=>`${v.id} ${v.size}` )
+    createDistributedDotsOfList(dataset.videos, 'x', consts.height*9/10, 'v', 'video', 'text')
 
     var edges = []
     

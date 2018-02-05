@@ -13,7 +13,7 @@ module.exports = function (p) {
     requestsSorted.map((r) => {
         let endpoint = p.endpoints[r.endpointId]
         if (endpoint.cacheServerLatencies.length) {
-            let closestServer = _.sortBy(endpoint.cacheServerLatencies, 'latency').reverse()[0]
+            let closestServer = _.sortBy(endpoint.cacheServerLatencies, 'latency')[0]
             if (closestServer.latency < endpoint.toDataServerLatency) {
                 addVideoToServer(servers[closestServer.cacheServerId], r.videoId)
             }

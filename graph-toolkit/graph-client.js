@@ -38,17 +38,17 @@ function ViewModel() {
         this.consts[key].subscribe(updateConsts, this.consts[key])
     })
 
-    
+
     this.inputData = ko.observable('')
     this.outputData = ko.observable('')
     this.stats = ko.observable({})
     this.solvers = ko.observable(solvers);
     this.magic = ko.observable({});
-    
+
     return this;
 }
 
-ko.onError = function(e){
+ko.onError = function (e) {
     console.error
 }
 
@@ -62,8 +62,8 @@ function updateConsts(val) {
     localStorage.setItem(CONST_KEY, JSON.stringify(consts));
 }
 
-function getSolutionFileName(algo, ver, dataset, magic){
-    return `${task}/${serverConsts.solutionCacheFolderName}/${algo}/${ver}/${dataset}/${magic?magic:'default'}.json`
+function getSolutionFileName(algo, ver, dataset, magic) {
+    return `${task}/${serverConsts.solutionCacheFolderName}/${algo}/${ver}/${dataset}/${magic ? magic : 'default'}.json`
 }
 
 /**
@@ -71,7 +71,7 @@ function getSolutionFileName(algo, ver, dataset, magic){
  * @param {String} name 
  */
 function loadInput(name) {
-    $.ajax({
+    return $.ajax({
         url: `/${task}/${serverConsts.inputFolder}/${name}.cache.json`,
         contentType: 'json'
     }).then(function (data) {
@@ -85,67 +85,70 @@ function loadInput(name) {
                 .attr("height", consts.height);
             var startTime = new Date()
             draw(data.parsedValue)
-            
-            $('#graph .nodes').on('mouseenter', function(){
+
+            $('#graph .nodes').on('mouseenter', function () {
                 this.parentElement.appendChild(this)
             });
-            
-            console.warn('Rendered in', (new Date() - startTime)/1000)
+
+            console.warn('Rendered in', (new Date() - startTime) / 1000)
         } catch (e) {
             console.error(e)
         }
     })
 }
-function loadSolution(path){
-    $.ajax({
-        url: path,
-        contentType: 'json'
-    }).then(function (data) {
-        
-        vm.outputData(JSON.stringify(data, null, 2));
-        try {            
-            var startTime = new Date()
-            drawSolution(data)            
-            console.warn('Rendered in', (new Date() - startTime)/1000)
-        } catch (e) {
-            console.error(e)
-        }
+function loadSolution(solutionName, path) {
+    return loadInput(solutionName).then(()=>{
+        return $.ajax({
+            url: path,
+            contentType: 'json'
+        }).then(function (data) {
+
+            vm.outputData(JSON.stringify(data, null, 2));
+            try {
+                var startTime = new Date()
+                drawSolution(data)
+                console.warn('Rendered in', (new Date() - startTime) / 1000)
+            } catch (e) {
+                console.error(e)
+            }
+        })
     })
 }
 
-function cleanStats(){
-    return confirm('Sure?')?$.ajax({
+function cleanStats() {
+    return confirm('Sure?') ? $.ajax({
         type: 'post',
         url: `/cleanstats`
-    }).then(getStats):false;
+    }).then(getStats) : false;
 }
 
 
-function getStats(){
+function getStats() {
     return $.ajax({
         url: `/${task}/${hostname}.${serverConsts.statFileName}`,
         contentType: 'json'
-    }).then((stats)=>{        
+    }).then((stats) => {
         let magic = {}
-        Object.keys(stats).map((solverName)=>{
+        Object.keys(stats).map((solverName) => {
             magic[solverName] = ko.observable()
             getMagic(solverName).then(magic[solverName])
         })
         vm.magic(magic)
-        vm.stats(stats)        
+        vm.stats(stats)
     })
+
 }
 
-function getMagic(solverName){
+function getMagic(solverName) {
     return $.ajax({
         url: `/${task}/${serverConsts.solversFolderName}/${solverName}.${serverConsts.magicConstantFile}`,
         contentType: 'json'
-    }).then(function(magic){                
+    }).then(function (magic) {
         return wrapWithSaveNumbers(magic, saveMagic.bind(this, solverName));
     })
 }
 
-function saveMagic(solverName, magic){
+function saveMagic(solverName, magic) {
     return $.ajax({
         type: 'post',
         url: `/magic/${solverName}`,
@@ -154,12 +157,12 @@ function saveMagic(solverName, magic){
     });
 }
 
-function wrapWithSaveNumbers(originalObject, callback){
+function wrapWithSaveNumbers(originalObject, callback) {
     Object.keys(originalObject).map((key) => {
-        originalObject[key] = ko.observable(originalObject[key])        
-        originalObject[key].subscribe(function(val){
+        originalObject[key] = ko.observable(originalObject[key])
+        originalObject[key].subscribe(function (val) {
             var objectToSave = {}
-            Object.keys(originalObject).map((origKey)=>{
+            Object.keys(originalObject).map((origKey) => {
                 objectToSave[origKey] = Number(ko.unwrap(originalObject[origKey]))
             })
             callback(objectToSave);
@@ -168,8 +171,8 @@ function wrapWithSaveNumbers(originalObject, callback){
     return originalObject
 }
 
-function flatMagic(magic){
-    return Object.keys(magic).map((m)=>`${m}: ${magic[m]}`).join(', ')
+function flatMagic(magic) {
+    return Object.keys(magic).map((m) => `${m}: ${magic[m]}`).join(', ')
 }
 
 
@@ -338,9 +341,9 @@ function newArray(objectCount) {
     return ret;
 }
 
-function wrapArray(array, variableName){
-    return array.map((elementValue, i)=>{
-        let element = {id: i}
+function wrapArray(array, variableName) {
+    return array.map((elementValue, i) => {
+        let element = { id: i }
         element[variableName] = elementValue
         return element
     })
@@ -389,7 +392,7 @@ function linkNodes(links, cls, textField) {
 }
 
 
-$('.flipper').on('click', function(){
+$('.flipper').on('click', function () {
     $(this).next().slideToggle()
 })
 

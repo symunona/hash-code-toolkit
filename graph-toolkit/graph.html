@@ -36,8 +36,6 @@
     <div data-bind="visible: false">loading...</div>    
     <div id="graph">graph</div>
     
-    
-
     <table> 
         <thead>
             <tr>                
@@ -65,7 +63,7 @@
                     <td>
                         <a data-bind="
                             text: stats()[algo][ver][dataset].score, 
-                            click: loadSolution.bind(this, getSolutionFileName(algo, ver, dataset, ''))"></a>
+                            click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, ''))"></a>
                     </td>
                     <td data-bind="text: stats()[algo][ver][dataset].time"></td>
                     <!-- /ko -->
@@ -90,7 +88,7 @@
                                     <div>
                                         <a data-bind="
                                             text: $parent.flatMagic(magic),
-                                            click: $parent.loadSolution.bind(this, getSolutionFileName(algo, ver, dataset, magicVer))
+                                            click: $parent.loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, magicVer))
                                             "></a>                                        
                                     </div>
                                 </div>

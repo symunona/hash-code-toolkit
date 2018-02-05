@@ -12,7 +12,7 @@
             "program": "${workspaceFolder}/app.js",
             "env":{
                 "task": "youtube",
-                "input":"test",
+                "input":"test me_at_the_zoo",
                 "solvers": "all",
                 "graph": "true"
             }
