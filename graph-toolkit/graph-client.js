@@ -90,6 +90,9 @@ function getSolutionFileName(algo, ver, dataset, magic) {
  * @param {String} name 
  */
 function loadInput(name) {
+    if (inputs[name]>10000){
+        if (!confirm('This is a pretty big file, it might freeze the browser. Sure?')) return;
+    }
     return $.ajax({
         url: `/${task}/${serverConsts.inputFolder}/${name}.cache.json`,
         contentType: 'json'
@@ -129,8 +132,11 @@ function getMagics(statNode){
     return _.uniq(magics)
 }
 
-function loadSolution(solutionName, path) {
-    return loadInput(solutionName).then(()=>{
+function loadSolution(dataset, path) {
+    if (inputs[name]>10000){
+        if (!confirm('This is a pretty big file, it might freeze the browser. Sure?')) return;
+    }
+    return loadInput(dataset).then(()=>{
         return $.ajax({
             url: path,
             contentType: 'json'
