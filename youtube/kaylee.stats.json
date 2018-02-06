@@ -116,8 +116,8 @@
         },
         "magicVersions": {
           "5": {
-            "score": 437500,
-            "time": 0.004,
+            "score": 0,
+            "time": 0.003,
             "magic": {
               "dummy": 5
             },
@@ -134,8 +134,8 @@
         },
         "magicVersions": {
           "5": {
-            "score": 188468.74,
-            "time": 0.008,
+            "score": 0,
+            "time": 0.011,
             "magic": {
               "dummy": 5
             },
@@ -182,13 +182,13 @@
     },
     "0205-235720": {
       "test": {
-        "score": 562500,
+        "score": 0,
         "time": 0,
         "size": 221
       },
       "me_at_the_zoo": {
-        "score": 178170.13,
-        "time": 0.001,
+        "score": 0,
+        "time": 0.007,
         "size": 1046
       }
     }
@@ -230,13 +230,13 @@
     },
     "0205-235720": {
       "test": {
-        "score": 562500,
-        "time": 0.001,
+        "score": 0,
+        "time": 0,
         "size": 221
       },
       "me_at_the_zoo": {
-        "score": 252502.05,
-        "time": 0.009,
+        "score": 0,
+        "time": 0.006,
         "size": 1159
       }
     }

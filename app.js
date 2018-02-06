@@ -1,12 +1,38 @@
-// Configuration
+/**
+ * Our little HashCodeToolkit is more like a framework, which 
+ * sums up the generic tasks about the competition, and tries 
+ * to simplify it so we have more time playing with algorithms.
+ * 
+ * We separated the process to these generic task specific steps:
+ * - reading input files
+ * - caching
+ * - solving with solver
+ * - scoring solution
+ * - exporting solution
+ * 
+ * At each step, you may have things configured, but this is the general
+ * pipeline. 
+ * 
+ * Oh, and we also have a nice GUI to compare the different algorithms,
+ * their efficiency, and even drawing some cool graphs!
+ * 
+ */
 
+ // The current task you are working on. It is used to identify the working folder where
+ // the task specific files go into.
 let currentTask = process.env.task
 if (!currentTask) throw new Error('Please provide a task name! (env variables task, see launch.json)')
 
+// Input files to be processed. If left empty, it will read all the .in files 
+// withing the project's input_data_set folder
 let input = process.env.input ? process.env.input.split(' ') : []
-let solvers = process.env.solvers ? process.env.solvers.split(' ') : []
-let writeSolutionsOut = !process.env.doNotCacheSolutions
 
+// Solvers to be ran on the data set. 
+// If `all` is provided, it will run every of them.
+// If none is provided, it will just run the imports and caches the files
+let solvers = process.env.solvers ? process.env.solvers.split(' ') : []
+
+// If it is a name of a solver, it will export the solver's solution.
 const doOutput = process.env.output // default false
 
 // If this is true, the file will not use cache, it will re-parse the original input
@@ -22,12 +48,9 @@ const graph = process.env.graph // If true, starts a server with some goodies.
 const consts = require('./consts')
 const fs = require('fs')
 const os = require('os')
-const bostich = require('bostich')
-const magicLoader = require('./magic')
-const reload = require('require-reload')(require)
-const solutionCacher = require('./solution-cacher')
-const packer = require('./packer')
 
+const solverRunner = require('./solver-runner')
+const packer = require('./packer')
 
 // If no input files are provided, search for all the input files in the input dir.
 if (!input.length) {
@@ -48,12 +71,11 @@ if (solvers.length === 1 && solvers[0] === 'all') {
         .map((fileName) => fileName.substr(0, fileName.length - 3))
     console.log('All solvers are loaded:', solvers.join(', '))
 }
+
 // Load the actual solvers for 
 const solverAlgorithms = solvers.map((name) => require(`./${currentTask}/${consts.solversFolderName}/${name}`))
 
-// Other task specific stuff
-
-const parser = require(`./${currentTask}/parser`)
+// Do not bail, if there is no score calculator is present.
 let score;
 try {
     score = require(`./${currentTask}/score`)
@@ -61,94 +83,35 @@ try {
     console.warn('No score calculator is in place yet, skiping.')
 }
 
-for (let i in input) {
-    let inputFileName = `./${currentTask}/${consts.inputFolder}/${input[i]}${consts.inputExtension}`
-    let inputParsedFileName = `./${currentTask}/${consts.inputFolder}/${input[i]}.cache.json`
-
-
-    console.log('<o>--------------------------------------<o>')
-    console.log(`Loading data for ${inputFileName}...`)
-
-    // Parse the file if not parsed already, if it is, load if from cache, unless force is true.
-    parsedData = bostich(inputFileName, parser, force)
-
-    if (parsedData.remaining) {
-        console.error('The parser is most likely faulity: there are still data to be processed!')
-    }
-
-    let solutions = {}
-
-    for (let s in solvers) {
-        solutions[solvers[s]] = runSolver(solvers[s], input[i], parsedData)
-    }
-
-    if (doOutput && solutions[doOutput]) {
-        packer.outputSolutionForOneDataSet(currentTask, input[i], solutions[doOutput])
-    }
-    else {
-        console.warn('No output is provided, not writing out anything.')
-    }
-    console.log('</>--------------------------------------</>')
-}
-
-
+// If we have export set, do clean the output folder so we 
+// do not have old compilations in place.
 if (doExport) {
     packer.cleanOutputFolder(currentTask)
+}
+
+// Iterate over the provided/found inputs.
+for (let i in input) {
+    solverRunner(currentTask, input[i], solvers, doOutput, force)
+}
+
+// If we are done, and the output property is set, do ourself 
+// a favor, and pack the 
+if (doExport) {
     packer.packCode(currentTask)
     packer.packOutputFolder(currentTask)
 }
 
-const toolkit = {
-    runSolver
-}
-
-// Start graphic frontend for debugging the problem
+// Start graphic frontend for debugging and nice algo version handling.
 if (graph) {
     const graphServer = require('./graph-toolkit/graph-server')
-    graphServer(currentTask, solvers, input, toolkit);
+    graphServer(currentTask, solvers, input);
     console.log('Started GUI')
 }
 else {
-    // process.exit();
+    // process.exit(); // Writes do not finish by the time this runs.    
 }
 console.log('============================================')
 
-/**
- * Runs the solver with the given name, then scores the output and saves the stats 
- * and backs up the current algorithm version to the hard drive.
- * Also saves the output JSON file, so it can be visualized and played with.
- * @param {String} solverName - to be run.
- * @param {String} inputDataSetName - the name of the input file used to identify and export file names.
- * @param {Object} parsedValue - the parsedValue parameter of jolicitron's output
- * @param {Object} [magic] - a set of magic constants provided to the algorithm
- * @returns {Object} the solution JS Object
- */
-function runSolver(solverName, inputDataSetName, parsedValue) {
-    console.log(`Solving with ${solverName}...`)
-    let algorithm = reLoadSolver(solverName);    
-    let startTime = new Date()
-    let magic = magicLoader(currentTask, solverName);
-    if (Object.keys(magic).length) console.log('Magic parameters:', Object.keys(magic).map((mkey)=>`${mkey}: ${magic[mkey]}`).join(', '))
-    let solution = algorithm(parsedData.parsedValue, magic)
-    let solveTime = (new Date() - startTime) / 1000;
-    console.log(`Solved in ${solveTime}`)
-    let solutionScore = 0
-    try {
-        solutionScore = score(solution, parsedData.parsedValue)
-    } catch (e) { }    // ignore if no scoring is in place.
-    console.warn('Score:', solutionScore)
-    // console.log('Backing up algorithm version...')    
-    solutionCacher(currentTask, solverName, inputDataSetName, solution, solutionScore, solveTime, magic)
-    console.log('>-----------------')    
-    return solution
-}
 
 
-/**
- * Live reloads the solver module from the hard drive.
- * @param {String} solverName 
- * @returns {Function} solver module function.
- */
-function reLoadSolver(solverName) {
-    return reload(`./${currentTask}/${consts.solversFolderName}/${solverName}`)
-}
+

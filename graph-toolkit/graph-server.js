@@ -15,10 +15,11 @@ const static = require('node-static'),
     os = require('os'),
     formidable = require("formidable"),
     del = require('node-delete'),
-    packer = require('../packer')
+    packer = require('../packer'),
+    solverRunner = require('../solver-runner')
 
 
-let datasets = [], task = '', algorithms = [], toolkit = {}, inputs = {}
+let datasets = [], task = '', algorithms = [], runSolver, inputs = {}
 
 server.on('request', (req, res) => {
 
@@ -42,7 +43,11 @@ server.on('request', (req, res) => {
             let solverName = parts[2]
             let version = parts[3]
 
+            
 
+            let inputFileName = `./${task}/${consts.inputFolder}/${input[i]}${consts.inputExtension}`
+            parsedData = bostich(inputFileName, parser, force)
+            
 
         }
         return
@@ -101,11 +106,10 @@ server.on('request', (req, res) => {
     }).resume()
 })
 
-module.exports = function graph(_task, _algorithms, _datasets, _toolkit) {
+module.exports = function graph(_task, _algorithms, _datasets) {
     task = _task
     algorithms = _algorithms
     datasets = _datasets
-    toolkit = _toolkit
 
     fs.readdirSync(`./${task}/${consts.inputFolder}/`)
         .filter((fn) => fn.endsWith(consts.inputExtension))

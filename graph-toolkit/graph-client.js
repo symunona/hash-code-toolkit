@@ -1,3 +1,7 @@
+/**
+ * This file handles generic GUI functionality in the browser.
+ */
+
 var consts = {
     width: 2000,
     height: 1000,
