@@ -14,7 +14,8 @@ const static = require('node-static'),
     consts = require('../consts'),
     os = require('os'),
     formidable = require("formidable"),
-    del = require('node-delete')
+    del = require('node-delete'),
+    packer = require('../packer')
 
 
 let datasets = [], task = '', algorithms = [], toolkit = {}, inputs = {}
@@ -48,9 +49,13 @@ server.on('request', (req, res) => {
 
     if (req.url.startsWith('/export/')) {
         if (req.method == 'POST') {
-            let versionName = req.url.substr(req.url.lastIndexOf('/'));
+            let parts = req.url.split('/');
+            let solverName = parts[2]
+            let version = parts[3]
+            let magic = parts[4]
             
-            // toolkit.out
+            console.log(`Exporting set: ${solverName} ${version} ${magic}`)
+            packer.exportSolutionsForSolver(task, solverName, version, magic)
             
             success(res)
             

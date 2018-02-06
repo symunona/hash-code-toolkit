@@ -93,15 +93,13 @@ for (let i in input) {
 
 
 if (doExport) {
-    packCode();
-    packOutputFolder();
+    packer.cleanOutputFolder(currentTask)
+    packer.packCode(currentTask)
+    packer.packOutputFolder(currentTask)
 }
 
 const toolkit = {
-    runSolver,
-    output,
-    packOutputFolder,
-    packCode
+    runSolver
 }
 
 // Start graphic frontend for debugging the problem
@@ -113,7 +111,7 @@ if (graph) {
 else {
     // process.exit();
 }
-
+console.log('============================================')
 
 /**
  * Runs the solver with the given name, then scores the output and saves the stats 

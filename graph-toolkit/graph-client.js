@@ -32,6 +32,7 @@ function ViewModel() {
     this.allInputs = inputs;
     this.formatSize = formatSize;
     this.exportSolution = exportSolution;
+    this.getMagics = getMagics;
 
     // Map constants to observables.
     this.consts = {}
@@ -111,6 +112,18 @@ function loadInput(name) {
     })
 }
 
+function getMagics(statNode){
+    let magics = []
+    Object.keys(statNode).map((inputDataSet)=>{
+        if (!statNode[inputDataSet].magicVersions){
+            magics.push('default')
+        }
+        else{
+            magics = magics.concat(Object.keys(statNode[inputDataSet].magicVersions))
+        }
+    })
+    return _.uniq(magics)
+}
 
 function loadSolution(solutionName, path) {
     return loadInput(solutionName).then(()=>{
@@ -132,9 +145,10 @@ function loadSolution(solutionName, path) {
 }
 
 
-function exportSolution(solutionName){
+function exportSolution(solverName, ver, magic){
     return $.ajax({
-        url: `/export/${solutionName}`        
+        type: 'post',
+        url: `/export/${solverName}/${ver}/${magic==='default'?'':magic}`        
     }).then(console.warn).catch(console.error)
 }
 
