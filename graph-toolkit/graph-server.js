@@ -36,14 +36,15 @@ server.on('request', (req, res) => {
 
     // We can replace solvers from the GUI in the future, so we can 
     // run specific versions of the algorithms
-    if (req.url.startsWith('/run')) {
-        var form = new formidable.IncomingForm();
-        form.parse(req, function (err, fields, files) {
+    if (req.url.startsWith('/run/')) {
+        if (req.method == 'POST') {
+            let parts = req.url.split('/');
+            let solverName = parts[2]
+            let version = parts[3]
 
-            console.log('[RUNNER] with blades: ', fields);
+            
 
-            success(res)
-        });
+        }
         return
     }
 
@@ -55,10 +56,13 @@ server.on('request', (req, res) => {
             let magic = parts[4]
             
             console.log(`Exporting set: ${solverName} ${version} ${magic}`)
-            packer.exportSolutionsForSolver(task, solverName, version, magic)
-            
-            success(res)
-            
+            let result = packer.exportSolutionsForSolver(task, solverName, version, magic)
+            if (result === true){
+                success(res)
+            }
+            else{
+                fail(res, result)
+            }        
         }
         return
     }
@@ -83,9 +87,9 @@ server.on('request', (req, res) => {
         if (req.method == 'POST') {
 
             console.log('[STATS] Cleaning up stats, solution cache and solver backups. Clean slate.');
-            fs.writeFileSync(`./${task}/${os.hostname()}.${consts.statFileName}`, '{}');
-            console.log(del.sync(`${task}/${consts.solversFolderName}/_*\.backup\.js`))
-            console.log(del.sync(`${task}/${consts.inputFolder}/_*\.output\.json`))
+            // fs.writeFileSync(`./${task}/${os.hostname()}.${consts.statFileName}`, '{}');
+
+            console.log(del.sync(`${task}/${consts.solutionCacheFolderName}/**/*`))            
 
             success(res)
         }
@@ -139,6 +143,14 @@ function success(res) {
         'content-type': 'application/json'
     });
     res.write('{"succes": true}');
+    res.end();
+}
+
+function fail(res, message) {
+    res.writeHead(500, {
+        'content-type': 'application/json'
+    });
+    res.write(`{"succes": false, "message":"${message}"}`);
     res.end();
 }
 

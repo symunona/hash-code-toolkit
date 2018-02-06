@@ -80,7 +80,7 @@
         "magicVersions": {
           "5": {
             "score": 437500,
-            "time": 0.003,
+            "time": 0.002,
             "magic": {
               "dummy": 5
             },
@@ -91,6 +91,44 @@
       "me_at_the_zoo": {
         "score": 188468.74,
         "time": 0.007,
+        "magic": {
+          "dummy": 5
+        },
+        "magicVersions": {
+          "5": {
+            "score": 188468.74,
+            "time": 0.008,
+            "magic": {
+              "dummy": 5
+            },
+            "size": 1370
+          }
+        }
+      }
+    },
+    "0205-235720": {
+      "test": {
+        "score": 437500,
+        "time": 0.004,
+        "size": 275,
+        "magic": {
+          "dummy": 5
+        },
+        "magicVersions": {
+          "5": {
+            "score": 437500,
+            "time": 0.004,
+            "magic": {
+              "dummy": 5
+            },
+            "size": 275
+          }
+        }
+      },
+      "me_at_the_zoo": {
+        "score": 188468.74,
+        "time": 0.013,
+        "size": 1370,
         "magic": {
           "dummy": 5
         },
@@ -121,7 +159,7 @@
     "0204-223947": {
       "test": {
         "score": 562500,
-        "time": 0.001,
+        "time": 0,
         "size": 221
       },
       "me_at_the_zoo": {
@@ -140,6 +178,18 @@
       "videos_worth_spreading": {
         "score": 1907266.8434,
         "time": 2.083
+      }
+    },
+    "0205-235720": {
+      "test": {
+        "score": 562500,
+        "time": 0,
+        "size": 221
+      },
+      "me_at_the_zoo": {
+        "score": 178170.13,
+        "time": 0.001,
+        "size": 1046
       }
     }
   },
@@ -162,7 +212,7 @@
       },
       "me_at_the_zoo": {
         "score": 252502.05,
-        "time": 0.003,
+        "time": 0.008,
         "size": 1159
       },
       "kittens": {
@@ -176,6 +226,18 @@
       "videos_worth_spreading": {
         "score": 2032814.88505,
         "time": 3.821
+      }
+    },
+    "0205-235720": {
+      "test": {
+        "score": 562500,
+        "time": 0.001,
+        "size": 221
+      },
+      "me_at_the_zoo": {
+        "score": 252502.05,
+        "time": 0.009,
+        "size": 1159
       }
     }
   }

@@ -45,10 +45,12 @@ function outputSolutionVersion(currentTask, inputDataSetName, solverName, versio
     try{
         let solution = JSON.parse(fs.readFileSync('./'+fileName, 'utf8'))
         outputSolutionForOneDataSet(currentTask, inputDataSetName, solution)
+        return true
     }
     catch(e){
         console.error(e)
         console.error(`Error reading cached solution file ${fileName}. Have the converter ran for it?`)
+        return `Error reading cached solution file ${fileName}.`
     }
     
 }
@@ -65,9 +67,15 @@ function exportSolutionsForSolver(task, solverName, version, magic) {
     let stats = solutionCacher.loadStatFile(task)
     let inputs = Object.keys(stats[solverName][version])
     
-    inputs.map((inputDataSetName)=>outputSolutionVersion(task, inputDataSetName, solverName, version, magic))    
+    let failures = inputs
+        .map((inputDataSetName)=>outputSolutionVersion(task, inputDataSetName, solverName, version, magic))
+        .filter((ret)=>ret!==true?ret:false)
 
     packOutputFolder(task)
+
+    // This is magic: if we have errors, we return the error messages
+    // if we have successes, we return true.
+    return failures.length?failures.join(' '):true;
 }
 
 /**
