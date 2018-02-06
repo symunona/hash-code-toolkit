@@ -22,14 +22,20 @@
     #graph g.edge:hover text{ fill: #aff; font-weight: bolder;}
     #graph g.edge:hover line{ stroke: #888}
     table {width: 100%}
-    span.score, span.time { display: inline-block;}
-    span.score{ width: 55% }
+    div.score, div.time, div.size { display: inline-block;}
+    span.score{ width: 45% }
     table td{ vertical-align: top}
 
     a{ background: #131; padding: 3px; display: inline-block}
     a:hover{ text-decoration: underline; cursor: pointer}
 
-    td, th{border: 1px solid #262; margin: 0}
+    td, th, .subtable div{border: 1px solid #262; margin: 0}
+    
+    .subtable div {  margin: 2px }
+
+    .export-link { font-size: small }
+
+    
 
 </style>
 <body>
@@ -42,66 +48,70 @@
                 <th rowspan="2">Algo</th>
                 <th rowspan="2">Ver</th>
                 <!-- ko foreach: datasets -->
-                <th colspan="2">
-                    <a data-bind="click: loadInput, text: $data"></a>
+                <th colspan="3">
+                    <a data-bind="click: loadInput, text: `${$data} (${formatSize($parent.allInputs[$data])})`"></a>
                 </th>
                 <!-- /ko -->
             </tr>
             <tr data-bind="foreach: datasets">
                     <th>Score</th>
                     <th>Time</th>
+                    <th>Size</th>
             </tr>
         </thead>
         <tbody data-bind="foreach: { data: Object.keys(stats()), as: 'algo' } ">                    
             <!-- ko foreach: { data: Object.keys(stats()[algo]), as: 'ver'} -->
+            <!-- ko foreach: { data: getMagics(stats()[algo][ver]), as: 'magicVer'} -->
             <tr>
                 <td data-bind="text: algo"></td>
-                <td data-bind="text: ver"></td>
+                <td>
+                    <span data-bind="text: ver"></span>
+                    <br>
+                    <a class="export-link" data-bind="click: exportSolution.bind(this, algo, ver, magicVer)">export</a>
+
+                    <!-- ko if: magicVer === 'default' -->                    
+                    <!-- /ko -->
+                    <!-- ko if: magicVer !== 'default' 
+                        && stats()[algo][ver][Object.keys(stats()[algo][ver])[0]].magicVersions 
+                        && stats()[algo][ver][Object.keys(stats()[algo][ver])[0]].magicVersions[magicVer]-->
+                    
+                        <!-- When I wrote this line down, I was not serious. Joking. -->
+                        M: <span data-bind="text: flatMagic(stats()[algo][ver][Object.keys(stats()[algo][ver])[0]].magicVersions[magicVer].magic)"></span>
+
+                    <!-- /ko -->
+                </td>
                 
                 <!-- ko foreach: {data: Object.keys(stats()[algo][ver]), as: 'dataset'} -->         
-                    <!-- ko if: !stats()[algo][ver][dataset].magicVersions -->
-                    <td>
-                        <a data-bind="
-                            text: stats()[algo][ver][dataset].score, 
-                            click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, ''))"></a>
-                    </td>
-                    <td data-bind="text: stats()[algo][ver][dataset].time"></td>
+                    <!-- ko if: magicVer === 'default' -->
+                        <td>
+                            <a data-bind="
+                                text: stats()[algo][ver][dataset].score, 
+                                click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, ''))"></a>
+                        </td>
+                        <td data-bind="text: stats()[algo][ver][dataset].time"></td>
+                        <td data-bind="text: formatSize(stats()[algo][ver][dataset].size)"></td>
                     <!-- /ko -->
                     
-                    <!-- ko if: stats()[algo][ver][dataset].magicVersions -->
-                    <td colspan="2" data-bind="with: stats()[algo][ver][dataset]">
-                        <!-- <span data-bind="text: JSON.stringify($data)"></span> -->
-                        
-                                
-                            <!-- ko if: Object.keys($data.magicVersions).length > 1 -->
-                                <div>                                    
-                                    Best: <span data-bind="text: $parent.flatMagic($data.magic)"></span>
-                                </div>
-                                <div>
-                                    <span class="score" data-bind="text: score"></span>
-                                    <span class="time" data-bind="text: time"></span>                                    
-                                </div>    
-                        
-                            <!-- /ko -->
-                            <!-- ko foreach: {data: Object.keys(magicVersions), as: 'magicVer'} -->
-                                <div>
-                                    <div>
-                                        <a data-bind="
-                                            text: $parent.flatMagic(magic),
-                                            click: $parent.loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, magicVer))
-                                            "></a>                                        
-                                    </div>
-                                </div>
-                                <div>
-                                    <span class="score" data-bind="text: magicVersions[magicVer].score"></span>
-                                    <span class="time" data-bind="text: magicVersions[magicVer].time"></span>
-                                </div>
-                            <!-- /ko -->  
-                        
-                    </td>                    
+                    <!-- ko if: magicVer !== 'default' --> 
+                        <!-- ko if: stats()[algo][ver][dataset].magicVersions && stats()[algo][ver][dataset].magicVersions[magicVer] -->
+                        <td>
+                            <a data-bind="
+                                text: stats()[algo][ver][dataset].magicVersions[magicVer].score, 
+                                click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, magicVer))"></a>
+                        </td>
+                        <td data-bind="text: stats()[algo][ver][dataset].magicVersions[magicVer].time"></td>
+                        <td data-bind="text: formatSize(stats()[algo][ver][dataset].magicVersions[magicVer].size)"></td>
+                        <!-- /ko -->
+                        <!-- ko if: !(stats()[algo][ver][dataset].magicVersions && stats()[algo][ver][dataset].magicVersions[magicVer]) -->
+                            <td colspan="3">
+                                N/A
+                            </td>
+                        <!-- /ko -->
                     <!-- /ko -->
+
                 <!-- /ko -->
             </tr>
+            <!-- /ko -->            
             <!-- /ko -->            
         </tbody>
     </table>    
@@ -143,6 +153,7 @@
         var solvers = {{solvers}};
         var serverConsts = {{consts}};
         var hostname = "{{hostname}}";
+        var inputs = {{inputs}}
     </script>
 
     <script src="graph-toolkit/graph-client.js"></script>

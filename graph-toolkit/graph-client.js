@@ -1,3 +1,7 @@
+/**
+ * This file handles generic GUI functionality in the browser.
+ */
+
 var consts = {
     width: 2000,
     height: 1000,
@@ -24,11 +28,15 @@ ko.bindingHandlers.json = {
 }
 
 function ViewModel() {
-    this.datasets = window.datasets;
+    
     this.loadInput = loadInput;
     this.cleanStats = cleanStats;
     this.loadSolution = loadSolution;
     this.flatMagic = flatMagic;
+    this.allInputs = inputs;
+    this.formatSize = formatSize;
+    this.exportSolution = exportSolution;
+    this.getMagics = getMagics;
 
     // Map constants to observables.
     this.consts = {}
@@ -44,6 +52,17 @@ function ViewModel() {
     this.stats = ko.observable({})
     this.solvers = ko.observable(solvers);
     this.magic = ko.observable({});
+
+    this.datasets = ko.computed(function(){
+        if (!this.stats()) return window.datasets
+        let datasets = []
+        Object.keys(this.stats()).map((algo)=>{
+            Object.keys(this.stats()[algo]).map((ver)=>{
+                datasets = datasets.concat(Object.keys(this.stats()[algo][ver]))
+            })
+        })
+        return _.uniq(datasets)
+    }, this)
 
     return this;
 }
@@ -96,6 +115,20 @@ function loadInput(name) {
         }
     })
 }
+
+function getMagics(statNode){
+    let magics = []
+    Object.keys(statNode).map((inputDataSet)=>{
+        if (!statNode[inputDataSet].magicVersions){
+            magics.push('default')
+        }
+        else{
+            magics = magics.concat(Object.keys(statNode[inputDataSet].magicVersions))
+        }
+    })
+    return _.uniq(magics)
+}
+
 function loadSolution(solutionName, path) {
     return loadInput(solutionName).then(()=>{
         return $.ajax({
@@ -113,6 +146,14 @@ function loadSolution(solutionName, path) {
             }
         })
     })
+}
+
+
+function exportSolution(solverName, ver, magic){
+    return $.ajax({
+        type: 'post',
+        url: `/export/${solverName}/${ver}/${magic==='default'?'':magic}`        
+    }).then(console.warn).catch(console.error)
 }
 
 function cleanStats() {
@@ -136,7 +177,6 @@ function getStats() {
         vm.magic(magic)
         vm.stats(stats)
     })
-
 }
 
 function getMagic(solverName) {
@@ -396,3 +436,9 @@ $('.flipper').on('click', function () {
     $(this).next().slideToggle()
 })
 
+function formatSize(size){
+    if (size === undefined) return ''
+    if (size < 1024) return size + 'B'
+    if (size < 1024*1024) return Math.round(size/1024) + 'KB'
+    return Math.round(size/1024/1024) + 'MB'
+}

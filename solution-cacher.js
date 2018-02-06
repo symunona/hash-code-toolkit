@@ -11,6 +11,8 @@ const getSolutionFileName = require('./solution-cache-name-resolver').getSolutio
     fs = require('fs')
 
 module.exports = backUpSolverIfNecessaryAndExportStats
+module.exports.loadStatFile = loadStatFile
+module.exports.generateMagicKey = generateMagicKey
 
 /**
  * Checks the last backed up solver version, if it's content has changed, backs it up again, 
@@ -35,8 +37,9 @@ function backUpSolverIfNecessaryAndExportStats(task, solverName, inputDataSetNam
 
     // Back up the solution, so we can access it from the frontend.
     fs.writeFileSync(solutionFileName, JSON.stringify(solution, null, 2))
+    let size = fs.statSync(solutionFileName).size;
 
-    exportStats(task, solverName, version, inputDataSetName, score, timeFinished, magic)
+    exportStats(task, solverName, version, inputDataSetName, score, timeFinished, magic, size)
 
     return version;
 }
@@ -108,14 +111,8 @@ function getSolverVersionAndBackItUp(task, solverName) {
  * @param {Number} timeFinished 
  * @param {Object} magic 
  */
-function exportStats(task, solverName, version, inputDataSetName, score, timeFinished, magic) {
-    let stats = {}
-
-    let statFileName = `./${task}/${os.hostname()}.${consts.statFileName}`
-    try {
-        let statFile = fs.readFileSync(statFileName, 'utf8')
-        stats = JSON.parse(statFile)
-    } catch (e) { } // File does not exists yet, ignore.
+function exportStats(task, solverName, version, inputDataSetName, score, timeFinished, magic, fileSize) {
+    let stats = loadStatFile(task)
 
     // Write the stats to the stats file.
     stats[solverName] = stats[solverName] || {}
@@ -138,6 +135,7 @@ function exportStats(task, solverName, version, inputDataSetName, score, timeFin
         if (isThisRunBetter) {
             stats[solverName][version][inputDataSetName].score = score;
             stats[solverName][version][inputDataSetName].time = timeFinished
+            stats[solverName][version][inputDataSetName].size = fileSize
             stats[solverName][version][inputDataSetName].magic = magic
         }
         
@@ -151,13 +149,33 @@ function exportStats(task, solverName, version, inputDataSetName, score, timeFin
         stats[solverName][version][inputDataSetName].magicVersions[magicKey].score = score;
         stats[solverName][version][inputDataSetName].magicVersions[magicKey].time = timeFinished
         stats[solverName][version][inputDataSetName].magicVersions[magicKey].magic = magic
+        stats[solverName][version][inputDataSetName].magicVersions[magicKey].size = fileSize
     
     } else {
         stats[solverName][version][inputDataSetName].score = score;
         stats[solverName][version][inputDataSetName].time = timeFinished
+        stats[solverName][version][inputDataSetName].size = fileSize
     }
 
-    fs.writeFileSync(statFileName, JSON.stringify(stats, null, 2));
+    fs.writeFileSync(getStatFileName(task), JSON.stringify(stats, null, 2));
+}
+
+/**
+ * Loads stat file if exists
+ * @param {String} task 
+ * @returns {Object}
+ */
+function loadStatFile(task){
+    let stats = {}    
+    try {
+        let statFile = fs.readFileSync(getStatFileName(task), 'utf8')
+        stats = JSON.parse(statFile)
+    } catch (e) { } // File does not exists yet, ignore.
+    return stats;
+}
+
+function getStatFileName(task){
+    return `./${task}/${os.hostname()}.${consts.statFileName}`
 }
 
 /**

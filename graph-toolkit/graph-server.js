@@ -14,10 +14,12 @@ const static = require('node-static'),
     consts = require('../consts'),
     os = require('os'),
     formidable = require("formidable"),
-    del = require('node-delete')
+    del = require('node-delete'),
+    packer = require('../packer'),
+    solverRunner = require('../solver-runner')
 
 
-let datasets = [], task = '', algorithms = [], toolkit = {}
+let datasets = [], task = '', algorithms = [], runSolver, inputs = {}
 
 server.on('request', (req, res) => {
 
@@ -27,21 +29,46 @@ server.on('request', (req, res) => {
             datasets: JSON.stringify(datasets),
             consts: JSON.stringify(consts),
             hostname: os.hostname(),
-            task
+            task,
+            inputs: JSON.stringify(inputs)
         }, res)
         return
     }
 
     // We can replace solvers from the GUI in the future, so we can 
     // run specific versions of the algorithms
-    if (req.url.startsWith('/run')) {
-        var form = new formidable.IncomingForm();
-        form.parse(req, function (err, fields, files) {
+    if (req.url.startsWith('/run/')) {
+        if (req.method == 'POST') {
+            let parts = req.url.split('/');
+            let solverName = parts[2]
+            let version = parts[3]
 
-            console.log('[RUNNER] with blades: ', fields);
+            
 
-            success(res)
-        });
+            let inputFileName = `./${task}/${consts.inputFolder}/${input[i]}${consts.inputExtension}`
+            parsedData = bostich(inputFileName, parser, force)
+            
+
+        }
+        return
+    }
+
+    if (req.url.startsWith('/export/')) {
+        if (req.method == 'POST') {
+            let parts = req.url.split('/');
+            let solverName = parts[2]
+            let version = parts[3]
+            let magic = parts[4]
+            
+            console.log(`Exporting set: ${solverName} ${version} ${magic}`)
+            let result = packer.exportSolutionsForSolver(task, solverName, version, magic)
+            if (result === true){
+                success(res)
+            }
+            else{
+                fail(res, result)
+            }        
+        }
         return
     }
 
@@ -66,8 +93,8 @@ server.on('request', (req, res) => {
 
             console.log('[STATS] Cleaning up stats, solution cache and solver backups. Clean slate.');
             fs.writeFileSync(`./${task}/${os.hostname()}.${consts.statFileName}`, '{}');
-            console.log(del.sync(`${task}/${consts.solversFolderName}/_*\.backup\.js`))
-            console.log(del.sync(`${task}/${consts.inputFolder}/_*\.output\.json`))
+
+            console.log(del.sync(`${task}/${consts.solutionCacheFolderName}/**/*`))            
 
             success(res)
         }
@@ -79,11 +106,17 @@ server.on('request', (req, res) => {
     }).resume()
 })
 
-module.exports = function graph(_task, _algorithms, _datasets, _toolkit) {
+module.exports = function graph(_task, _algorithms, _datasets) {
     task = _task
     algorithms = _algorithms
     datasets = _datasets
-    toolkit = _toolkit
+
+    fs.readdirSync(`./${task}/${consts.inputFolder}/`)
+        .filter((fn) => fn.endsWith(consts.inputExtension))
+        .map((fileName) => {
+            inputs[fileName.substr(0, fileName.length - consts.inputExtension.length)] =
+                fs.statSync(`./${task}/${consts.inputFolder}/${fileName}`).size
+        })
 
     opn(`http://127.0.0.1:${port}/`);
 }
@@ -109,11 +142,19 @@ function renderHtml(html, data, res) {
     res.end();
 }
 
-function success(res){
+function success(res) {
     res.writeHead(200, {
         'content-type': 'application/json'
     });
     res.write('{"succes": true}');
+    res.end();
+}
+
+function fail(res, message) {
+    res.writeHead(500, {
+        'content-type': 'application/json'
+    });
+    res.write(`{"succes": false, "message":"${message}"}`);
     res.end();
 }
 
