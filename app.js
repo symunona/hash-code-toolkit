@@ -75,14 +75,6 @@ if (solvers.length === 1 && solvers[0] === 'all') {
 // Load the actual solvers for 
 const solverAlgorithms = solvers.map((name) => require(`./${currentTask}/${consts.solversFolderName}/${name}`))
 
-// Do not bail, if there is no score calculator is present.
-let score;
-try {
-    score = require(`./${currentTask}/score`)
-} catch (e) {
-    console.warn('No score calculator is in place yet, skiping.')
-}
-
 // If we have export set, do clean the output folder so we 
 // do not have old compilations in place.
 if (doExport) {
@@ -97,7 +89,9 @@ for (let i in input) {
 // If we are done, and the output property is set, do ourself 
 // a favor, and pack the 
 if (doExport) {
-    packer.packCode(currentTask)
+
+    // Yeah, this does not really work just yet...
+    // packer.packCode(currentTask)
     packer.packOutputFolder(currentTask)
 }
 

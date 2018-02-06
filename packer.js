@@ -5,7 +5,7 @@
 
 module.exports = {}
 
-module.exports.outputSolutionDirectly = outputSolutionForOneDataSet
+module.exports.outputSolutionForOneDataSet = outputSolutionForOneDataSet
 
 module.exports.outputSolutionVersion = outputSolutionVersion
 

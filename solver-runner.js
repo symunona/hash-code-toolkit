@@ -75,10 +75,14 @@ function runSolver(currentTask, solverName, inputDataSetName, parsedValue) {
     console.log(`Solved in ${solveTime}`)
     let solutionScore = 0
     try {
-        solutionScore = score(solution, parsedData.parsedValue)
-    } catch (e) { }    // ignore if no scoring is in place.
-    console.warn('Score:', solutionScore)
-    // console.log('Backing up algorithm version...')    
+        // Do not bail, if there is no score calculator is present.
+        solutionScore = require(`./${currentTask}/score`)(solution, parsedData.parsedValue)
+        console.warn('Score:', solutionScore)
+    } catch (e) { 
+        console.warn('No scoring is in place, could not tell you the score.')
+
+    }
+        
     solutionCacher(currentTask, solverName, inputDataSetName, solution, solutionScore, solveTime, magic)
     console.log('>-----------------')
     return solution
