@@ -1,79 +1,100 @@
 {
-  "ordered-by-request-quantities": {
-    "0206-010824": {
+  "cache-server-perspective": {
+    "0206-103030": {
+      "test": {
+        "score": 562500,
+        "time": 0.002,
+        "size": 275
+      },
+      "me_at_the_zoo": {
+        "score": 228727.15,
+        "time": 0.008,
+        "size": 1382
+      }
+    },
+    "0206-114115": {
       "kittens": {
-        "score": 2443497.08772,
-        "time": 20.187,
-        "size": 129117
+        "score": 391649.576085,
+        "time": 1977.315,
+        "size": 149495
+      },
+      "me_at_the_zoo": {
+        "score": 228727.15,
+        "time": 0.005,
+        "size": 1382
       },
       "test": {
         "score": 562500,
-        "time": 0,
-        "size": 221
+        "time": 0.001,
+        "size": 275
       },
-      "me_at_the_zoo": {
-        "score": 178170.13,
-        "time": 0.002,
-        "size": 1046
+      "trending_today": {
+        "score": 52531.035,
+        "time": 47.916,
+        "size": 142326
+      },
+      "videos_worth_spreading": {
+        "score": 2423578.51768,
+        "time": 3.554,
+        "size": 52423
       }
     }
   },
   "endpoint-perspective": {
-    "0206-011025": {
-      "kittens": {
-        "score": 2725835.80534,
-        "time": 86.143,
-        "size": 120806
-      },
+    "0206-103030": {
       "test": {
         "score": 562500,
-        "time": 0,
+        "time": 0.001,
         "size": 221
       },
       "me_at_the_zoo": {
-        "score": 252502.05,
-        "time": 0.003,
+        "score": 260266.29,
+        "time": 0.002,
         "size": 1159
+      },
+      "kittens": {
+        "score": 2767286.202385,
+        "time": 73.007,
+        "size": 120806
+      },
+      "trending_today": {
+        "score": 2502196.56,
+        "time": 17.1,
+        "size": 144918
+      },
+      "videos_worth_spreading": {
+        "score": 2082863.56438,
+        "time": 1.614,
+        "size": 52308
       }
     }
   },
-  "cache-server-perspective": {
-    "0206-011505": {
+  "ordered-by-request-quantities": {
+    "0206-103030": {
       "test": {
-        "score": 437500,
-        "time": 0.004,
-        "size": 275,
-        "magic": {
-          "dummy": 5
-        },
-        "magicVersions": {
-          "5": {
-            "score": 437500,
-            "time": 0.004,
-            "magic": {
-              "dummy": 5
-            },
-            "size": 275
-          }
-        }
+        "score": 562500,
+        "time": 0.001,
+        "size": 221
       },
       "me_at_the_zoo": {
-        "score": 188468.74,
-        "time": 0.005,
-        "size": 1370,
-        "magic": {
-          "dummy": 5
-        },
-        "magicVersions": {
-          "5": {
-            "score": 188468.74,
-            "time": 0.005,
-            "magic": {
-              "dummy": 5
-            },
-            "size": 1370
-          }
-        }
+        "score": 190201.9,
+        "time": 0.001,
+        "size": 1046
+      },
+      "kittens": {
+        "score": 2554429.65092,
+        "time": 38.192,
+        "size": 129117
+      },
+      "trending_today": {
+        "score": 31970.15,
+        "time": 4.907,
+        "size": 7307
+      },
+      "videos_worth_spreading": {
+        "score": 2062796.48526,
+        "time": 0.784,
+        "size": 30324
       }
     }
   }

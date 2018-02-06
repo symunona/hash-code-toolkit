@@ -13,7 +13,7 @@ module.exports = function score(algorithmOutput, parsedValue) {
         // Look for the shortest route to the video
         let serversHavingTheVideo = getCacheServersForEndpointWithTheVideo(r.endpointId, r.videoId)
         if (serversHavingTheVideo.length){
-            let shortestTimeToVideo = _.sortBy(serversHavingTheVideo, 'latency').reverse()[0].latency
+            let shortestTimeToVideo = _.sortBy(serversHavingTheVideo, 'latency')[0].latency
             // Is it faster through the data server?
             shortestTimeToVideo = _.min([shortestTimeToVideo, dataServerLatency])    
             return (dataServerLatency - shortestTimeToVideo) * r.requestCount

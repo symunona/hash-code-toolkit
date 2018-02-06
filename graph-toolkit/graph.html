@@ -81,32 +81,39 @@
                     <!-- /ko -->
                 </td>
                 
-                <!-- ko foreach: {data: Object.keys(stats()[algo][ver]), as: 'dataset'} -->         
-                    <!-- ko if: magicVer === 'default' -->
-                        <td>
-                            <a data-bind="
-                                text: stats()[algo][ver][dataset].score, 
-                                click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, ''))"></a>
-                        </td>
-                        <td data-bind="text: stats()[algo][ver][dataset].time"></td>
-                        <td data-bind="text: formatSize(stats()[algo][ver][dataset].size)"></td>
-                    <!-- /ko -->
-                    
-                    <!-- ko if: magicVer !== 'default' --> 
-                        <!-- ko if: stats()[algo][ver][dataset].magicVersions && stats()[algo][ver][dataset].magicVersions[magicVer] -->
-                        <td>
-                            <a data-bind="
-                                text: stats()[algo][ver][dataset].magicVersions[magicVer].score, 
-                                click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, magicVer))"></a>
-                        </td>
-                        <td data-bind="text: stats()[algo][ver][dataset].magicVersions[magicVer].time"></td>
-                        <td data-bind="text: formatSize(stats()[algo][ver][dataset].magicVersions[magicVer].size)"></td>
-                        <!-- /ko -->
-                        <!-- ko if: !(stats()[algo][ver][dataset].magicVersions && stats()[algo][ver][dataset].magicVersions[magicVer]) -->
-                            <td colspan="3">
-                                N/A
+                <!-- ko foreach: {data: datasets, as: 'dataset'} -->         
+                    <!-- ko if: stats()[algo][ver][dataset] -->
+                        <!-- ko if: magicVer === 'default' -->
+                            <td>
+                                <a data-bind="
+                                    text: score(stats()[algo][ver][dataset].score), 
+                                    click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, ''))"></a>
                             </td>
+                            <td data-bind="text: time(stats()[algo][ver][dataset].time)"></td>
+                            <td data-bind="text: formatSize(stats()[algo][ver][dataset].size)"></td>
                         <!-- /ko -->
+                        
+                        <!-- ko if: magicVer !== 'default' --> 
+                            <!-- ko if: stats()[algo][ver][dataset].magicVersions && stats()[algo][ver][dataset].magicVersions[magicVer] -->
+                            <td>
+                                <a data-bind="
+                                    text: score(stats()[algo][ver][dataset].magicVersions[magicVer].score), 
+                                    click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, magicVer))"></a>
+                            </td>
+                            <td data-bind="text: time(stats()[algo][ver][dataset].magicVersions[magicVer].time)"></td>
+                            <td data-bind="text: formatSize(stats()[algo][ver][dataset].magicVersions[magicVer].size)"></td>
+                            <!-- /ko -->
+                            <!-- ko if: !(stats()[algo][ver][dataset].magicVersions && stats()[algo][ver][dataset].magicVersions[magicVer]) -->
+                                <td colspan="3">
+                                    N/A
+                                </td>
+                            <!-- /ko -->
+                        <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- ko if: !stats()[algo][ver][dataset] -->
+                    <td colspan="3">
+                        N/A
+                    </td>
                     <!-- /ko -->
 
                 <!-- /ko -->

@@ -11,11 +11,10 @@
             "name": "youtube - test",
             "program": "${workspaceFolder}/app.js",
             "env":{
-                "task": "youtube",
-                "input":"test me_at_the_zoo",
-                "solvers": "all",
+                "task": "youtube",            
                 "graph": "true"
-            }
+            },
+            "console": "integratedTerminal"
         },
         {
             "type": "node",

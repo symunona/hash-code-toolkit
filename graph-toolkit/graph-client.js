@@ -37,6 +37,7 @@ function ViewModel() {
     this.formatSize = formatSize;
     this.exportSolution = exportSolution;
     this.getMagics = getMagics;
+    this.time = time
 
     // Map constants to observables.
     this.consts = {}
@@ -220,6 +221,21 @@ function wrapWithSaveNumbers(originalObject, callback) {
 function flatMagic(magic) {
     return Object.keys(magic).map((m) => `${m}: ${magic[m]}`).join(', ')
 }
+
+function time(seconds){
+    if (seconds < 1) return '<1s'
+    else if (seconds < 100) return Math.round(seconds) + 's'
+    else if (seconds < 3600) return Math.floor(seconds/60) + 'm ' + Math.floor(seconds%60) + 's'
+    else return Math.floor(seconds/3600) + 'h ' + Math.floor(seconds % 60) + 'm'
+}
+
+function score(score){
+    return score.toFixed(0).replace(/./g, function(c, i, a) {
+        return i && c !== "." && ((a.length - i) % 3 === 0) ? ' ' + c : c;
+    })
+}
+
+///////////////////////////////////////////////////////////////////////////////////
 
 
 /**
