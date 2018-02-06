@@ -19,7 +19,7 @@ const static = require('node-static'),
     solverRunner = require('../solver-runner')
 
 
-let datasets = [], task = '', algorithms = [], runSolver, inputs = {}
+let datasets = [], task = '', algorithms = [], inputs = {}
 
 server.on('request', (req, res) => {
 
