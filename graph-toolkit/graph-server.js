@@ -42,7 +42,7 @@ server.on('request', (req, res) => {
             let solverName = parts[2]
             let version = parts[3]
 
-            
+
 
         }
         return
@@ -87,7 +87,7 @@ server.on('request', (req, res) => {
         if (req.method == 'POST') {
 
             console.log('[STATS] Cleaning up stats, solution cache and solver backups. Clean slate.');
-            // fs.writeFileSync(`./${task}/${os.hostname()}.${consts.statFileName}`, '{}');
+            fs.writeFileSync(`./${task}/${os.hostname()}.${consts.statFileName}`, '{}');
 
             console.log(del.sync(`${task}/${consts.solutionCacheFolderName}/**/*`))            
 
