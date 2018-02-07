@@ -44,7 +44,8 @@ module.exports = function(p) {
                     (currentValue, r)=>{
                         return r.value+currentValue
                     }
-                    , 0)
+                    , 0),
+                requestList: videoValuesPerCacheServer[videoId]
             })
         })
 

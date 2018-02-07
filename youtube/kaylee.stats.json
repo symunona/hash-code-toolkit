@@ -97,5 +97,34 @@
         "size": 30324
       }
     }
+  },
+  "cache-server-perspective.mark-addressed-requests": {
+    "0206-185919": {
+      "test": {
+        "score": 562500,
+        "time": 0.001,
+        "size": 221
+      },
+      "me_at_the_zoo": {
+        "score": 239652.62,
+        "time": 0.006,
+        "size": 1167
+      },
+      "kittens": {
+        "score": 4412042.941355,
+        "time": 2319.359,
+        "size": 120164
+      },
+      "trending_today": {
+        "score": 2502510.325,
+        "time": 46.4,
+        "size": 144940
+      },
+      "videos_worth_spreading": {
+        "score": 2802208.488,
+        "time": 3.056,
+        "size": 49909
+      }
+    }
   }
 }

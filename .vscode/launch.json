@@ -12,6 +12,7 @@
             "program": "${workspaceFolder}/app.js",
             "env":{
                 "task": "youtube",            
+                "solvers": "cache-server-perspective.mark-addressed-requests",
                 "graph": "true"
             },
             "console": "integratedTerminal"
@@ -19,12 +20,13 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "youtube - me_at_the_zoo",
+            "name": "youtube - test - me_at_the_zoo",
             "program": "${workspaceFolder}/app.js",
             "env":{
                 "task": "youtube",
-                "input":"test me_at_the_zoo",
-                "solvers": "solver1"                
+                "input":"test test me_at_the_zoo",
+                "solvers": "cache-server-perspective.mark-addressed-requests",
+                "graph": "true"
             }
         },
         {
