@@ -8,26 +8,24 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "youtube - test",
+            "name": "youtube - just graph",
             "program": "${workspaceFolder}/app.js",
             "env":{
-                "task": "youtube",            
-                "solvers": "cache-server-perspective.mark-addressed-requests",
+                "task": "youtube",                            
                 "graph": "true"
-            },
-            "console": "integratedTerminal"
+            }
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "youtube - test - me_at_the_zoo",
+            "name": "youtube - kittens",
             "program": "${workspaceFolder}/app.js",
             "env":{
                 "task": "youtube",
-                "input":"test test me_at_the_zoo",
-                "solvers": "cache-server-perspective.mark-addressed-requests",
-                "graph": "true"
-            }
+                "input":"kittens",
+                "solvers": "cache-server-endpoint-hybrid"                
+            },
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -37,7 +35,7 @@
             "env":{
                 "task": "youtube",
                 "input":"test me_at_the_zoo",
-                "solvers": "solver1",
+                
                 "graph": "true"                
             }
         },
@@ -54,13 +52,14 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "youtube - all-solvers-test-1",
+            "name": "youtube - exceptKittens",
             "program": "${workspaceFolder}/app.js",
             "env":{
                 "task": "youtube", 
-                "input":"test",              
+                "input":"test me_at_the_zoo trending_today videos_worth_spreading",              
                 "solvers": "all"                               
-            }
+            },
+            "console": "integratedTerminal"
         },
         {
             "type": "node",

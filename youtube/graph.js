@@ -52,5 +52,9 @@ function drawSolution(solution){
     })
 
     linkNodes(links, 'solution');
+    
+
+    dataset.cacheServers = newArray(dataset.cacheServerCount)    
+    createDistributedDotsOfList(dataset.cacheServers, 'x', consts.height/10, 'circle', 'cache', (s)=>`${s.id} ${s.remaining}`, 20)
 
 }
