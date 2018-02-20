@@ -11,8 +11,7 @@ module.exports = function(){
     // Recalculate ETA every logarithmic tick.    
     if (module.exports._i % (module.exports._etaCheckInterval)){
         eta = module.exports._eta    // Just return the cached value
-    } else{
-        module.exports._etaCheckInterval = module.exports._etaCheckInterval<<1    
+    } else{          
         eta = module.exports._eta = ((module.exports._total/module.exports._i)*(new Date()-module.exports._startTime)/1000) // recalculate
     }
     let remaining = module.exports._eta - (new Date() - module.exports._startTime)/1000
@@ -35,6 +34,6 @@ module.exports.start = function(total){
     module.exports._total = total 
     module.exports._startTime = new Date()
     module.exports._i = 0
-    module.exports._etaCheckInterval = 1
+    module.exports._etaCheckInterval = 10
     module.exports._eta = -1
 }
