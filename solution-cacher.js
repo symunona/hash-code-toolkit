@@ -13,6 +13,7 @@ const getSolutionFileName = require('./solution-cache-name-resolver').getSolutio
 module.exports = backUpSolverIfNecessaryAndExportStats
 module.exports.loadStatFile = loadStatFile
 module.exports.generateMagicKey = generateMagicKey
+module.exports.exportFile = exportFile
 
 /**
  * Checks the last backed up solver version, if it's content has changed, backs it up again, 
@@ -157,6 +158,30 @@ function exportStats(task, solverName, version, inputDataSetName, score, timeFin
         stats[solverName][version][inputDataSetName].size = fileSize
     }
 
+    fs.writeFileSync(getStatFileName(task), JSON.stringify(stats, null, 2));
+}
+
+/**
+ * We want to track, which versions are in the output folder.
+ * @param {*} task 
+ * @param {*} solverName 
+ * @param {*} version 
+ * @param {*} magic 
+ * @param {*} inputDataSetName 
+ */
+function exportFile(task, solverName, version, magic, inputDataSetName){
+    let stats = loadStatFile(task);
+    stats.output = stats.output || {}
+
+    let score = magic?stats[solverName][version][inputDataSetName].magicVersions[magic].score:
+        stats[solverName][version][inputDataSetName].score;
+
+    stats.output[inputDataSetName] = {
+        solver: solverName, 
+        version, 
+        magic, 
+        score
+    }
     fs.writeFileSync(getStatFileName(task), JSON.stringify(stats, null, 2));
 }
 

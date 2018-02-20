@@ -179,5 +179,31 @@
         "size": 52423
       }
     }
+  },
+  "output": {
+    "me_at_the_zoo": {
+      "solver": "endpoint-perspective",
+      "version": "0206-103030",
+      "magic": "",
+      "score": 260266.29
+    },
+    "trending_today": {
+      "solver": "cache-server-endpoint-hybrid",
+      "version": "0208-113210",
+      "magic": "",
+      "score": 2502510.325
+    },
+    "videos_worth_spreading": {
+      "solver": "cache-server-perspective",
+      "version": "0206-114115",
+      "magic": "",
+      "score": 2423578.51768
+    },
+    "kittens": {
+      "solver": "cache-server-perspective.mark-addressed-requests",
+      "version": "0206-185919",
+      "magic": "",
+      "score": 4412042.941355
+    }
   }
 }

@@ -31,6 +31,8 @@
 
     td, th, .subtable div{border: 1px solid #262; margin: 0}
     
+    td.exported{bacgkround-color: #773311; border-color: #ccffcc}
+
     .subtable div {  margin: 2px }
 
     .export-link { font-size: small }
@@ -45,7 +47,13 @@
     <table> 
         <thead>
             <tr>                
-                <th rowspan="2">Algo</th>
+                <th rowspan="2">Algo
+                    <br>
+                    <button data-bind="click: packCurrent">
+                        Pack current output folder
+                    </button>
+
+                </th>
                 <th rowspan="2">Ver</th>
                 <!-- ko foreach: datasets -->
                 <th colspan="3">
@@ -61,6 +69,7 @@
         </thead>
         <tbody data-bind="foreach: { data: Object.keys(stats()), as: 'algo' } ">                    
             <!-- ko foreach: { data: Object.keys(stats()[algo]), as: 'ver'} -->
+            <!-- ko if: algo!=='output' -->
             <!-- ko foreach: { data: getMagics(stats()[algo][ver]), as: 'magicVer'} -->
             <tr>
                 <td data-bind="text: algo"></td>
@@ -84,10 +93,11 @@
                 <!-- ko foreach: {data: datasets, as: 'dataset'} -->         
                     <!-- ko if: stats()[algo][ver][dataset] -->
                         <!-- ko if: magicVer === 'default' -->
-                            <td>
+                            <td data-bind="css: {exported: isThisExported(algo, ver, '', dataset)}">
                                 <a data-bind="
                                     text: score(stats()[algo][ver][dataset].score), 
                                     click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, ''))"></a>
+                                    <a data-bind="click: exportToOutputFolder.bind(this, algo, ver, magicVer, dataset)">export</a>
                             </td>
                             <td data-bind="text: time(stats()[algo][ver][dataset].time)"></td>
                             <td data-bind="text: formatSize(stats()[algo][ver][dataset].size)"></td>
@@ -119,10 +129,12 @@
                 <!-- /ko -->
             </tr>
             <!-- /ko -->            
+            <!-- /ko -->   
             <!-- /ko -->            
         </tbody>
     </table>    
 
+    <span>Currently exported score: <span data-bind="text: currentlyExportedScore"></span></span>
     
     <h3>client-consts</h3>
     <div data-bind="foreach: Object.keys(consts)">

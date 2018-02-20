@@ -36,8 +36,10 @@ function ViewModel() {
     this.allInputs = inputs;
     this.formatSize = formatSize;
     this.exportSolution = exportSolution;
+    this.exportToOutputFolder = exportToOutputFolder;
     this.getMagics = getMagics;
-    this.time = time
+    this.time = time;
+    this.packCurrent = packCurrent;
 
     // Map constants to observables.
     this.consts = {}
@@ -54,16 +56,35 @@ function ViewModel() {
     this.solvers = ko.observable(solvers);
     this.magic = ko.observable({});
 
+    this.isThisExported = function(solverName, ver, magic, dataset){
+        if (this.stats().output[dataset]){
+            return this.stats().output[dataset].version === ver &&
+                this.stats().output[dataset].magic === magic &&
+                this.stats().output[dataset].solver === solverName
+        }
+        return false;
+    }.bind(this)
+    
+
     this.datasets = ko.computed(function(){
         if (!this.stats()) return window.datasets
         let datasets = []
-        Object.keys(this.stats()).map((algo)=>{
+        Object.keys(this.stats())
+            .filter((algo)=>algo!=='output')
+            .map((algo)=>{
             Object.keys(this.stats()[algo]).map((ver)=>{
                 datasets = datasets.concat(Object.keys(this.stats()[algo][ver]))
             })
         })
         return _.uniq(datasets)
     }, this)
+
+    this.currentlyExportedScore = ko.computed(function(){        
+        let output = this.stats().output;
+        if (!output) return 'nope...';
+        return Object.keys(output).reduce((prev, s)=>prev+(output[s].score || 0), 0);
+    }, this)
+
 
     return this;
 }
@@ -133,6 +154,7 @@ function getMagics(statNode){
     return _.uniq(magics)
 }
 
+
 function loadSolution(dataset, path) {
     if (inputs[name]>10000){
         if (!confirm('This is a pretty big file, it might freeze the browser. Sure?')) return;
@@ -160,7 +182,21 @@ function exportSolution(solverName, ver, magic){
     return $.ajax({
         type: 'post',
         url: `/export/${solverName}/${ver}/${magic==='default'?'':magic}`        
-    }).then(console.warn).catch(console.error)
+    }).then(console.warn).then(getStats).catch(console.error)
+}
+
+function packCurrent(){
+    return $.ajax({
+        type: 'post',
+        url: `/pack`        
+    }).then(console.warn).then(getStats).catch(console.error)
+}
+
+function exportToOutputFolder(solverName, ver, magic, dataset){
+    return $.ajax({
+        type: 'post',
+        url: `/export/${solverName}/${ver}/${magic==='default'?'':magic}/${dataset}`        
+    }).then(console.warn).then(getStats).catch(console.error)
 }
 
 function cleanStats() {

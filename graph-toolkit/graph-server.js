@@ -43,12 +43,9 @@ server.on('request', (req, res) => {
             let solverName = parts[2]
             let version = parts[3]
 
-            
-
             let inputFileName = `./${task}/${consts.inputFolder}/${input[i]}${consts.inputExtension}`
             parsedData = bostich(inputFileName, parser, force)
             
-
         }
         return
     }
@@ -59,15 +56,37 @@ server.on('request', (req, res) => {
             let solverName = parts[2]
             let version = parts[3]
             let magic = parts[4]
+            let dataset = parts[5]
             
-            console.log(`Exporting set: ${solverName} ${version} ${magic}`)
-            let result = packer.exportSolutionsForSolver(task, solverName, version, magic)
-            if (result === true){
-                success(res)
-            }
-            else{
-                fail(res, result)
-            }        
+            // Export all datasets from that specific 
+            if (parts.length === 4){
+                console.log(`Exporting set: ${solverName} ${version} ${magic}`)
+                let result = packer.exportSolutionsForSolver(task, solverName, version, magic)
+                if (result === true){
+                    success(res)
+                }
+                else{
+                    fail(res, result)
+                }            
+            } else {
+                // Export one specific solution
+                console.log(`Exporting solution: ${solverName} ${version} ${magic} ${dataset}`)
+                let result = packer.exportSolutionsForSolverAndDataset(task, solverName, version, magic, dataset)
+                if (result){
+                    success(res)
+                }
+                else{
+                    fail(res, result)
+                }            
+            }    
+        }
+        return
+    }
+    if (req.url.startsWith('/pack')) {
+        if (req.method == 'POST') {            
+            let result = packer.packOutputFolder(task, (result)=>{
+                success(res, result);
+            });            
         }
         return
     }
@@ -142,11 +161,15 @@ function renderHtml(html, data, res) {
     res.end();
 }
 
-function success(res) {
+function success(res, message) {
     res.writeHead(200, {
         'content-type': 'application/json'
     });
-    res.write('{"succes": true}');
+    let response = {success: true};
+    if (message){
+        response.message = message;
+    }
+    res.write(JSON.stringify(response));
     res.end();
 }
 

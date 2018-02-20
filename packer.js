@@ -11,6 +11,8 @@ module.exports.outputSolutionVersion = outputSolutionVersion
 
 module.exports.exportSolutionsForSolver = exportSolutionsForSolver
 
+module.exports.exportSolutionsForSolverAndDataset = exportSolutionsForSolverAndDataset
+
 module.exports.packCode = packCode
 
 module.exports.packOutputFolder = packOutputFolder
@@ -32,11 +34,14 @@ const getSolutionFileName = require('./solution-cache-name-resolver').getSolutio
  * @param {String} inputDataSetName - to generate output file name
  * @param {Object} solution - to be converted
  */
-function outputSolutionForOneDataSet(currentTask, inputDataSetName, solution) {
+function outputSolutionForOneDataSet(currentTask, inputDataSetName, solution, solverName, version, magic) {
     let outputFileName = `./${currentTask}/${consts.outputFolder}/${inputDataSetName}${consts.outputExtension}`
     console.log(`Writing out solution ${outputFileName}`)
     let fileData = require(`./${currentTask}/output`)(solution)    
     fs.writeFileSync(outputFileName, fileData);
+    
+    // Track what we wrote out, so we know what we have in the output folder.
+    solutionCacher.exportFile(currentTask, solverName, version, magic, inputDataSetName)
 }
 
 function outputSolutionVersion(currentTask, inputDataSetName, solverName, version, magic) {
@@ -44,7 +49,7 @@ function outputSolutionVersion(currentTask, inputDataSetName, solverName, versio
     let fileName = getSolutionFileName(currentTask, consts.solutionCacheFolderName, solverName, version, inputDataSetName, solutionCacher.generateMagicKey(magic))
     try{
         let solution = JSON.parse(fs.readFileSync('./'+fileName, 'utf8'))
-        outputSolutionForOneDataSet(currentTask, inputDataSetName, solution)
+        outputSolutionForOneDataSet(currentTask, inputDataSetName, solution, solverName, version, magic)
         return true
     }
     catch(e){
@@ -61,9 +66,6 @@ function cleanOutputFolder(task){
 
 
 function exportSolutionsForSolver(task, solverName, version, magic) {
-
-    cleanOutputFolder(task)
-
     let stats = solutionCacher.loadStatFile(task)
     let inputs = Object.keys(stats[solverName][version])
     
@@ -76,6 +78,15 @@ function exportSolutionsForSolver(task, solverName, version, magic) {
     // This is magic: if we have errors, we return the error messages
     // if we have successes, we return true.
     return failures.length?failures.join(' '):true;
+}
+
+/**
+ * Export a specific dataset.
+ */
+function exportSolutionsForSolverAndDataset(task, solverName, version, magic, inputDataSetName) {
+
+    let success = outputSolutionVersion(task, inputDataSetName, solverName, version, magic)            
+    return success===true?true:success;
 }
 
 /**
@@ -103,7 +114,7 @@ function packCode(currentTask) {
  * It displays warnings, if not all the input data has been converted.
  * I am always so lost with packing. https://xkcd.com/1168/
  */
-function packOutputFolder(currentTask) {
+function packOutputFolder(currentTask, cb) {
     let inputFiles = fs.readdirSync(`./${currentTask}/${consts.inputFolder}/`)
         .filter((fn) => fn.endsWith(consts.inputExtension))
         .map((fileName) => fileName.substr(0, fileName.length - consts.inputExtension.length))
@@ -122,6 +133,7 @@ function packOutputFolder(currentTask) {
     // TODO: pack files in output folder to an output.zip file. tar params magic reference to XKCD
     archiver(`./${currentTask}/${consts.outputFolder}/output-data.zip`, inputFiles, (res) => {
         console.log(`Exported data to ${consts.outputFolder}/output-data.zip ${res}`)
+        if (cb) cb(res);
     }, true)
 }
 
