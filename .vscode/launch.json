@@ -99,6 +99,19 @@
                 "output": "endpoint-perspective",
                 "export": "true"
             }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "router - parser",
+            "program": "${workspaceFolder}/app.js",
+            "env":{
+                "input": "charleston_road",
+                "solvers": "dummy-solver",
+                "task": "router",
+                "force": "true",
+                "graph": "true"
+            }
         }
         
         

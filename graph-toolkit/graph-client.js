@@ -57,7 +57,9 @@ function ViewModel() {
     this.magic = ko.observable({});
 
     this.isThisExported = function(solverName, ver, magic, dataset){
-        if (this.stats().output[dataset]){
+        if (this.stats() && 
+            this.stats().output &&
+            this.stats().output[dataset]){
             return this.stats().output[dataset].version === ver &&
                 this.stats().output[dataset].magic === magic &&
                 this.stats().output[dataset].solver === solverName
@@ -350,7 +352,7 @@ function fillArrayKeyWithValue(array, key, value) {
  * @param {String} [size] - if we want to have 
  * @param {Number} [padding] - distance from the sides. Default: '10px'
  */
-function createDistributedDotsOfList(array, axis, otherDistance, type, cls, textField, size, padding) {
+function createDistributedDotsOfList(array, axis, otherDistance, type, cls, textField, size, padding, subclass) {
     distributeOnAxis(array, axis, otherDistance, padding);
     size = size || 10
     type = type || 'rect'
@@ -371,12 +373,15 @@ function createDistributedDotsOfList(array, axis, otherDistance, type, cls, text
             .attr('r', size);
 
     } else if (type === 'rect') {
-        node
+        let n = node
             .append('svg:' + type)
             .attr('x', function (d) { return d.x - (size / 2); })
             .attr('y', function (d) { return d.y - (size / 2); })
             .attr('width', size)
             .attr('height', size);
+        if (_.isFunction(subclass)){
+            n.attr('class', subclass)
+        }
     }
     else if (type === 'triangle') {
         node.append('svg:polygon')
@@ -500,3 +505,24 @@ function formatSize(size){
     if (size < 1024*1024) return Math.round(size/1024) + 'KB'
     return Math.round(size/1024/1024) + 'MB'
 }
+
+
+String.prototype.replaceObject=function(object) {
+    return Object.keys(object).reduce(function(prev, cur){
+        return prev.replaceAll(cur, object[cur])
+    }, this);
+}
+
+function groupReplace(string, object){
+    
+}
+
+String.prototype.replaceAt=function(index, replacement) {
+    return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+}
+
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
