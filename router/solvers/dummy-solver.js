@@ -3,7 +3,8 @@
 const _ = require('underscore')
 
 
-module.exports = function (p) {
+module.exports = function (p, magic) {
     
-    return { solution: 42 };
+    // ez masik
+    return { solution: 42 * magic.pina };
 }

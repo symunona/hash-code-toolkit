@@ -182,10 +182,10 @@
   },
   "output": {
     "me_at_the_zoo": {
-      "solver": "endpoint-perspective",
-      "version": "0206-103030",
+      "solver": "cache-server-perspective.mark-addressed-requests",
+      "version": "0206-185919",
       "magic": "",
-      "score": 260266.29
+      "score": 25752.13
     },
     "trending_today": {
       "solver": "cache-server-endpoint-hybrid",

@@ -6,6 +6,87 @@
         "time": 0,
         "size": 20
       }
+    },
+    "0226-160347": {
+      "charleston_road": {
+        "score": 21,
+        "time": 0,
+        "size": 20
+      }
+    },
+    "0226-160848": {
+      "charleston_road": {
+        "score": 42,
+        "time": 0.003,
+        "size": 20,
+        "magic": {
+          "pina": 2
+        },
+        "magicVersions": {
+          "2": {
+            "score": 42,
+            "time": 0,
+            "magic": {
+              "pina": 2
+            },
+            "size": 20
+          }
+        }
+      },
+      "rue_de_londres": {
+        "score": 42,
+        "time": 0.001,
+        "size": 20,
+        "magic": {
+          "pina": 2
+        },
+        "magicVersions": {
+          "2": {
+            "score": 42,
+            "time": 0,
+            "magic": {
+              "pina": 2
+            },
+            "size": 20
+          }
+        }
+      },
+      "opera": {
+        "score": 42,
+        "time": 0.001,
+        "size": 20,
+        "magic": {
+          "pina": 2
+        },
+        "magicVersions": {
+          "2": {
+            "score": 42,
+            "time": 0,
+            "magic": {
+              "pina": 2
+            },
+            "size": 20
+          }
+        }
+      },
+      "lets_go_higher": {
+        "score": 42,
+        "time": 0,
+        "size": 20,
+        "magic": {
+          "pina": 2
+        },
+        "magicVersions": {
+          "2": {
+            "score": 42,
+            "time": 0,
+            "magic": {
+              "pina": 2
+            },
+            "size": 20
+          }
+        }
+      }
     }
   }
 }

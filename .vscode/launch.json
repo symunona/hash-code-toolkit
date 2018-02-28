@@ -106,11 +106,23 @@
             "name": "router - parser",
             "program": "${workspaceFolder}/app.js",
             "env":{
-                "input": "charleston_road",
+                "input": "charleston_road rue_de_londres opera lets_go_higher",
                 "solvers": "dummy-solver",
-                "task": "router",
-                "force": "true",
+                "task": "router",                
                 "graph": "true"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "pizza - parser",
+            "program": "${workspaceFolder}/app.js",
+            "env":{                
+                "solvers": "hut",
+                "input": "example small",
+                "task": "pizza",                
+                "graph": "true",
+                "force": "true"
             }
         }
         

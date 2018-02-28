@@ -140,6 +140,7 @@ function loadInput(name) {
         } catch (e) {
             console.error(e)
         }
+        return data;
     })
 }
 
@@ -161,16 +162,15 @@ function loadSolution(dataset, path) {
     if (inputs[name]>10000){
         if (!confirm('This is a pretty big file, it might freeze the browser. Sure?')) return;
     }
-    return loadInput(dataset).then(()=>{
+    return loadInput(dataset).then((inp)=>{        
         return $.ajax({
             url: path,
             contentType: 'json'
         }).then(function (data) {
-
             vm.outputData(JSON.stringify(data, null, 2));
             try {
                 var startTime = new Date()
-                drawSolution(data)
+                drawSolution(data, inp.parsedValue)
                 console.warn('Rendered in', (new Date() - startTime) / 1000)
             } catch (e) {
                 console.error(e)
@@ -268,6 +268,7 @@ function time(seconds){
 }
 
 function score(score){
+    if(!score) return 'x'
     return score.toFixed(0).replace(/./g, function(c, i, a) {
         return i && c !== "." && ((a.length - i) % 3 === 0) ? ' ' + c : c;
     })

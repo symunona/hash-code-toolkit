@@ -4,7 +4,7 @@ const loading = require('../../loading')
 
 let servers, serverSize, videos, endpoints, requests
 
-module.exports = function(p) {
+module.exports = function(p, magic) {
 
     serverSize = p.cacheServerSize
     servers = _.range(p.cacheServerCount).map((i) => { return { videos: [], remaining: serverSize } })
