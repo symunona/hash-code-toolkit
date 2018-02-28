@@ -18,7 +18,7 @@ const bostich = require('bostich'),
  * @param {String} solverName 
  * @param {String} doOutput 
  */
-module.exports = function (currentTask, inputName, solverNames, doOutput, forceReParsing) {
+module.exports = function (currentTask, inputName, solverNames, doOutput, forceReParsing, moreMagic) {
     let inputFileName = `./${currentTask}/${consts.inputFolder}/${inputName}${consts.inputExtension}`
 
     console.log('<o>--------------------------------------<o>')
@@ -39,7 +39,7 @@ module.exports = function (currentTask, inputName, solverNames, doOutput, forceR
 
     let solutions = {}
     for (let s in solverNames) {
-        solutions[solverNames[s]] = runSolver(currentTask, solverNames[s], inputName, parsedData)
+        solutions[solverNames[s]] = runSolver(currentTask, solverNames[s], inputName, parsedData, moreMagic)
     }
     // Do direct export of the file, output is set.
     if (doOutput && solutions[doOutput]) {
@@ -64,11 +64,30 @@ module.exports = function (currentTask, inputName, solverNames, doOutput, forceR
  * @param {Object} [magic] - a set of magic constants provided to the algorithm
  * @returns {Object} the solution JS Object
  */
-function runSolver(currentTask, solverName, inputDataSetName, parsedValue) {
+function runSolver(currentTask, solverName, inputDataSetName, parsedValue, moreMagic) {
+    
+    // Reading magics 
+    if (moreMagic){
+        let magics = magicLoader.more(currentTask, solverName);
+        console.log(`More Magics: are present: ${JSON.stringify(magics, null, 2)}`)
+        return magics.map((m)=>runSolverWithSpecificMagic(currentTask, solverName, inputDataSetName, parsedValue, m))
+    }
+    let magic = magicLoader(currentTask, solverName);
+
+    if (Object.keys(magic).length) {
+        console.log('Magic () parameters:', Object.keys(magic).map((mkey) => `${mkey}: ${magic[mkey]}`).join(', '))                
+    }
+    else {
+        console.log('No magic is present')
+    }
+    return runSolverWithSpecificMagic(currentTask, solverName, inputDataSetName, parsedValue, magic)
+}
+
+function runSolverWithSpecificMagic(currentTask, solverName, inputDataSetName, parsedValue, magic){
     console.log(`Solving with ${solverName}...`)
     let algorithm = reLoadSolver(currentTask, solverName);
     let startTime = new Date()
-    let magic = magicLoader(currentTask, solverName);
+    
     if (Object.keys(magic).length) console.log('Magic parameters:', Object.keys(magic).map((mkey) => `${mkey}: ${magic[mkey]}`).join(', '))
     let solution = algorithm(parsedData.parsedValue, magic)
     let solveTime = (new Date() - startTime) / 1000;
@@ -87,7 +106,6 @@ function runSolver(currentTask, solverName, inputDataSetName, parsedValue) {
     console.log('>-----------------')
     return solution
 }
-
 /**
  * Live reloads the solver module from the hard drive.
  * @param {String} solverName 

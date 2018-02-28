@@ -12,5 +12,7 @@ const _ = require('underscore')
 
 module.exports = function score(algorithmOutput, parsedValue) {
 
-    return algorithmOutput.slices.reduce((prev, cur)=>prev+cur.w,0)
+    let covered = algorithmOutput.slices.reduce((prev, cur)=>prev+(cur.w*cur.h),0);
+    let percent = Math.round(covered/parsedValue.rows/parsedValue.cols * 100)
+    return `${covered}/${parsedValue.rows*parsedValue.cols} = ${percent}%` 
 }

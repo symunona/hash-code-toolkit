@@ -115,17 +115,42 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "pizza - parser",
+            "name": "pizza - just graph",
+            "program": "${workspaceFolder}/app.js",
+            "env":{                            
+                "task": "pizza",                
+                "graph": "true"                
+            }            
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "pizza - example small allmagics",
             "program": "${workspaceFolder}/app.js",
             "env":{                
                 "solvers": "hut",
-                
+                "input": "example small medium",
+                "allmagics": "true",
                 "task": "pizza",                
                 "graph": "true"                
             },
             "console": "integratedTerminal"
         }
-        
-        
+        ,
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "pizza - all",
+            "program": "${workspaceFolder}/app.js",
+            "env":{                
+                "solvers": "hut",
+                "input": "example small medium",
+                "allmagics": "true",
+                "task": "pizza",                
+                "graph": "true"                
+            },
+            "console": "integratedTerminal"
+        }
+
     ]
 }

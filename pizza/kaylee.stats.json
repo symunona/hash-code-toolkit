@@ -102,6 +102,399 @@
         "time": 8.282,
         "size": 1644236
       }
+    },
+    "0228-154436": {
+      "example": {
+        "score": "4/15 = 666.6666666666666%",
+        "time": 0.003,
+        "size": 574,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "3/15 = 20%",
+            "time": 0.005,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 542
+          },
+          "value2-true": {
+            "score": "3/15 = 20%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 542
+          },
+          "value2-false": {
+            "score": "4/15 = 27%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 574
+          },
+          "value1-true": {
+            "score": "4/15 = 27%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true
+            },
+            "size": 574
+          }
+        }
+      },
+      "small": {
+        "score": "20/42 = 48%",
+        "time": 0.007,
+        "size": 1964,
+        "magic": {
+          "orderBy": "value1",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "20/42 = 48%",
+            "time": 0.015,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1969
+          },
+          "value2-true": {
+            "score": "16/42 = 38%",
+            "time": 0.009,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 1946
+          },
+          "value2-false": {
+            "score": "16/42 = 38%",
+            "time": 0.01,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1785
+          },
+          "value1-true": {
+            "score": "12/42 = 29%",
+            "time": 0.01,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true
+            },
+            "size": 1814
+          }
+        }
+      },
+      "medium": {
+        "score": "6587/50000 = 13%",
+        "time": 6.577,
+        "size": 1644095,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": true
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "12889/50000 = 26%",
+            "time": 6.475,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1646303
+          },
+          "value2-true": {
+            "score": "6587/50000 = 13%",
+            "time": 6.577,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 1644095
+          }
+        }
+      }
+    },
+    "0228-155638": {
+      "example": {
+        "score": "4/15 = 27%",
+        "time": 0.003,
+        "size": 574,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "3/15 = 20%",
+            "time": 0.003,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 542
+          },
+          "value2-true": {
+            "score": "3/15 = 20%",
+            "time": 0.002,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 537
+          },
+          "value2-false": {
+            "score": "4/15 = 27%",
+            "time": 0.003,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 574
+          },
+          "value1-true": {
+            "score": "4/15 = 27%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true
+            },
+            "size": 574
+          }
+        }
+      },
+      "small": {
+        "score": "20/42 = 48%",
+        "time": 0.007,
+        "size": 1960,
+        "magic": {
+          "orderBy": "value1",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "20/42 = 48%",
+            "time": 0.007,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1960
+          },
+          "value2-true": {
+            "score": "16/42 = 38%",
+            "time": 0.01,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 1943
+          },
+          "value2-false": {
+            "score": "16/42 = 38%",
+            "time": 0.006,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1790
+          },
+          "value1-true": {
+            "score": "12/42 = 29%",
+            "time": 0.006,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true
+            },
+            "size": 1814
+          }
+        }
+      },
+      "medium": {
+        "score": "6587/50000 = 13%",
+        "time": 4.67,
+        "size": 1644230,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": true
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "12889/50000 = 26%",
+            "time": 4.599,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1646000
+          },
+          "value2-true": {
+            "score": "6587/50000 = 13%",
+            "time": 4.67,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 1644230
+          }
+        }
+      }
+    },
+    "0228-160157": {
+      "example": {
+        "score": "8/15 = 53%",
+        "time": 0.005,
+        "size": 690,
+        "magic": {
+          "orderBy": "value1",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "8/15 = 53%",
+            "time": 0.005,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 690
+          },
+          "value2-true": {
+            "score": "8/15 = 53%",
+            "time": 0.003,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 690
+          },
+          "value2-false": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 535
+          },
+          "value1-true": {
+            "score": "8/15 = 53%",
+            "time": 0.002,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true
+            },
+            "size": 538
+          }
+        }
+      },
+      "small": {
+        "score": "9/42 = 21%",
+        "time": 0.011,
+        "size": 1888,
+        "magic": {
+          "orderBy": "value1",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "24/42 = 57%",
+            "time": 0.011,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1888
+          },
+          "value2-true": {
+            "score": "26/42 = 62%",
+            "time": 0.013,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 2415
+          },
+          "value2-false": {
+            "score": "30/42 = 71%",
+            "time": 0.007,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1673
+          },
+          "value1-true": {
+            "score": "25/42 = 60%",
+            "time": 0.01,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true
+            },
+            "size": 1407
+          }
+        }
+      },
+      "medium": {
+        "score": "6781/50000 = 14%",
+        "time": 5.576,
+        "size": 1663106,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": true
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "47264/50000 = 95%",
+            "time": 5.301,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1639508
+          },
+          "value2-true": {
+            "score": "47520/50000 = 95%",
+            "time": 5.593,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 1663300
+          },
+          "value2-false": {
+            "score": "47886/50000 = 96%",
+            "time": 5.177,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1506754
+          },
+          "value1-true": {
+            "score": "49061/50000 = 98%",
+            "time": 5.271,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true
+            },
+            "size": 1534076
+          }
+        }
+      }
     }
   }
 }

@@ -3,6 +3,8 @@
  * compressed folders for the generated output
  */
 
+const glob = require('glob-fs')
+
 module.exports = {}
 
 module.exports.outputSolutionForOneDataSet = outputSolutionForOneDataSet
@@ -94,14 +96,15 @@ function exportSolutionsForSolverAndDataset(task, solverName, version, magic, in
  */
 function packCode(currentTask) {
     // Export the currently ran code to a zip
-    let fileList = [
-        '*.js',        
+    let globber = glob()
+    globber.readdirSync(`${currentTask}/${consts.solversFolderName}/*.js`)
+    globber.readdirSync(`${currentTask}/${consts.solversFolderName}/*.json`)
+    let fileList = globber.readdirSync(`*.js`)
+     fileList = fileList.concat([        
         `${currentTask}/output.js`,
-        `${currentTask}/parser.js`,
-        `./${currentTask}/${consts.solversFolderName}/*.js`
-    ]
-    // Pack all the solvers to it
-    
+        `${currentTask}/parser.js`
+    ])    
+    // Pack all the solvers to it    
     archiver(`./${currentTask}/${consts.outputFolder}/output-code.zip`, fileList, (res) => {
         console.log(`Exported code to ${consts.outputFolder}/output-code.zip ${res}`)
     })

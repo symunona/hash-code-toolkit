@@ -40,6 +40,7 @@ function ViewModel() {
     this.getMagics = getMagics;
     this.time = time;
     this.packCurrent = packCurrent;
+    this.packCode = packCode;
 
     // Map constants to observables.
     this.consts = {}
@@ -194,6 +195,15 @@ function packCurrent(){
     }).then(console.warn).then(getStats).catch(console.error)
 }
 
+
+function packCode(){
+    return $.ajax({
+        type: 'post',
+        url: `/packcode`        
+    }).then(console.warn).then(getStats).catch(console.error)
+}
+
+
 function exportToOutputFolder(solverName, ver, magic, dataset){
     return $.ajax({
         type: 'post',
@@ -269,6 +279,9 @@ function time(seconds){
 
 function score(score){
     if(!score) return 'x'
+    if(_.isString(score)){
+        return score;
+    }
     return score.toFixed(0).replace(/./g, function(c, i, a) {
         return i && c !== "." && ((a.length - i) % 3 === 0) ? ' ' + c : c;
     })

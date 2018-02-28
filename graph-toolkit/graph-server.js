@@ -82,11 +82,21 @@ server.on('request', (req, res) => {
         }
         return
     }
-    if (req.url.startsWith('/pack')) {
+    if (req.url === '/pack') {
         if (req.method == 'POST') {            
-            let result = packer.packOutputFolder(task, (result)=>{
+            packer.packCode(task, (result)=>{               
+                packer.packOutputFolder(task, (result)=>{
+                    success(res, result);
+                });            
+            }); 
+        }
+        return
+    }
+    if (req.url === '/packcode') {
+        if (req.method == 'POST') {            
+            packer.packCode(task, (result)=>{                               
                 success(res, result);
-            });            
+            })
         }
         return
     }

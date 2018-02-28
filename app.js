@@ -38,11 +38,20 @@ const doOutput = process.env.output // default false
 // If this is true, the file will not use cache, it will re-parse the original input
 const force = process.env.force // Scotty!... oh wait, that's another one.
 
+// EXPERIMENTAL If this is true, we fork processes instead of running them linearily.
+// This can be good for two things: 
+//  - heat your room in the winter
+//  - finish the tasks faster
+const paralell = process.env.paralell
+
 // If this is true, the file will not use cache, it will re-parse the original input
 const doExport = process.env.export // Default: do not export.
 
 // Graphic interface and file server
 const graph = process.env.graph // If true, starts a server with some goodies.
+
+// If true, search for other magics too.
+const allmagics = process.env.allmagics
 
 // Generic stuff
 const consts = require('./consts')
@@ -51,6 +60,8 @@ const os = require('os')
 
 const solverRunner = require('./solver-runner')
 const packer = require('./packer')
+
+const cores = os.cpus().length
 
 // If no input files are provided, search for all the input files in the input dir.
 if (!input.length) {
@@ -81,30 +92,46 @@ if (doExport) {
     packer.cleanOutputFolder(currentTask)
 }
 
-// Iterate over the provided/found inputs.
-for (let i in input) {
-    solverRunner(currentTask, input[i], solvers, doOutput, force)
-}
+if (!paralell){
+    // Iterate over the provided/found inputs.
+    for (let i in input) {
+        solverRunner(currentTask, input[i], solvers, doOutput, force, allmagics)
+    }
+    // If we are done, and the output property is set, do ourself 
+    // a favor, and pack the 
+    if (doExport) {
 
-// If we are done, and the output property is set, do ourself 
-// a favor, and pack the 
-if (doExport) {
+        // Yeah, this does not really work just yet...
+        // packer.packCode(currentTask)
+        packer.packOutputFolder(currentTask)
+    }
 
-    // Yeah, this does not really work just yet...
-    // packer.packCode(currentTask)
-    packer.packOutputFolder(currentTask)
-}
+    // Start graphic frontend for debugging and nice algo version handling.
+    if (graph) {
+        const graphServer = require('./graph-toolkit/graph-server')
+        graphServer(currentTask, solvers, input);
+        console.log('Started GUI')
+    }
+    else {
+        // process.exit(); // Writes do not finish by the time this runs.    
+    }
+    console.log('============================================')
 
-// Start graphic frontend for debugging and nice algo version handling.
-if (graph) {
-    const graphServer = require('./graph-toolkit/graph-server')
-    graphServer(currentTask, solvers, input);
-    console.log('Started GUI')
 }
 else {
-    // process.exit(); // Writes do not finish by the time this runs.    
+    for (let i in input) {
+
+        solverRunner(currentTask, input[i], solvers, doOutput, force)
+    }
 }
-console.log('============================================')
+
+// const { spawn } = require('child_process');
+
+
+// function paralellFork(cb){
+//     // forking 
+//     child = spawn('');    
+// }
 
 
 
