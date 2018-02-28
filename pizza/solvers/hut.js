@@ -97,21 +97,40 @@ function sortPossibleSlicesWithAlignmentPreference(allSlices, pizzaType) {
 
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {        
-            allSlices[y][x] = allSlices[y][x].sort(sortByDimensionPreference.bind(this, axisPref)).reverse()
+            allSlices[y][x] = _.sortBy(
+                allSlices[y][x].map(
+                    calculateSliceValue.bind(this, {x,y}, allSlices)), 'value2').reverse()
         }
     }
 }
 
-
-function sortByDimensionPreference(mainAxis, a, b) {
-    
-    let secAxis = mainAxis == 'y' ? 'w' : 'h';
-    if (a[mainAxis] > b[mainAxis]) return 1;
-    if (a[mainAxis] < b[mainAxis]) return -1;
-    if (a[mainAxis] == b[mainAxis]) return a[secAxis] < b[secAxis] ?
-        1 : a[secAxis] < b[secAxis] ? -1 : 0;
-
+/** 
+ * We sum up the lengths in the other part of the slice, then give it a value by that
+ * - sum up the slice's 
+*/
+function calculateSliceValue(pos, allSlices, slice){
+    let sum = 0
+    for (let y = 0; y < slice.h; y++) {        
+        for (let x = 0; x < slice.w; x++) {
+            // ignore the very value
+            if (!x&&!y){
+                sum += allSlices[pos.y + y][pos.x + x].length
+            }            
+        }
+    }
+    slice.value1 = 1/sum
+    slice.value2 = 1/sum/((slice.h*slice.w)-1)
+    return slice
 }
+
+// function sortByDimensionPreference(mainAxis, a, b) {
+//     let secAxis = mainAxis == 'y' ? 'w' : 'h'
+//     if (a[mainAxis] > b[mainAxis]) return 1;
+//     if (a[mainAxis] < b[mainAxis]) return -1;
+//     if (a[mainAxis] == b[mainAxis]) return a[secAxis] < b[secAxis] ?
+//         1 : a[secAxis] < b[secAxis] ? -1 : 0;
+
+// }
 
 
 function verticalOrHorizontalPizzaItIs(allSlices) {

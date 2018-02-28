@@ -137,7 +137,7 @@ module.exports = function graph(_task, _algorithms, _datasets) {
                 fs.statSync(`./${task}/${consts.inputFolder}/${fileName}`).size
         })
 
-    opn(`http://127.0.0.1:${port}/`);
+    // opn(`http://127.0.0.1:${port}/`);
 }
 
 /**

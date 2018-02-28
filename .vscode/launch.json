@@ -119,7 +119,7 @@
             "program": "${workspaceFolder}/app.js",
             "env":{                
                 "solvers": "hut",
-                "input": "example small medium",
+                
                 "task": "pizza",                
                 "graph": "true"                
             },

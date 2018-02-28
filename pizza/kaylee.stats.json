@@ -24,13 +24,83 @@
     "0228-000746": {
       "example": {
         "score": 10,
-        "time": 0.004,
+        "time": 0.005,
         "size": 474
       },
       "small": {
         "score": 27,
-        "time": 0.008,
-        "size": 1443
+        "time": 0.011,
+        "size": 1453
+      }
+    },
+    "0228-094621": {
+      "example": {
+        "score": 10,
+        "time": 0.005,
+        "size": 574
+      },
+      "small": {
+        "score": 27,
+        "time": 0.018,
+        "size": 1814
+      }
+    },
+    "0228-094654": {
+      "example": {
+        "score": 6,
+        "time": 0.007,
+        "size": 542
+      },
+      "small": {
+        "score": 22,
+        "time": 0.017,
+        "size": 1969
+      }
+    },
+    "0228-094713": {
+      "example": {
+        "score": 10,
+        "time": 0.007,
+        "size": 574
+      },
+      "small": {
+        "score": 28,
+        "time": 0.016,
+        "size": 1790
+      }
+    },
+    "0228-094728": {
+      "example": {
+        "score": 10,
+        "time": 0.005,
+        "size": 574
+      },
+      "small": {
+        "score": 27,
+        "time": 0.01,
+        "size": 1814
+      }
+    },
+    "0228-094742": {
+      "example": {
+        "score": 6,
+        "time": 0.003,
+        "size": 542
+      },
+      "small": {
+        "score": 21,
+        "time": 0.007,
+        "size": 1946
+      },
+      "big": {
+        "score": 848737,
+        "time": 160.459,
+        "size": 26572361
+      },
+      "medium": {
+        "score": 46487,
+        "time": 8.282,
+        "size": 1644236
       }
     }
   }
