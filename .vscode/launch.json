@@ -119,11 +119,11 @@
             "program": "${workspaceFolder}/app.js",
             "env":{                
                 "solvers": "hut",
-                "input": "example small",
+                "input": "example small medium",
                 "task": "pizza",                
-                "graph": "true",
-                "force": "true"
-            }
+                "graph": "true"                
+            },
+            "console": "integratedTerminal"
         }
         
         

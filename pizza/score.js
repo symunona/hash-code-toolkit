@@ -12,5 +12,5 @@ const _ = require('underscore')
 
 module.exports = function score(algorithmOutput, parsedValue) {
 
-    return 555
+    return algorithmOutput.slices.reduce((prev, cur)=>prev+cur.w*cur.h,0)
 }

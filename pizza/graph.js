@@ -33,14 +33,14 @@ function colorLine(line, y, solution){
     let newLine = '';
     let lastColor = 0;
     for(let x = 0; x < line.length; x++){
-        if (solution.map[x][y]!=lastColor){
+        if (solution.map[y][x]!=lastColor){
             if (lastColor!=0){                    
                 newLine+='</span>'                
             }
-            if (solution.map[x][y]!=0){
-                newLine+=`<span style="color: ${solution.map[x][y]}">`
+            if (solution.map[y][x]!=0){
+                newLine+=`<span style="color: ${solution.map[y][x]}">`
             }            
-            lastColor = solution.map[x][y];
+            lastColor = solution.map[y][x];
         }
         newLine+=line[x];
     }

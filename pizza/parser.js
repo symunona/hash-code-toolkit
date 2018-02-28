@@ -27,7 +27,7 @@ module.exports = function parse(rawData){
     let data = parser(rawData)
     
     let mapRaw = data.remaining;        
-    let rows = mapRaw.split('\n');
+    let rows = mapRaw.trim().split('\n');
 
     data.parsedValue.bitmap = rows;
     delete data.remaining;

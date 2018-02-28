@@ -1,82 +1,37 @@
 {
-  "dummy-solver": {
-    "0227-131718": {
-      "big": {
-        "score": 21,
-        "time": 0,
-        "size": 20
-      },
-      "example": {
-        "score": 21,
-        "time": 0,
-        "size": 20
-      },
-      "medium": {
-        "score": 21,
-        "time": 0.002,
-        "size": 20
-      },
-      "small": {
-        "score": 21,
-        "time": 0,
-        "size": 20
-      }
-    }
-  },
   "hut": {
-    "0227-133136": {
-      "big": {
-        "score": null,
-        "time": 0,
-        "size": 2
-      },
+    "0227-235312": {
       "example": {
-        "score": null,
-        "time": 0.001,
-        "size": 2
-      },
-      "medium": {
-        "score": null,
-        "time": 0.001,
-        "size": 2
-      },
-      "small": {
-        "score": null,
-        "time": 0,
-        "size": 2
-      }
-    },
-    "0227-192016": {
-      "example": {
-        "score": 5,
-        "time": 0.001,
-        "size": 272
-      },
-      "small": {
-        "score": 5,
-        "time": 0.003,
-        "size": 749
-      }
-    },
-    "0227-193034": {
-      "example": {
-        "score": 555,
-        "time": 0.001,
-        "size": 296
-      },
-      "small": {
-        "score": 555,
+        "score": 8,
         "time": 0.004,
-        "size": 761
+        "size": 552
       }
-    }
-  },
-  "output": {
-    "small": {
-      "solver": "hut",
-      "version": "0227-192016",
-      "magic": "",
-      "score": 5
+    },
+    "0228-000006": {
+      "example": {
+        "score": 8,
+        "time": 0.004,
+        "size": 552
+      }
+    },
+    "0228-000115": {
+      "example": {
+        "score": 12,
+        "time": 0.003,
+        "size": 490
+      }
+    },
+    "0228-000746": {
+      "example": {
+        "score": 10,
+        "time": 0.004,
+        "size": 474
+      },
+      "small": {
+        "score": 27,
+        "time": 0.008,
+        "size": 1443
+      }
     }
   }
 }

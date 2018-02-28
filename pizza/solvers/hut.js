@@ -1,6 +1,7 @@
 // Solve the problem within this file.
 
 const _ = require('underscore')
+const loading = require('../../loading')
 
 let pizza, min, max, h, w
 
@@ -16,23 +17,21 @@ module.exports = function (p) {
 
     let allSlices = findAllPossibleSlices()
 
-    // let pizzaType = verticalOrHorizontalPizzaItIs(allSlices)
+    let pizzaType = verticalOrHorizontalPizzaItIs(allSlices)
 
-    // if (pizzaType.vertical > pizzaType.horizontal) {
-    //     sortPossibleSlicesWithAlignmentPreference(allSlices, pizzaType)
-    // }
-
+    sortPossibleSlicesWithAlignmentPreference(allSlices, pizzaType)
+    
     let slices = selectNonConflictingSlices(allSlices);
 
-    return {slices, map: generateColorMap(allSlices)}
+    return { slices, map: generateColorMap(allSlices) }
 }
 
-function generateColorMap(allSlices){
+function generateColorMap(allSlices) {
     let map = []
-    for (let x = 0; x < w; x++) {
-        map[x] = []
-        for (let y = 0; y < h; y++) {
-            map[x][y] = allSlices[x][y].color || 0
+    for (let y = 0; y < h; y++) {
+        map[y] = []
+        for (let x = 0; x < w; x++) {
+            map[y][x] = allSlices[y][x].taken ? allSlices[y][x].taken.color : 0
         }
     }
     return map;
@@ -40,14 +39,24 @@ function generateColorMap(allSlices){
 
 
 function selectNonConflictingSlices(allSlices) {
+    
+    console.log('Picking slices...')
+    loading.start(h*w)
+
     let slices = []
-    for (let x = 0; x < w; x++) {        
-        for (let y = 0; y < h; y++) {
-            for (let i=0; i<allSlices[x][y].length; i++ ){
-                if (canPutinSlice(allSlices, {x,y}, allSlices[x][y][i])){
-                    putinSlice(allSlices, {x,y}, allSlices[x][y][i]);
-                    slices.push(allSlices[x][y][i])
-                }                
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            loading()
+            for (let i = 0; i < allSlices[y][x].length; i++) {
+                let slice = allSlices[y][x][i]
+                
+                // if (x==3 && y ==0) debugger
+                if (canPutinSlice(allSlices, { x, y }, slice)) {
+                    _.extend(slice, { x, y })
+                    putinSlice(allSlices, { x, y }, slice);
+                    slices.push(slice)
+                    // console.log(slice)
+                }
             }
         }
     }
@@ -60,11 +69,12 @@ function selectNonConflictingSlices(allSlices) {
  * @param {*} pos 
  * @param {*} slice 
  */
-function canPutinSlice(allSlices, pos, slice){
+function canPutinSlice(allSlices, pos, slice) {
 
-    for(var x=0; x< slice.x; x++){
-        for(var y=0; y< slice.y; y++){
-            if (allSlices[pos.x+x][pos.y+y].taken){
+    for (var y = 0; y < slice.h; y++) {
+        for (var x = 0; x < slice.w; x++) {
+        
+            if (allSlices[pos.y + y][pos.x + x].taken) {
                 return false
             }
         }
@@ -72,30 +82,30 @@ function canPutinSlice(allSlices, pos, slice){
     return true
 }
 
-function putinSlice(allSlices, pos, slice){
+function putinSlice(allSlices, pos, slice) {
 
-    for(var x=0; x< slice.x; x++){
-        for(var y=0; y< slice.y; y++){
-            allSlices[pos.x+x][pos.y+y].taken = slice
+    for (var y = 0; y < slice.h; y++) {
+        for (var x = 0; x < slice.w; x++) {        
+            allSlices[pos.y + y][pos.x + x].taken = slice
         }
-    }    
+    }
 }
 
 
-function sortPossibleSlicesWithAlignmentPreference(allSlices) {
-    let axisPref = pizzaType.vertical > pizzaType.horizontal ? 'y' : 'x'
+function sortPossibleSlicesWithAlignmentPreference(allSlices, pizzaType) {
+    let axisPref = pizzaType.vertical > pizzaType.horizontal ? 'h' : 'w'
 
-    for (let x = 0; x < w; x++) {
-        for (let y = 0; y < h; y++) {
-            allSlices[x][y] = allSlices[x][y].sort(sortByDimensionPreference.bind(this, axisPref))
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {        
+            allSlices[y][x] = allSlices[y][x].sort(sortByDimensionPreference.bind(this, axisPref)).reverse()
         }
     }
 }
 
 
 function sortByDimensionPreference(mainAxis, a, b) {
-
-    let secAxis = mainAxis == 'y' ? 'x' : 'y';
+    
+    let secAxis = mainAxis == 'y' ? 'w' : 'h';
     if (a[mainAxis] > b[mainAxis]) return 1;
     if (a[mainAxis] < b[mainAxis]) return -1;
     if (a[mainAxis] == b[mainAxis]) return a[secAxis] < b[secAxis] ?
@@ -108,13 +118,12 @@ function verticalOrHorizontalPizzaItIs(allSlices) {
 
     let vertical = 0; horizontal = 0; square = 0
 
-    for (let x = 0; x < w; x++) {
-        allSlices[x] = []
+    for (let x = 0; x < w; x++) {        
         for (let y = 0; y < h; y++) {
-            allSlices[x][y].map((piece) => {
-                if (piece.x > piece.y) horizontal++
-                if (piece.x < piece.y) vertical++
-                if (piece.x == piece.y) square++
+            allSlices[y][x].map((piece) => {
+                if (piece.w > piece.h) horizontal++
+                if (piece.w < piece.h) vertical++
+                if (piece.w == piece.h) square++
             })
         }
     }
@@ -124,12 +133,17 @@ function verticalOrHorizontalPizzaItIs(allSlices) {
     return { vertical, horizontal, square }
 }
 
-function findAllPossibleSlices() {    
+function findAllPossibleSlices() {
+
+    console.log('Finding slices...')
+    loading.start(h*w)
+
     let allSlices = []
-    for (let x = 0; x < w; x++) {
-        allSlices[x] = []
-        for (let y = 0; y < h; y++) {
-            allSlices[x][y] = possibleSlicesAtPos({ x, y })
+    for (let y = 0; y < h; y++) {
+        allSlices[y] = []
+        for (let x = 0; x < w; x++) {
+            loading()
+            allSlices[y][x] = possibleSlicesAtPos({ x, y })
         }
     }
     return allSlices
@@ -137,8 +151,8 @@ function findAllPossibleSlices() {
 
 function whatsOnTheSlice(pos, size) {
     let ret = { t: 0, m: 0 }
-    for (let y = pos.y; y < pos.y + size.y; y++) {
-        let line = pizza[y].substr(pos.x, size.x)
+    for (let y = pos.y; y < h && y < pos.y + size.h; y++) {
+        let line = pizza[y].substr(pos.x, size.w)
         ret.t += line.replace(/M/g, '').length
         ret.m += line.replace(/T/g, '').length
     }
@@ -147,12 +161,12 @@ function whatsOnTheSlice(pos, size) {
 
 function possibleSlicesAtPos(pos) {
     let results = []
-    for (let i = 0; i < max; i++) {
-        for (let j = 0; j < max; j++) {
+    for (let i = 1; i < max; i++) {
+        for (let j = 1; j < max; j++) {
             // if slice is smaller than max size
-            if (i + j < max && pos.x+i<w && pos.y+j<h) {
+            if (i * j > 1 && i * j <= max && pos.x + i < w && pos.y + j < h) {
                 // if slice have enough stuff on it
-                let size = { x: i, y: j }
+                let size = { h: i, w: j }
                 if (isSliceGood(whatsOnTheSlice(pos, size))) {
                     size.color = randomColor()
                     results.push(size)
@@ -164,9 +178,9 @@ function possibleSlicesAtPos(pos) {
 }
 
 function isSliceGood(slice) {
-    return slice.t > min && slice.m > min
+    return slice.t >= min && slice.m >= min
 }
 
-function randomColor(){
-    return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+function randomColor() {
+    return '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
 }
