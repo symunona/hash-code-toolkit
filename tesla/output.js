@@ -10,7 +10,7 @@ module.exports = function(o){
     start();
 
     o.cars.map((car)=>{
-        line(car.length, _.pluck(car.join(' '),'index'))        
+        line(car.rides.length, _.pluck(car.rides,'index').join(' '))        
     })
 
     return output;
