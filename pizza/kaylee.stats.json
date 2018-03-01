@@ -495,6 +495,299 @@
           }
         }
       }
+    },
+    "0228-204058": {
+      "example": {
+        "score": "8/15 = 53%",
+        "time": 0.005,
+        "size": 690,
+        "magic": {
+          "orderBy": "value1",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 690
+          },
+          "value2-true": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 690
+          },
+          "value2-false": {
+            "score": "8/15 = 53%",
+            "time": 0.003,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 538
+          },
+          "value1-true-2": {
+            "score": "8/15 = 53%",
+            "time": 0.005,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true,
+              "algo": "2"
+            },
+            "size": 538
+          }
+        }
+      },
+      "small": {
+        "score": "30/42 = 71%",
+        "time": 0.005,
+        "size": 1673,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "24/42 = 57%",
+            "time": 0.01,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1885
+          },
+          "value2-true": {
+            "score": "26/42 = 62%",
+            "time": 0.017,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 2114
+          },
+          "value2-false": {
+            "score": "30/42 = 71%",
+            "time": 0.008,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1673
+          },
+          "value1-true-2": {
+            "score": "25/42 = 60%",
+            "time": 0.008,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true,
+              "algo": "2"
+            },
+            "size": 1407
+          }
+        }
+      },
+      "medium": {
+        "score": "47413/50000 = 95%",
+        "time": 6.415,
+        "size": 1554237,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "43900/50000 = 88%",
+            "time": 5.717,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1585358
+          },
+          "value2-true": {
+            "score": "43338/50000 = 87%",
+            "time": 6.143,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 1587578
+          },
+          "value2-false": {
+            "score": "47413/50000 = 95%",
+            "time": 6.178,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1554592
+          },
+          "value1-true-2": {
+            "score": "46983/50000 = 94%",
+            "time": 8.479,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true,
+              "algo": "2"
+            },
+            "size": 1549950
+          }
+        }
+      }
+    },
+    "0228-212439": {
+      "example": {
+        "score": "8/15 = 53%",
+        "time": 0.006,
+        "size": 690,
+        "magic": {
+          "orderBy": "value1",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 690
+          },
+          "value2-true": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 690
+          },
+          "value2-false": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 538
+          },
+          "value1-true-2": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true,
+              "algo": "2"
+            },
+            "size": 538
+          }
+        }
+      },
+      "small": {
+        "score": "30/42 = 71%",
+        "time": 0.009,
+        "size": 1673,
+        "magic": {
+          "orderBy": "value2",
+          "reverse": false
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "23/42 = 55%",
+            "time": 0.014,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1878
+          },
+          "value2-true": {
+            "score": "26/42 = 62%",
+            "time": 0.009,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 2421
+          },
+          "value2-false": {
+            "score": "30/42 = 71%",
+            "time": 0.009,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1673
+          },
+          "value1-true-2": {
+            "score": "23/42 = 55%",
+            "time": 0.01,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true,
+              "algo": "2"
+            },
+            "size": 1375
+          }
+        }
+      },
+      "medium": {
+        "score": "45087/50000 = 90%",
+        "time": 5.971,
+        "size": 1498269,
+        "magic": {
+          "orderBy": "value1",
+          "reverse": true,
+          "algo": "2"
+        },
+        "magicVersions": {
+          "value1-false": {
+            "score": "41909/50000 = 84%",
+            "time": 5.517,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": false
+            },
+            "size": 1515449
+          },
+          "value2-true": {
+            "score": "40797/50000 = 82%",
+            "time": 5.629,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": true
+            },
+            "size": 1523966
+          },
+          "value2-false": {
+            "score": "44700/50000 = 89%",
+            "time": 5.131,
+            "magic": {
+              "orderBy": "value2",
+              "reverse": false
+            },
+            "size": 1441999
+          },
+          "value1-true-2": {
+            "score": "45087/50000 = 90%",
+            "time": 5.586,
+            "magic": {
+              "orderBy": "value1",
+              "reverse": true,
+              "algo": "2"
+            },
+            "size": 1498470
+          }
+        }
+      }
     }
   }
 }

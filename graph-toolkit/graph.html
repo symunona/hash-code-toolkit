@@ -41,6 +41,10 @@
 
     .export-link { font-size: small }
 
+    ::-webkit-scrollbar { 
+        display: none; 
+    }
+
 </style>
 <link rel="stylesheet" type="text/css" href="{{task}}/style.css">
 <body>
@@ -163,7 +167,7 @@
         </tr>
     </table>
 
-    <button style="background: #922; position: fixed; right: 0; bottom: 0"
+    <button style="background: #922;"
         data-bind="click: cleanStats"
             >Clear stats and backup algos</button>
 

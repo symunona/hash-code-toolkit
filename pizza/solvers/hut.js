@@ -3,6 +3,8 @@
 const _ = require('underscore')
 const loading = require('../../loading')
 
+const mrMath = require('../../mr-math')
+
 let pizza, min, max, h, w
 
 module.exports = function (p, magic) {
@@ -40,47 +42,47 @@ function generateColorMap(allSlices) {
 
 function selectNonConflictingSlices(allSlices, magic) {
     
+    let orderMatrix = mrMath.generateMatrixOrder(w, h)
+    // mrMath.topBottomOrder(orderMatrix)
+    orderMatrix = mrMath.around(orderMatrix);
+    
     console.log('Picking slices...')
     loading.start(h)    
     let slices = []
+    
     for (let y = 0; y < h; y++) {
         loading()
-        for (let x = 0; x < w; x++) {            
-            for (let i = 0; i < allSlices[y][x].length; i++) {
-                let slice = allSlices[y][x][i]
-                
-                // if (x==3 && y ==0) debugger
-                if (canPutinSlice(allSlices, { x, y }, slice)) {
-                    _.extend(slice, { x, y })
-                    putinSlice(allSlices, { x, y }, slice);
-                    slices.push(slice)                    
-                }
-            }
+        for (let x = 0; x < w; x++) {
+            allSlices[y][x].order = orderMatrix[y][x];            
         }
     }
+
+    let vector = _.sortBy(mrMath.vectorizeMatrix(allSlices),'order');
+    vector.map((slicesAtPos)=>{
+        for (let i = 0; i < slicesAtPos.length; i++) {
+            let slice = slicesAtPos[i]
+                            
+            if (canPutinSlice(allSlices, slice)) {                    
+                putinSlice(allSlices, slice);
+                slices.push(slice)
+            }
+        }
+    })
+    
+
     return slices
 }
 
 /**
  * Note: Putin is everywhere. Not only in Ukraine...
  * @param {*} allSlices 
- * @param {*} pos 
  * @param {*} slice 
  */
-function canPutinSlice(allSlices, pos, slice) {
+function canPutinSlice(allSlices, slice) {
 
     for (var y = 0; y < slice.h; y++) {
         for (var x = 0; x < slice.w; x++) {
-            if (pos.y + y >= allSlices.length){                
-                console.error(`This slice is bad, how were you made?`)
-                console.error(pos, slice)
-                debugger
-            } else if (allSlices[0].length <= pos.x + x){
-                
-                console.error(`This slice is bad, how were you made?`)
-                console.error(pos, slice)
-                debugger
-            } else if (allSlices[pos.y + y][pos.x + x].taken) {
+           if (allSlices[slice.y + y][slice.x + x].taken) {
                 return false
             }
         }
@@ -88,11 +90,11 @@ function canPutinSlice(allSlices, pos, slice) {
     return true
 }
 
-function putinSlice(allSlices, pos, slice) {
+function putinSlice(allSlices, slice) {
 
     for (var y = 0; y < slice.h; y++) {
         for (var x = 0; x < slice.w; x++) {        
-            allSlices[pos.y + y][pos.x + x].taken = slice
+            allSlices[slice.y + y][slice.x + x].taken = slice
         }
     }
 }
@@ -202,7 +204,7 @@ function possibleSlicesAtPos(pos) {
                 let size = { w: sliceWidth, h: sliceHeight }
                 if (isSliceGood(whatsOnTheSlice(pos, size))) {
                     size.color = randomColor()
-                    results.push(size)
+                    results.push(_.extend(size, pos))
                 }
             }
         }

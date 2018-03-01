@@ -151,6 +151,13 @@
             },
             "console": "integratedTerminal"
         }
+        ,
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "test mr-math",
+            "program": "${workspaceFolder}/mr-math.js",            
+        }
 
     ]
 }

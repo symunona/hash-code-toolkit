@@ -38,7 +38,7 @@ module.exports = function (currentTask, inputName, solverNames, doOutput, forceR
     }
 
     let solutions = {}
-    for (let s in solverNames) {
+    for (let s=0; s<solverNames.length; s++) {
         solutions[solverNames[s]] = runSolver(currentTask, solverNames[s], inputName, parsedData, moreMagic)
     }
     // Do direct export of the file, output is set.

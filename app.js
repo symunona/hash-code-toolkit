@@ -94,7 +94,7 @@ if (doExport) {
 
 if (!paralell){
     // Iterate over the provided/found inputs.
-    for (let i in input) {
+    for (var i=0; i<input.length; i++) {
         solverRunner(currentTask, input[i], solvers, doOutput, force, allmagics)
     }
     // If we are done, and the output property is set, do ourself 
