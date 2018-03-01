@@ -1,4 +1,6 @@
 {
-    "orderBy": "value1",
-    "reverse": "true"
+    "orderBy": "value3",
+    "reverse": "true",
+    "algo": "rnd",
+    "seed": "singularity"
 }

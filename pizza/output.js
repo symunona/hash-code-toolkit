@@ -9,8 +9,11 @@ module.exports = function(o){
     
     start();
     
-    line(o.solution);
+    line(o.slices.length);
 
+    o.slices.map((slice)=>{
+        line(slice.x, slice.y, slice.x+slice.w, slice.y+slice.h)
+    });
     // Example: 
 
     // line(o.cacheServers.length);

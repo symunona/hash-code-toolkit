@@ -144,8 +144,8 @@
             "program": "${workspaceFolder}/app.js",
             "env":{                
                 "solvers": "hut",
-                "input": "example small medium",
-                "allmagics": "true",
+                "input": "example small medium big",
+                "allmagics": "false",
                 "task": "pizza",                
                 "graph": "true"                
             },

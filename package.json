@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "a bunch of helper stuff to make fiddling easier",
   "main": "app.js",
+  "repository": "https://github.com/symunona/hash-code-toolkit.git",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +25,7 @@
     "opn": "^5.2.0",
     "progress": "^2.0.0",
     "require-reload": "^0.2.2",
+    "seedrandom": "^2.4.3",
     "single-line-log": "^1.1.2",
     "underscore": "^1.8.3"
   }

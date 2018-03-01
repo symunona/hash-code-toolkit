@@ -142,6 +142,80 @@
           }
         }
       }
+    },
+    "0301-114329": {
+      "example": {
+        "score": "8/15 = 53%",
+        "time": 0.004,
+        "size": 578,
+        "magic": {
+          "orderBy": "value3",
+          "reverse": "true",
+          "algo": "rnd",
+          "seed": "singularity"
+        },
+        "magicVersions": {
+          "value3-true-rnd-singularity": {
+            "score": "8/15 = 53%",
+            "time": 0.004,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "rnd",
+              "seed": "singularity"
+            },
+            "size": 578
+          }
+        }
+      },
+      "small": {
+        "score": "27/42 = 64%",
+        "time": 0.01,
+        "size": 1908,
+        "magic": {
+          "orderBy": "value3",
+          "reverse": "true",
+          "algo": "rnd",
+          "seed": "singularity"
+        },
+        "magicVersions": {
+          "value3-true-rnd-singularity": {
+            "score": "27/42 = 64%",
+            "time": 0.01,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "rnd",
+              "seed": "singularity"
+            },
+            "size": 1908
+          }
+        }
+      },
+      "medium": {
+        "score": "39600/50000 = 79%",
+        "time": 5.443,
+        "size": 1421744,
+        "magic": {
+          "orderBy": "value3",
+          "reverse": "true",
+          "algo": "rnd",
+          "seed": "singularity"
+        },
+        "magicVersions": {
+          "value3-true-rnd-singularity": {
+            "score": "39600/50000 = 79%",
+            "time": 5.443,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "rnd",
+              "seed": "singularity"
+            },
+            "size": 1421744
+          }
+        }
+      }
     }
   },
   "output": {

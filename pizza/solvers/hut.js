@@ -5,6 +5,7 @@ const loading = require('../../loading')
 
 const mrMath = require('../../mr-math')
 
+
 let pizza, min, max, h, w
 
 module.exports = function (p, magic) {
@@ -28,6 +29,8 @@ module.exports = function (p, magic) {
     return { slices, map: generateColorMap(allSlices) }
 }
 
+
+
 function generateColorMap(allSlices) {
     let map = []
     for (let y = 0; y < h; y++) {
@@ -43,8 +46,20 @@ function generateColorMap(allSlices) {
 function selectNonConflictingSlices(allSlices, magic) {
     
     let orderMatrix = mrMath.generateMatrixOrder(w, h)
-    // mrMath.topBottomOrder(orderMatrix)
-    orderMatrix = mrMath.around(orderMatrix);
+
+    switch(magic.algo){
+        case 'rnd':
+            orderMatrix = mrMath.randomOrder(orderMatrix, magic.seed)
+            break;
+        case 'fliflop':
+            orderMatrix =mrMath.topBottomOrder(orderMatrix)
+        break;
+        case 'circular':
+            orderMatrix = mrMath.around(orderMatrix);    
+        break;        
+    }
+    
+    
     
     console.log('Picking slices...')
     loading.start(h)    
@@ -101,8 +116,7 @@ function putinSlice(allSlices, slice) {
 
 
 function sortPossibleSlicesWithAlignmentPreference(allSlices, pizzaType, magic) {
-    let axisPref = pizzaType.vertical > pizzaType.horizontal ? 'h' : 'w'
-
+    
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {        
             allSlices[y][x] = _.sortBy(
@@ -130,6 +144,7 @@ function calculateSliceValue(pos, allSlices, slice){
     }
     slice.value1 = 1/sum
     slice.value2 = 1/sum/((slice.h*slice.w)-1)
+    slice.value3 = -sum
     return slice
 }
 

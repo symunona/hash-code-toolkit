@@ -33,25 +33,25 @@ let input = process.env.input ? process.env.input.split(' ') : []
 let solvers = process.env.solvers ? process.env.solvers.split(' ') : []
 
 // If it is a name of a solver, it will export the solver's solution.
-const doOutput = process.env.output // default false
+const doOutput = process.env.output === 'true' // default false
 
 // If this is true, the file will not use cache, it will re-parse the original input
-const force = process.env.force // Scotty!... oh wait, that's another one.
+const force = process.env.force === 'true' // Scotty!... oh wait, that's another one.
 
 // EXPERIMENTAL If this is true, we fork processes instead of running them linearily.
 // This can be good for two things: 
 //  - heat your room in the winter
 //  - finish the tasks faster
-const paralell = process.env.paralell
+const paralell = process.env.paralell === 'true'
 
 // If this is true, the file will not use cache, it will re-parse the original input
-const doExport = process.env.export // Default: do not export.
+const doExport = process.env.export === 'true' // Default: do not export.
 
 // Graphic interface and file server
-const graph = process.env.graph // If true, starts a server with some goodies.
+const graph = process.env.graph === 'true' // If true, starts a server with some goodies.
 
 // If true, search for other magics too.
-const allmagics = process.env.allmagics
+const allmagics = process.env.allmagics === 'true'
 
 // Generic stuff
 const consts = require('./consts')
