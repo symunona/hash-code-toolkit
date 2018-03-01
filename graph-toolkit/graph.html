@@ -115,10 +115,11 @@
                         
                         <!-- ko if: magicVer !== 'default' --> 
                             <!-- ko if: stats()[algo][ver][dataset].magicVersions && stats()[algo][ver][dataset].magicVersions[magicVer] -->
-                            <td>
+                            <td data-bind="css: {exported: isThisExported(algo, ver, magicVer, dataset)}">
                                 <a data-bind="
                                     text: score(stats()[algo][ver][dataset].magicVersions[magicVer].score), 
                                     click: loadSolution.bind(this, dataset, getSolutionFileName(algo, ver, dataset, magicVer))"></a>
+                                <a data-bind="click: exportToOutputFolder.bind(this, algo, ver, magicVer, dataset)">export</a>
                             </td>
                             <td data-bind="text: time(stats()[algo][ver][dataset].magicVersions[magicVer].time)"></td>
                             <td data-bind="text: formatSize(stats()[algo][ver][dataset].magicVersions[magicVer].size)"></td>

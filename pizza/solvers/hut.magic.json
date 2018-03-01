@@ -1,5 +1,4 @@
 {
     "orderBy": "value1",
-    "reverse": true,
-    "algo": "2"
+    "reverse": "true"
 }

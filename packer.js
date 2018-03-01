@@ -5,6 +5,8 @@
 
 const glob = require('glob-fs')
 
+const _ = require('underscore')
+
 module.exports = {}
 
 module.exports.outputSolutionForOneDataSet = outputSolutionForOneDataSet
@@ -48,7 +50,7 @@ function outputSolutionForOneDataSet(currentTask, inputDataSetName, solution, so
 
 function outputSolutionVersion(currentTask, inputDataSetName, solverName, version, magic) {
         
-    let fileName = getSolutionFileName(currentTask, consts.solutionCacheFolderName, solverName, version, inputDataSetName, solutionCacher.generateMagicKey(magic))
+    let fileName = getSolutionFileName(currentTask, consts.solutionCacheFolderName, solverName, version, inputDataSetName, _.isString(magic)?magic:solutionCacher.generateMagicKey(magic))
     try{
         let solution = JSON.parse(fs.readFileSync('./'+fileName, 'utf8'))
         outputSolutionForOneDataSet(currentTask, inputDataSetName, solution, solverName, version, magic)

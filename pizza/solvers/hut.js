@@ -107,7 +107,7 @@ function sortPossibleSlicesWithAlignmentPreference(allSlices, pizzaType, magic) 
         for (let x = 0; x < w; x++) {        
             allSlices[y][x] = _.sortBy(
                 allSlices[y][x].map(calculateSliceValue.bind(this, {x,y}, allSlices)), magic.orderBy)
-            if (magic.reverse){
+            if (magic.reverse=='true'){
                 allSlices[y][x] = allSlices[y][x].reverse();
             }
         }

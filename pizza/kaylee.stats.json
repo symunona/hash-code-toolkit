@@ -1,366 +1,13 @@
 {
   "hut": {
-    "0227-235312": {
-      "example": {
-        "score": 8,
-        "time": 0.004,
-        "size": 552
-      }
-    },
-    "0228-000006": {
-      "example": {
-        "score": 8,
-        "time": 0.004,
-        "size": 552
-      }
-    },
-    "0228-000115": {
-      "example": {
-        "score": 12,
-        "time": 0.003,
-        "size": 490
-      }
-    },
-    "0228-000746": {
-      "example": {
-        "score": 10,
-        "time": 0.005,
-        "size": 474
-      },
-      "small": {
-        "score": 27,
-        "time": 0.011,
-        "size": 1453
-      }
-    },
-    "0228-094621": {
-      "example": {
-        "score": 10,
-        "time": 0.005,
-        "size": 574
-      },
-      "small": {
-        "score": 27,
-        "time": 0.018,
-        "size": 1814
-      }
-    },
-    "0228-094654": {
-      "example": {
-        "score": 6,
-        "time": 0.007,
-        "size": 542
-      },
-      "small": {
-        "score": 22,
-        "time": 0.017,
-        "size": 1969
-      }
-    },
-    "0228-094713": {
-      "example": {
-        "score": 10,
-        "time": 0.007,
-        "size": 574
-      },
-      "small": {
-        "score": 28,
-        "time": 0.016,
-        "size": 1790
-      }
-    },
-    "0228-094728": {
-      "example": {
-        "score": 10,
-        "time": 0.005,
-        "size": 574
-      },
-      "small": {
-        "score": 27,
-        "time": 0.01,
-        "size": 1814
-      }
-    },
-    "0228-094742": {
-      "example": {
-        "score": 6,
-        "time": 0.003,
-        "size": 542
-      },
-      "small": {
-        "score": 21,
-        "time": 0.007,
-        "size": 1946
-      },
-      "big": {
-        "score": 848737,
-        "time": 160.459,
-        "size": 26572361
-      },
-      "medium": {
-        "score": 46487,
-        "time": 8.282,
-        "size": 1644236
-      }
-    },
-    "0228-154436": {
-      "example": {
-        "score": "4/15 = 666.6666666666666%",
-        "time": 0.003,
-        "size": 574,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "3/15 = 20%",
-            "time": 0.005,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 542
-          },
-          "value2-true": {
-            "score": "3/15 = 20%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 542
-          },
-          "value2-false": {
-            "score": "4/15 = 27%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 574
-          },
-          "value1-true": {
-            "score": "4/15 = 27%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true
-            },
-            "size": 574
-          }
-        }
-      },
-      "small": {
-        "score": "20/42 = 48%",
-        "time": 0.007,
-        "size": 1964,
-        "magic": {
-          "orderBy": "value1",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "20/42 = 48%",
-            "time": 0.015,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1969
-          },
-          "value2-true": {
-            "score": "16/42 = 38%",
-            "time": 0.009,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 1946
-          },
-          "value2-false": {
-            "score": "16/42 = 38%",
-            "time": 0.01,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 1785
-          },
-          "value1-true": {
-            "score": "12/42 = 29%",
-            "time": 0.01,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true
-            },
-            "size": 1814
-          }
-        }
-      },
-      "medium": {
-        "score": "6587/50000 = 13%",
-        "time": 6.577,
-        "size": 1644095,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": true
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "12889/50000 = 26%",
-            "time": 6.475,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1646303
-          },
-          "value2-true": {
-            "score": "6587/50000 = 13%",
-            "time": 6.577,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 1644095
-          }
-        }
-      }
-    },
-    "0228-155638": {
-      "example": {
-        "score": "4/15 = 27%",
-        "time": 0.003,
-        "size": 574,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "3/15 = 20%",
-            "time": 0.003,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 542
-          },
-          "value2-true": {
-            "score": "3/15 = 20%",
-            "time": 0.002,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 537
-          },
-          "value2-false": {
-            "score": "4/15 = 27%",
-            "time": 0.003,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 574
-          },
-          "value1-true": {
-            "score": "4/15 = 27%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true
-            },
-            "size": 574
-          }
-        }
-      },
-      "small": {
-        "score": "20/42 = 48%",
-        "time": 0.007,
-        "size": 1960,
-        "magic": {
-          "orderBy": "value1",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "20/42 = 48%",
-            "time": 0.007,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1960
-          },
-          "value2-true": {
-            "score": "16/42 = 38%",
-            "time": 0.01,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 1943
-          },
-          "value2-false": {
-            "score": "16/42 = 38%",
-            "time": 0.006,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 1790
-          },
-          "value1-true": {
-            "score": "12/42 = 29%",
-            "time": 0.006,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true
-            },
-            "size": 1814
-          }
-        }
-      },
-      "medium": {
-        "score": "6587/50000 = 13%",
-        "time": 4.67,
-        "size": 1644230,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": true
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "12889/50000 = 26%",
-            "time": 4.599,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1646000
-          },
-          "value2-true": {
-            "score": "6587/50000 = 13%",
-            "time": 4.67,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 1644230
-          }
-        }
-      }
-    },
-    "0228-160157": {
+    "0228-215944": {
       "example": {
         "score": "8/15 = 53%",
         "time": 0.005,
         "size": 690,
         "magic": {
           "orderBy": "value1",
-          "reverse": false
+          "reverse": "false"
         },
         "magicVersions": {
           "value1-false": {
@@ -368,178 +15,34 @@
             "time": 0.005,
             "magic": {
               "orderBy": "value1",
-              "reverse": false
+              "reverse": "false"
             },
             "size": 690
           },
           "value2-true": {
             "score": "8/15 = 53%",
-            "time": 0.003,
+            "time": 0.002,
             "magic": {
               "orderBy": "value2",
-              "reverse": true
+              "reverse": "true"
             },
             "size": 690
           },
           "value2-false": {
             "score": "8/15 = 53%",
-            "time": 0.004,
+            "time": 0.007,
             "magic": {
               "orderBy": "value2",
-              "reverse": false
+              "reverse": "false"
             },
-            "size": 535
+            "size": 538
           },
           "value1-true": {
             "score": "8/15 = 53%",
             "time": 0.002,
             "magic": {
               "orderBy": "value1",
-              "reverse": true
-            },
-            "size": 538
-          }
-        }
-      },
-      "small": {
-        "score": "9/42 = 21%",
-        "time": 0.011,
-        "size": 1888,
-        "magic": {
-          "orderBy": "value1",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "24/42 = 57%",
-            "time": 0.011,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1888
-          },
-          "value2-true": {
-            "score": "26/42 = 62%",
-            "time": 0.013,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 2415
-          },
-          "value2-false": {
-            "score": "30/42 = 71%",
-            "time": 0.007,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 1673
-          },
-          "value1-true": {
-            "score": "25/42 = 60%",
-            "time": 0.01,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true
-            },
-            "size": 1407
-          }
-        }
-      },
-      "medium": {
-        "score": "6781/50000 = 14%",
-        "time": 5.576,
-        "size": 1663106,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": true
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "47264/50000 = 95%",
-            "time": 5.301,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1639508
-          },
-          "value2-true": {
-            "score": "47520/50000 = 95%",
-            "time": 5.593,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 1663300
-          },
-          "value2-false": {
-            "score": "47886/50000 = 96%",
-            "time": 5.177,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 1506754
-          },
-          "value1-true": {
-            "score": "49061/50000 = 98%",
-            "time": 5.271,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true
-            },
-            "size": 1534076
-          }
-        }
-      }
-    },
-    "0228-204058": {
-      "example": {
-        "score": "8/15 = 53%",
-        "time": 0.005,
-        "size": 690,
-        "magic": {
-          "orderBy": "value1",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "8/15 = 53%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 690
-          },
-          "value2-true": {
-            "score": "8/15 = 53%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 690
-          },
-          "value2-false": {
-            "score": "8/15 = 53%",
-            "time": 0.003,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 538
-          },
-          "value1-true-2": {
-            "score": "8/15 = 53%",
-            "time": 0.005,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true,
-              "algo": "2"
+              "reverse": "true"
             },
             "size": 538
           }
@@ -548,246 +51,117 @@
       "small": {
         "score": "30/42 = 71%",
         "time": 0.005,
-        "size": 1673,
+        "size": 1667,
         "magic": {
           "orderBy": "value2",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "24/42 = 57%",
-            "time": 0.01,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1885
-          },
-          "value2-true": {
-            "score": "26/42 = 62%",
-            "time": 0.017,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 2114
-          },
-          "value2-false": {
-            "score": "30/42 = 71%",
-            "time": 0.008,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 1673
-          },
-          "value1-true-2": {
-            "score": "25/42 = 60%",
-            "time": 0.008,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true,
-              "algo": "2"
-            },
-            "size": 1407
-          }
-        }
-      },
-      "medium": {
-        "score": "47413/50000 = 95%",
-        "time": 6.415,
-        "size": 1554237,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "43900/50000 = 88%",
-            "time": 5.717,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 1585358
-          },
-          "value2-true": {
-            "score": "43338/50000 = 87%",
-            "time": 6.143,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 1587578
-          },
-          "value2-false": {
-            "score": "47413/50000 = 95%",
-            "time": 6.178,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 1554592
-          },
-          "value1-true-2": {
-            "score": "46983/50000 = 94%",
-            "time": 8.479,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true,
-              "algo": "2"
-            },
-            "size": 1549950
-          }
-        }
-      }
-    },
-    "0228-212439": {
-      "example": {
-        "score": "8/15 = 53%",
-        "time": 0.006,
-        "size": 690,
-        "magic": {
-          "orderBy": "value1",
-          "reverse": false
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "8/15 = 53%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": false
-            },
-            "size": 690
-          },
-          "value2-true": {
-            "score": "8/15 = 53%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": true
-            },
-            "size": 690
-          },
-          "value2-false": {
-            "score": "8/15 = 53%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": false
-            },
-            "size": 538
-          },
-          "value1-true-2": {
-            "score": "8/15 = 53%",
-            "time": 0.004,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": true,
-              "algo": "2"
-            },
-            "size": 538
-          }
-        }
-      },
-      "small": {
-        "score": "30/42 = 71%",
-        "time": 0.009,
-        "size": 1673,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": false
+          "reverse": "false"
         },
         "magicVersions": {
           "value1-false": {
             "score": "23/42 = 55%",
-            "time": 0.014,
+            "time": 0.011,
             "magic": {
               "orderBy": "value1",
-              "reverse": false
+              "reverse": "false"
             },
             "size": 1878
           },
           "value2-true": {
             "score": "26/42 = 62%",
-            "time": 0.009,
+            "time": 0.01,
             "magic": {
               "orderBy": "value2",
-              "reverse": true
+              "reverse": "true"
             },
-            "size": 2421
+            "size": 2414
           },
           "value2-false": {
             "score": "30/42 = 71%",
             "time": 0.009,
             "magic": {
               "orderBy": "value2",
-              "reverse": false
+              "reverse": "false"
             },
             "size": 1673
           },
-          "value1-true-2": {
+          "value1-true": {
             "score": "23/42 = 55%",
             "time": 0.01,
             "magic": {
               "orderBy": "value1",
-              "reverse": true,
-              "algo": "2"
+              "reverse": "true"
             },
-            "size": 1375
+            "size": 1387
           }
         }
       },
       "medium": {
         "score": "45087/50000 = 90%",
-        "time": 5.971,
-        "size": 1498269,
+        "time": 7.063,
+        "size": 1498195,
         "magic": {
           "orderBy": "value1",
-          "reverse": true,
-          "algo": "2"
+          "reverse": "true"
         },
         "magicVersions": {
           "value1-false": {
             "score": "41909/50000 = 84%",
-            "time": 5.517,
+            "time": 6.541,
             "magic": {
               "orderBy": "value1",
-              "reverse": false
+              "reverse": "false"
             },
-            "size": 1515449
+            "size": 1516025
           },
           "value2-true": {
             "score": "40797/50000 = 82%",
-            "time": 5.629,
+            "time": 6.778,
             "magic": {
               "orderBy": "value2",
-              "reverse": true
+              "reverse": "true"
             },
-            "size": 1523966
+            "size": 1524153
           },
           "value2-false": {
             "score": "44700/50000 = 89%",
-            "time": 5.131,
+            "time": 6.935,
             "magic": {
               "orderBy": "value2",
-              "reverse": false
+              "reverse": "false"
             },
-            "size": 1441999
+            "size": 1442145
           },
-          "value1-true-2": {
+          "value1-true": {
             "score": "45087/50000 = 90%",
-            "time": 5.586,
+            "time": 7.063,
             "magic": {
               "orderBy": "value1",
-              "reverse": true,
-              "algo": "2"
+              "reverse": "true"
             },
-            "size": 1498470
+            "size": 1498195
           }
         }
       }
+    }
+  },
+  "output": {
+    "small": {
+      "solver": "hut",
+      "version": "0228-215944",
+      "magic": "value2-false",
+      "score": "30/42 = 71%"
+    },
+    "example": {
+      "solver": "hut",
+      "version": "0228-215944",
+      "magic": "value2-true",
+      "score": "8/15 = 53%"
+    },
+    "medium": {
+      "solver": "hut",
+      "version": "0228-215944",
+      "magic": "value1-true",
+      "score": "45087/50000 = 90%"
     }
   }
 }
