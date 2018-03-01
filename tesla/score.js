@@ -14,7 +14,7 @@ module.exports = function score(algorithmOutput, parsedValue) {
     
     let score = 0
 
-    algorithmOutput.cars.maps((car)=>{
+    algorithmOutput.cars.map((car)=>{
         car.rides.map((ride)=>{
             score += ride.length
             if (ride.start == ride.actualStart){

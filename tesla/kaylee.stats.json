@@ -1,0 +1,19 @@
+{
+  "dummy": {
+    "0301-135603": {
+      "a_example": {
+        "score": 6,
+        "time": 0,
+        "size": 536
+      }
+    }
+  },
+  "output": {
+    "a_example": {
+      "solver": "dummy",
+      "version": "0301-135603",
+      "magic": "",
+      "score": 6
+    }
+  }
+}

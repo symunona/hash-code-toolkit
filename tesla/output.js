@@ -5,6 +5,8 @@
 
 var output;
 
+const _ = require('underscore')
+
 module.exports = function(o){
     
     start();

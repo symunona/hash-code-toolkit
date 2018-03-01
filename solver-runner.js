@@ -98,6 +98,7 @@ function runSolverWithSpecificMagic(currentTask, solverName, inputDataSetName, p
         solutionScore = require(`./${currentTask}/score`)(solution, parsedData.parsedValue)
         console.warn('Score:', solutionScore)
     } catch (e) { 
+        console.error(e);
         console.warn('No scoring is in place, could not tell you the score.')
 
     }    
