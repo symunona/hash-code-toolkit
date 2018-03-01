@@ -16,7 +16,7 @@ module.exports = function parse(rawData){
         save('rideCount'),
         'bonus',
         'maxSteps',                
-        n('rides', {length: 'rideCount', indicies: true}, 
+        n('rides', {length: 'rideCount', indices: true}, 
             'fromY', 
             'fromX', 
             'toY', 
@@ -26,6 +26,11 @@ module.exports = function parse(rawData){
         )        
     ])
 
-    return parser(rawData)
+    let data = parser(rawData)
+    data.parsedValue.rides.map((ride)=>{
+        ride.length = Math.abs(ride.fromX-ride.toX)+Math.abs(ride.fromY-ride.toY)
+    })
+
+    return data
     
 }

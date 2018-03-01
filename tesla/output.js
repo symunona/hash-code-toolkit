@@ -8,17 +8,10 @@ var output;
 module.exports = function(o){
     
     start();
-    
-    line(o.solution);
 
-    // Example: 
-
-    // line(o.cacheServers.length);
-    // o.cacheServers.map((c, i)=>{
-    //     if (c.videos.length){            
-    //         line(i, c.videos.join(' '))
-    //     }    
-    // })
+    o.cars.map((car)=>{
+        line(car.length, _.pluck(car.join(' '),'index'))        
+    })
 
     return output;
 }

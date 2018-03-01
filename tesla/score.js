@@ -11,6 +11,17 @@
 const _ = require('underscore')
 
 module.exports = function score(algorithmOutput, parsedValue) {
+    
+    let score = 0
 
-    return algorithmOutput.solution / 2
+    algorithmOutput.cars.maps((car)=>{
+        car.map((ride)=>{
+            score += ride.length
+            if (ride.start == ride.actualStart){
+                score+= parsedValue.bonus
+            }
+        })
+    })    
+
+    return score;
 }

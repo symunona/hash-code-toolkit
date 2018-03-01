@@ -180,10 +180,8 @@ mmy{
             "request": "launch",
             "name": "tesla - parser",
             "program": "${workspaceFolder}/app.js",
-            "env":{                                
-                "input": "example",                
-                "task": "tesla",
-                "input": "a_example b_should_be_easy",
+            "env":{                                                             
+                "task": "tesla",                
                 "force": "true"
             },
             "console": "integratedTerminal"
