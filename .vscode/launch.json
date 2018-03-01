@@ -183,6 +183,7 @@ mmy{
             "env":{                                
                 "input": "example",                
                 "task": "tesla",
+                "input": "a_example b_should_be_easy",
                 "force": "true"
             },
             "console": "integratedTerminal"
