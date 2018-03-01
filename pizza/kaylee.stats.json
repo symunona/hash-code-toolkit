@@ -1,152 +1,9 @@
 {
   "hut": {
-    "0228-215944": {
+    "0301-115057": {
       "example": {
         "score": "8/15 = 53%",
-        "time": 0.005,
-        "size": 690,
-        "magic": {
-          "orderBy": "value1",
-          "reverse": "false"
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "8/15 = 53%",
-            "time": 0.005,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": "false"
-            },
-            "size": 690
-          },
-          "value2-true": {
-            "score": "8/15 = 53%",
-            "time": 0.002,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": "true"
-            },
-            "size": 690
-          },
-          "value2-false": {
-            "score": "8/15 = 53%",
-            "time": 0.007,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": "false"
-            },
-            "size": 538
-          },
-          "value1-true": {
-            "score": "8/15 = 53%",
-            "time": 0.002,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": "true"
-            },
-            "size": 538
-          }
-        }
-      },
-      "small": {
-        "score": "30/42 = 71%",
-        "time": 0.005,
-        "size": 1667,
-        "magic": {
-          "orderBy": "value2",
-          "reverse": "false"
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "23/42 = 55%",
-            "time": 0.011,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": "false"
-            },
-            "size": 1878
-          },
-          "value2-true": {
-            "score": "26/42 = 62%",
-            "time": 0.01,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": "true"
-            },
-            "size": 2414
-          },
-          "value2-false": {
-            "score": "30/42 = 71%",
-            "time": 0.009,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": "false"
-            },
-            "size": 1673
-          },
-          "value1-true": {
-            "score": "23/42 = 55%",
-            "time": 0.01,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": "true"
-            },
-            "size": 1387
-          }
-        }
-      },
-      "medium": {
-        "score": "45087/50000 = 90%",
-        "time": 7.063,
-        "size": 1498195,
-        "magic": {
-          "orderBy": "value1",
-          "reverse": "true"
-        },
-        "magicVersions": {
-          "value1-false": {
-            "score": "41909/50000 = 84%",
-            "time": 6.541,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": "false"
-            },
-            "size": 1516025
-          },
-          "value2-true": {
-            "score": "40797/50000 = 82%",
-            "time": 6.778,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": "true"
-            },
-            "size": 1524153
-          },
-          "value2-false": {
-            "score": "44700/50000 = 89%",
-            "time": 6.935,
-            "magic": {
-              "orderBy": "value2",
-              "reverse": "false"
-            },
-            "size": 1442145
-          },
-          "value1-true": {
-            "score": "45087/50000 = 90%",
-            "time": 7.063,
-            "magic": {
-              "orderBy": "value1",
-              "reverse": "true"
-            },
-            "size": 1498195
-          }
-        }
-      }
-    },
-    "0301-114329": {
-      "example": {
-        "score": "8/15 = 53%",
-        "time": 0.004,
+        "time": 0.006,
         "size": 578,
         "magic": {
           "orderBy": "value3",
@@ -157,7 +14,7 @@
         "magicVersions": {
           "value3-true-rnd-singularity": {
             "score": "8/15 = 53%",
-            "time": 0.004,
+            "time": 0.006,
             "magic": {
               "orderBy": "value3",
               "reverse": "true",
@@ -165,77 +22,106 @@
               "seed": "singularity"
             },
             "size": 578
+          },
+          "value3-true-circle-singularity": {
+            "score": "8/15 = 53%",
+            "time": 0.006,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "circle",
+              "seed": "singularity"
+            },
+            "size": 578
           }
         }
       },
       "small": {
-        "score": "27/42 = 64%",
-        "time": 0.01,
-        "size": 1908,
+        "score": "25/42 = 60%",
+        "time": 0.009,
+        "size": 1507,
         "magic": {
           "orderBy": "value3",
           "reverse": "true",
-          "algo": "rnd",
+          "algo": "circle",
           "seed": "singularity"
         },
         "magicVersions": {
-          "value3-true-rnd-singularity": {
-            "score": "27/42 = 64%",
+          "value3-true-circle-singularity": {
+            "score": "25/42 = 60%",
             "time": 0.01,
             "magic": {
               "orderBy": "value3",
               "reverse": "true",
-              "algo": "rnd",
+              "algo": "circle",
               "seed": "singularity"
             },
-            "size": 1908
+            "size": 1507
           }
         }
       },
       "medium": {
-        "score": "39600/50000 = 79%",
-        "time": 5.443,
-        "size": 1421744,
+        "score": "49061/50000 = 98%",
+        "time": 5.514,
+        "size": 1619269,
         "magic": {
           "orderBy": "value3",
           "reverse": "true",
-          "algo": "rnd",
+          "algo": "circle",
           "seed": "singularity"
         },
         "magicVersions": {
-          "value3-true-rnd-singularity": {
-            "score": "39600/50000 = 79%",
-            "time": 5.443,
+          "value3-true-circle-singularity": {
+            "score": "49061/50000 = 98%",
+            "time": 5.274,
             "magic": {
               "orderBy": "value3",
               "reverse": "true",
-              "algo": "rnd",
+              "algo": "circle",
               "seed": "singularity"
             },
-            "size": 1421744
+            "size": 1619086
+          }
+        }
+      },
+      "big": {
+        "score": "895402/1000000 = 90%",
+        "time": 124.387,
+        "size": 27978568,
+        "magic": {
+          "orderBy": "value3",
+          "reverse": "true",
+          "algo": "circle",
+          "seed": "singularity"
+        },
+        "magicVersions": {
+          "value3-true-circle-singularity": {
+            "score": "895402/1000000 = 90%",
+            "time": 124.387,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "circle",
+              "seed": "singularity"
+            },
+            "size": 27978568
           }
         }
       }
     }
   },
   "output": {
-    "small": {
-      "solver": "hut",
-      "version": "0228-215944",
-      "magic": "value2-false",
-      "score": "30/42 = 71%"
-    },
     "example": {
       "solver": "hut",
-      "version": "0228-215944",
-      "magic": "value2-true",
+      "version": "0301-115057",
+      "magic": "value3-true-circle-singularity",
       "score": "8/15 = 53%"
     },
-    "medium": {
+    "small": {
       "solver": "hut",
-      "version": "0228-215944",
-      "magic": "value1-true",
-      "score": "45087/50000 = 90%"
+      "version": "0301-115057",
+      "magic": "value3-true-circle-singularity",
+      "score": "25/42 = 60%"
     }
   }
 }

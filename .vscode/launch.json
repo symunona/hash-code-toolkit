@@ -147,7 +147,8 @@
                 "input": "example small medium big",
                 "allmagics": "false",
                 "task": "pizza",                
-                "graph": "true"                
+                "graph": "true",
+                "output": "hut"                
             },
             "console": "integratedTerminal"
         }
@@ -157,6 +158,21 @@
             "request": "launch",
             "name": "test mr-math",
             "program": "${workspaceFolder}/mr-math.js",            
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "pizza - just output",
+            "program": "${workspaceFolder}/app.js",
+            "env":{                
+                "solvers": "hut",
+                "input": "example small",
+                "allmagics": "false",
+                "task": "pizza",                                
+                "output": "hut"                
+            },
+            "console": "integratedTerminal"
         }
 
     ]

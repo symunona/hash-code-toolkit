@@ -8,7 +8,8 @@ const getSolutionFileName = require('./solution-cache-name-resolver').getSolutio
     consts = require('./consts'),
     mkdirr = require('mkdir-recursive'),
     os = require('os'),
-    fs = require('fs')
+    fs = require('fs'),
+    _ = require('underscore')
 
 module.exports = backUpSolverIfNecessaryAndExportStats
 module.exports.loadStatFile = loadStatFile
@@ -172,6 +173,10 @@ function exportStats(task, solverName, version, inputDataSetName, score, timeFin
 function exportFile(task, solverName, version, magic, inputDataSetName){
     let stats = loadStatFile(task);
     stats.output = stats.output || {}
+
+    if (!_.isString(magic)){
+        magic = generateMagicKey(magic);
+    }
 
     let score = magic?stats[solverName][version][inputDataSetName].magicVersions[magic].score:
         stats[solverName][version][inputDataSetName].score;

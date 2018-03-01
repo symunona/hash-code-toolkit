@@ -12,8 +12,11 @@ Array.prototype.swap = function (i, j) {
 }
 
 module.exports.generateMatrixOrder = function (width, height) {
-    let length = width * height;
-    let vector = Array.apply(null, { length }).map(Number.call, Number)
+    let length = width * height;    
+    let vector = [], i=0
+    while(i<length) vector.push(i++);
+    // This does not work with too many args.
+    // Array.apply(null, { length }).map(Number.call, Number)
     return module.exports.matricizeVector(vector, width)
 }
 

@@ -1,6 +1,6 @@
 {
     "orderBy": "value3",
     "reverse": "true",
-    "algo": "rnd",
+    "algo": "circle",
     "seed": "singularity"
 }

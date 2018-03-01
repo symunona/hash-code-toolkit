@@ -33,7 +33,7 @@ let input = process.env.input ? process.env.input.split(' ') : []
 let solvers = process.env.solvers ? process.env.solvers.split(' ') : []
 
 // If it is a name of a solver, it will export the solver's solution.
-const doOutput = process.env.output === 'true' // default false
+const doOutput = process.env.output // default false
 
 // If this is true, the file will not use cache, it will re-parse the original input
 const force = process.env.force === 'true' // Scotty!... oh wait, that's another one.
@@ -44,7 +44,7 @@ const force = process.env.force === 'true' // Scotty!... oh wait, that's another
 //  - finish the tasks faster
 const paralell = process.env.paralell === 'true'
 
-// If this is true, the file will not use cache, it will re-parse the original input
+// If true, it will clean the output folder and pack the outputs.
 const doExport = process.env.export === 'true' // Default: do not export.
 
 // Graphic interface and file server

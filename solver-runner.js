@@ -37,13 +37,13 @@ module.exports = function (currentTask, inputName, solverNames, doOutput, forceR
         process.exit(1)
     }
 
-    let solutions = {}
+    let solutionData = {}
     for (let s=0; s<solverNames.length; s++) {
-        solutions[solverNames[s]] = runSolver(currentTask, solverNames[s], inputName, parsedData, moreMagic)
+        solutionData[solverNames[s]] = runSolver(currentTask, solverNames[s], inputName, parsedData, moreMagic)
     }
     // Do direct export of the file, output is set.
-    if (doOutput && solutions[doOutput]) {
-        packer.outputSolutionForOneDataSet(currentTask, inputName, solutions[doOutput])
+    if (doOutput && solutionData[doOutput]) {        
+        packer.outputSolutionVersion(currentTask, inputName, doOutput, solutionData[doOutput].version, solutionData[doOutput].magic);        
     }
     else {
         console.warn('No output is provided.')
@@ -100,11 +100,10 @@ function runSolverWithSpecificMagic(currentTask, solverName, inputDataSetName, p
     } catch (e) { 
         console.warn('No scoring is in place, could not tell you the score.')
 
-    }
-        
-    solutionCacher(currentTask, solverName, inputDataSetName, solution, solutionScore, solveTime, magic)
-    console.log('>-----------------')
-    return solution
+    }    
+    let version = solutionCacher(currentTask, solverName, inputDataSetName, solution, solutionScore, solveTime, magic)    
+    console.log('>-----------------<')
+    return {version, magic}
 }
 /**
  * Live reloads the solver module from the hard drive.
