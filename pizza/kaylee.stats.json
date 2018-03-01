@@ -14,7 +14,7 @@
         "magicVersions": {
           "value3-true-rnd-singularity": {
             "score": "8/15 = 53%",
-            "time": 0.006,
+            "time": 0.005,
             "magic": {
               "orderBy": "value3",
               "reverse": "true",
@@ -37,13 +37,13 @@
         }
       },
       "small": {
-        "score": "25/42 = 60%",
-        "time": 0.009,
-        "size": 1507,
+        "score": "27/42 = 64%",
+        "time": 0.014,
+        "size": 1908,
         "magic": {
           "orderBy": "value3",
           "reverse": "true",
-          "algo": "circle",
+          "algo": "rnd",
           "seed": "singularity"
         },
         "magicVersions": {
@@ -57,6 +57,17 @@
               "seed": "singularity"
             },
             "size": 1507
+          },
+          "value3-true-rnd-singularity": {
+            "score": "27/42 = 64%",
+            "time": 0.014,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "rnd",
+              "seed": "singularity"
+            },
+            "size": 1908
           }
         }
       },
@@ -81,6 +92,17 @@
               "seed": "singularity"
             },
             "size": 1619086
+          },
+          "value3-true-rnd-singularity": {
+            "score": "39600/50000 = 79%",
+            "time": 5.55,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "rnd",
+              "seed": "singularity"
+            },
+            "size": 1421531
           }
         }
       },
@@ -105,6 +127,17 @@
               "seed": "singularity"
             },
             "size": 27978568
+          },
+          "value3-true-rnd-singularity": {
+            "score": "710469/1000000 = 71%",
+            "time": 121.992,
+            "magic": {
+              "orderBy": "value3",
+              "reverse": "true",
+              "algo": "rnd",
+              "seed": "singularity"
+            },
+            "size": 24250155
           }
         }
       }
@@ -114,14 +147,26 @@
     "example": {
       "solver": "hut",
       "version": "0301-115057",
-      "magic": "value3-true-circle-singularity",
+      "magic": "value3-true-rnd-singularity",
       "score": "8/15 = 53%"
     },
     "small": {
       "solver": "hut",
       "version": "0301-115057",
-      "magic": "value3-true-circle-singularity",
-      "score": "25/42 = 60%"
+      "magic": "value3-true-rnd-singularity",
+      "score": "27/42 = 64%"
+    },
+    "medium": {
+      "solver": "hut",
+      "version": "0301-115057",
+      "magic": "value3-true-rnd-singularity",
+      "score": "39600/50000 = 79%"
+    },
+    "big": {
+      "solver": "hut",
+      "version": "0301-115057",
+      "magic": "value3-true-rnd-singularity",
+      "score": "710469/1000000 = 71%"
     }
   }
 }

@@ -146,9 +146,8 @@
                 "solvers": "hut",
                 "input": "example small medium big",
                 "allmagics": "false",
-                "task": "pizza",                
-                "graph": "true",
-                "output": "hut"                
+                "task": "pizza",                                
+                "output": "hut"
             },
             "console": "integratedTerminal"
         }
