@@ -1,2 +1,4 @@
-
+#graph .ride rect{ fill: yellow }
+#graph .first-ride rect{ fill: red }
+#graph text{ fill: #444 }
 #graph pre {line-height: 10px;}

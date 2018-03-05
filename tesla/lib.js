@@ -12,32 +12,60 @@ module.exports.initCars = function (n) {
 }
 
 module.exports.getAvailableCars = function (cars) {
-    return cars.filter((car) => car.currentRide)
-}
-
-module.exports.getRidingCars = function (cars) {
     return cars.filter((car) => !car.currentRide)
 }
 
+module.exports.getRidingCars = function (cars) {
+    return cars.filter((car) => car.currentRide)
+}
 
-module.exports.takeRide = function (car, ride, rides) {    
+
+module.exports.takeRide = function (car, ride, rides, time) {    
     car.currentRide = ride;
     ride.car = car
+    car.freeAt = time + ride.length
+    car.x = ride.toX
+    car.y = ride.toY
     rides.splice(rides.indexOf(ride), 1);
 }
 
 module.exports.moveOneTowardsNextRide = function (car, ride) {
+    // console.log(`moving car ${car.id} from`, {x: car.x, y: car.y}, 'towards', {x: ride.fromX, y:ride.fromY})
     return module.exports.moveCarTowards(car, { x: ride.fromX, y: ride.fromY });
 }
 
-module.exports.moveCarTowardsNextClosestRide = function(car, ridesLeft, time){
-    let rides = module.exports.reachableRidesForCarAtTimeSlotOrderedByDistance(car, ridesLeft, time)
-    let ride = rides[0]
-    return ride = module.exports.moveOneTowardsNextClosestRide(car, ride)
+module.exports.moveCarTowardsNextClosestRide = function(car, ridesLeft, time, depth, rides){    
+    depth = depth || 0
+    if (depth > 1) return;
+    rides = rides || module.exports.reachableRidesForCarAtTimeSlotOrderedByDistance(car, time, ridesLeft)    
+    if (rides.length){
+        let ride = rides[0]
+        let someoneIsAlreadyHeadingThere = ride.currentlyHeadingCar;
+        if (!someoneIsAlreadyHeadingThere){
+            car.currentlyHeadingTo = ride;
+            ride.currentlyHeadingCar = car;
+        }
+        else {
+            let myDistance = module.exports.carRideDistance(car, ride)
+            let otherDistance = module.exports.carRideDistance(someoneIsAlreadyHeadingThere, ride)
+            if (myDistance < otherDistance){
+                // Hit on that car
+                car.currentlyHeadingTo = ride;
+                ride.currentlyHeadingCar = car;
+            }    
+            else{
+                // lookForAnotherRide if there is another one                
+                return module.exports.moveCarTowardsNextClosestRide(car, ridesLeft, time, depth+1, rides.slice(1))
+            }
+        }
+        module.exports.moveOneTowardsNextRide(car, ride)
+        return ride;
+    }
+    return
 }
 
-module.exports.moveOneTowardsRideFinish = function (car, ride) {
-    return module.exports.moveCarTowards(car, { x: ride.toX, y: ride.toY });
+module.exports.moveOneTowardsRideFinish = function (car) {
+    return module.exports.moveCarTowards(car, { x: car.currentRide.toX, y: car.currentRide.toY });
 }
 
 module.exports.isAtDestination = function (car, ride) {
@@ -48,6 +76,7 @@ module.exports.canTakeRideNow = function (car, ride) {
     return car.x == ride.fromX && car.y == ride.fromY
 }
 
+// This shall be random.
 module.exports.moveCarTowards = function (car, pos) {
     if (car.y > pos.y) {
         return car.y--
@@ -78,38 +107,32 @@ module.exports.moveCarTowards = function (car, pos) {
 //     });    
 // }
 
-
 module.exports.reachableRidesForCarAtTimeSlotOrderedByDistance = function (car, ridesLeft, time) {
 
     return ridesLeft.filter((ride) => {
-        ride.d = carRideDistance(car, ride)
+        ride.d = module.exports.carRideDistance(car, ride)
+        ride.bonus = ride.d<ride.start
         // The latest time
-        return distance < ride.finish - ride.length
-    }).sort(function (a, b) {
-        if (a.d < b.d) return 1;
-        if (a.d > b.d) return -1;
-        if (a.length < b.length) return 1;
-        if (a.length > b.length) return -1;
-        return 0;
+        return ride.d < ride.finish - ride.length
     })
 }
 
-module.exports.moveCars = function(cars, time, ridesLeft){
-    module.exports.getAvailableCars(cars).map((car)=>{        
+
+module.exports.moveCars = function(cars, time, ridesLeft, freeCars){
+    freeCars.map((car)=>{        
         let closestRide = module.exports.moveCarTowardsNextClosestRide(car, time, ridesLeft)
-        if (module.exports.canTakeRideNow(car, closestRide)){
-            module.exports.takeRide(car, ride, ridesLeft)
+        if (closestRide && module.exports.canTakeRideNow(car, closestRide)){
+            // console.log(`${car.id} is taking ${closestRide.id}`);
+            module.exports.takeRide(car, closestRide, ridesLeft)
         }        
     })
-    module.exports.getRidingCars(cars).map((car)=>{
-        if (module.exports.isAtDestination(car, car.currentRide)){
-            cars.rides.push(car.currentRide)
-            car.currentRide = false;
-        } else{
-            module.exports.moveOneTowardsRideFinish(car)
-        }        
-    })   
 
+    module.exports.getRidingCars(cars).map((car)=>{
+        if (time == car.freeAt){
+            car.rides.push(car.currentRide)
+            car.currentRide = false;
+        }    
+    })   
 }
 
 module.exports.getCurrentDistanceDistance = function (car, ride) {
@@ -130,9 +153,3 @@ module.exports.filterNonViableRides = function (rides) {
         return ride.length > ride.finish - ride.start
     })
 }
-
-
-module.exports.canTakeRide = function (car, ride, time) {
-
-}
-

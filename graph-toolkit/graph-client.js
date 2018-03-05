@@ -2,6 +2,8 @@
  * This file handles generic GUI functionality in the browser.
  */
 
+document.title = task + ' ' + document.title
+
 var consts = {
     width: 2000,
     height: 1000,
@@ -33,7 +35,7 @@ function ViewModel() {
     this.cleanStats = cleanStats;
     this.loadSolution = loadSolution;
     this.flatMagic = flatMagic;
-    this.allInputs = inputs;
+    
     this.formatSize = formatSize;
     this.exportSolution = exportSolution;
     this.exportToOutputFolder = exportToOutputFolder;
@@ -54,8 +56,9 @@ function ViewModel() {
     this.inputData = ko.observable('')
     this.outputData = ko.observable('')
     this.stats = ko.observable({})
-    this.solvers = ko.observable(solvers);
+    this.solvers = ko.observable();
     this.magic = ko.observable({});
+    this.allInputs = ko.observable();
 
     this.isThisExported = function(solverName, ver, magic, dataset){
         if (this.stats() && 
@@ -96,10 +99,15 @@ ko.onError = function (e) {
     console.error
 }
 
+setInterval(function(){
+    $.ajax({url: '/data/'}).then((data)=>console.warn)
+},1000 )
+
 var vm = new ViewModel
 ko.applyBindings(vm);
 
 getStats();
+getAllInputs()
 
 function updateConsts(val) {
     consts[this._key] = Number(val)
@@ -110,12 +118,29 @@ function getSolutionFileName(algo, ver, dataset, magic) {
     return `${task}/${serverConsts.solutionCacheFolderName}/${algo}/${ver}/${dataset}/${magic ? magic : 'default'}.json`
 }
 
+function getAllInputs() {
+    $.ajax({
+        url: `/inputs/` + task,
+        contentType: 'json'
+    }).then(vm.allInputs)
+}
+
+function getAllSolvers() {
+    $.ajax({
+        url: `/solvers/` + task,
+        contentType: 'json'
+    }).then((data)=>{
+        console.warn(data)
+        return data
+    }).then(vm.allInputs)
+}
+
 /**
  * Loads a given input json cache from the server and feeds it to the graph function.
  * @param {String} name 
  */
 function loadInput(name) {
-    if (inputs[name]>10000){
+    if (vm.allInputs()[name]>10000){
         if (!confirm('This is a pretty big file, it might freeze the browser. Sure?')) return;
     }
     return $.ajax({
@@ -160,7 +185,7 @@ function getMagics(statNode){
 
 
 function loadSolution(dataset, path) {
-    if (inputs[name]>10000){
+    if (vm.allInputs()[name]>10000){
         if (!confirm('This is a pretty big file, it might freeze the browser. Sure?')) return;
     }
     return loadInput(dataset).then((inp)=>{        
@@ -355,6 +380,83 @@ function fillArrayKeyWithValue(array, key, value) {
 
 }
 
+function drawRect(){
+
+}
+
+/**
+ * 
+ * @param {Array} array 
+ * @param {String} axis - 'x' or 'y' which we want to distribute the nodes by
+ * @param {Number} [otherDistance] - the displacement on the other axis
+ * @param {String} [type] - 'rect' or 'circle'
+ * @param {String} [cls] - if you want an extra class
+ * @param {String} [textField] - if provided, text will be added to the nodes
+ * @param {String} [size] - if we want to have 
+ * @param {Number} [padding] - distance from the sides. Default: '10px'
+ */
+function createDotsOfList(array, type, cls, textField, size, padding, subclass) {    
+    size = size || 10
+    type = type || 'rect'
+    cls = cls || ''
+
+    var node = vis.selectAll("circle .nodes" + cls ? '.' + cls : '')
+        .data(array)
+        .enter()
+        .append('g')
+        .attr('class', 'nodes ' + cls);
+
+
+    if (type === 'circle') {
+        node
+            .append('svg:' + type)
+            .attr('cx', function (d) { return d.x; })
+            .attr('cy', function (d) { return d.y; })
+            .attr('r', size);
+
+    } else if (type === 'rect') {
+        let n = node
+            .append('svg:' + type)
+            .attr('x', function (d) { return d.x - (size / 2); })
+            .attr('y', function (d) { return d.y - (size / 2); })
+            .attr('width', size)
+            .attr('height', size);
+        if (_.isFunction(subclass)){
+            n.attr('class', subclass)
+        }
+    }
+    else if (type === 'triangle') {
+        node.append('svg:polygon')
+            .attr('points', function (e) {
+                return triangle(e.x, e.y, size)
+            })
+    }
+    else if (type === 'v') {
+        node.append('svg:polygon')
+            .attr('points', function (e) {
+                return triangle(e.x, e.y, size)
+            })
+            .attr('transform', (e) => 'rotate(180 ' + e.x + ',' + e.y + ')')
+    }
+    else {
+        throw new Error('What should be shape?')
+    }
+
+    if (textField) {
+        var offsetX = -size * 2, offsetY = 0
+        node
+            .append('text')
+            .text(function (node) {
+                return node[textField]
+            })
+            .attr('class', 'node-text ' + cls)
+            .attr('x', function (d) { return d.x + offsetX; })
+            .attr('y', function (d) { return d.y + offsetY; })
+    }
+    return node;
+}
+
+
 /**
  * 
  * @param {Array} array 
@@ -466,6 +568,17 @@ function wrapArray(array, variableName) {
     })
 }
 
+function NormalizedCoordinateSystem(height, width){
+    let h = (consts.height - (consts.padding * 2)) / height
+    let w = (consts.width - (consts.padding * 2)) / width
+    
+    return function(coords){        
+        return {
+            x: consts.padding + (coords.x * w),
+            y: consts.padding + (coords.y * h)
+        }
+    }
+}
 
 /**
  * Draws edges between nodes.
@@ -539,4 +652,3 @@ String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
 };
-

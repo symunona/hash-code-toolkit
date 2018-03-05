@@ -23,13 +23,17 @@ module.exports = function (d, magic) {
     console.log('start')
     loading.start(d.maxSteps/10)
 
-    while (clock < d.maxSteps){
+    let freeCars = []
+    cars.map((c)=>freeCars.push)
+
+    while (clock < d.maxSteps && d.rides.length){
         if (!(clock%10)) loading();
         clock++;
-        lib.moveCars(cars, clock, d.rides)        
+        lib.moveCars(cars, clock, d.rides, freeCars)        
     }
 
     console.log('end!', clock)
+    
     cars.map((c)=>{
         delete c.currentlyHeadingTo;
         c.rides.map((r)=>{

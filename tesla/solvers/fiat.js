@@ -8,9 +8,13 @@ const mrMath = require('../../mr-math')
 
 const loading = require('../../loading')
 
+var bonus;
+
 // Takes the car amount of first rides.
 
 module.exports = function (d, magic) {
+
+    bonus = d.bonus
 
     let cars = lib.initCars(d.carCount)
 
@@ -39,10 +43,12 @@ module.exports = function (d, magic) {
         
         loading('_', currentTime)
 
-        let reachableRides = lib.reachableRidesForCarAtTimeSlotOrderedByDistance(car, d.rides, currentTime)
+        let reachableRides = lib.reachableRidesForCarAtTimeSlotOrderedByDistance(car, d.rides, currentTime, bonus)
+        
+        reachableRides = reachableRides.sort(dSorter)
 
-        reachableRides = mrMath.shuffleArray(reachableRides);
-
+        // reachableRides = mrMath.shuffleArray(reachableRides);
+                
         if (reachableRides.length){
             lib.takeRide(car, reachableRides[0], d.rides, currentTime);
         }
@@ -70,3 +76,19 @@ module.exports = function (d, magic) {
     
     return { cars };
 }
+
+
+function rideValue(ride){
+    return ride.d + (ride.bonus?bonus:0)
+}
+
+
+function dSorter(a, b){
+    let av = rideValue(a), bv = rideValue(b)
+    if (av < bv) return 1;
+    if (av > bv) return -1;
+    if (a.length < b.length) return 1;
+    if (a.length > b.length) return -1;
+    return 0;
+}
+

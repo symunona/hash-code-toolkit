@@ -16,7 +16,7 @@ module.exports = function (d, magic) {
 
     // get the first car number of rides
 
-    let firstRides = d.rides.slice(0, d.carCount)
+    let firstRlides = d.rides.slice(0, d.carCount)
 
     firstRides.map((ride, i)=>{
         lib.takeRide(cars[i], ride, d.rides, 0);        

@@ -79,13 +79,14 @@ module.exports.around = function (matrix) {
 }
 
 module.exports.shuffleArray = function (array, rnd) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
 
+    rnd = rnd || seedrandom('batman')
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
 
         // Pick a remaining element...
-        randomIndex = Math.floor((rnd ? rnd() : Math.random()) * currentIndex);
+        randomIndex = Math.floor((rnd()) * currentIndex);
         currentIndex -= 1;
 
         // And swap it with the current element.

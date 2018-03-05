@@ -4,14 +4,13 @@ mmy{
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "node",
             "request": "launch",
             "name": "youtube - just graph",
             "program": "${workspaceFolder}/app.js",
-            "env":{
-                "task": "youtube",                            
+            "env": {
+                "task": "youtube",
                 "graph": "true"
             }
         },
@@ -20,10 +19,10 @@ mmy{
             "request": "launch",
             "name": "youtube - kittens",
             "program": "${workspaceFolder}/app.js",
-            "env":{
+            "env": {
                 "task": "youtube",
-                "input":"kittens",
-                "solvers": "cache-server-endpoint-hybrid"                
+                "input": "kittens",
+                "solvers": "cache-server-endpoint-hybrid"
             },
             "console": "integratedTerminal"
         },
@@ -32,11 +31,10 @@ mmy{
             "request": "launch",
             "name": "youtube - test graph",
             "program": "${workspaceFolder}/app.js",
-            "env":{
+            "env": {
                 "task": "youtube",
-                "input":"test me_at_the_zoo",
-                
-                "graph": "true"                
+                "input": "test me_at_the_zoo",
+                "graph": "true"
             }
         },
         {
@@ -44,9 +42,9 @@ mmy{
             "request": "launch",
             "name": "youtube - parse-all",
             "program": "${workspaceFolder}/app.js",
-            "env":{
-                "task": "youtube",               
-                "solvers": "solver1"                               
+            "env": {
+                "task": "youtube",
+                "solvers": "solver1"
             }
         },
         {
@@ -54,10 +52,10 @@ mmy{
             "request": "launch",
             "name": "youtube - exceptKittens",
             "program": "${workspaceFolder}/app.js",
-            "env":{
-                "task": "youtube", 
-                "input":"test me_at_the_zoo trending_today videos_worth_spreading",              
-                "solvers": "all"                               
+            "env": {
+                "task": "youtube",
+                "input": "test me_at_the_zoo trending_today videos_worth_spreading",
+                "solvers": "all"
             },
             "console": "integratedTerminal"
         },
@@ -66,9 +64,9 @@ mmy{
             "request": "launch",
             "name": "youtube - test-output-with-one-solver",
             "program": "${workspaceFolder}/app.js",
-            "env":{
-                "task": "youtube", 
-                "input": "test",              
+            "env": {
+                "task": "youtube",
+                "input": "test",
                 "solvers": "solver1",
                 "output": "solver1",
                 "doNotCacheSolutions": "true"
@@ -79,9 +77,9 @@ mmy{
             "request": "launch",
             "name": "youtube - test-whole-pipeline",
             "program": "${workspaceFolder}/app.js",
-            "env":{
+            "env": {
                 "task": "youtube",
-                "input":"test me_at_the_zoo",
+                "input": "test me_at_the_zoo",
                 "solvers": "endpoint-perspective",
                 "output": "endpoint-perspective",
                 "export": "true"
@@ -92,12 +90,13 @@ mmy{
             "request": "launch",
             "name": "youtube - optimize ALL",
             "program": "${workspaceFolder}/app.js",
-            "env":{
-                "task": "youtube",                
+            "env": {
+                "task": "youtube",
                 "solvers": "ordered-by-request-quantities endpoint-perspective",
                 "graph": "true",
                 "output": "endpoint-perspective",
-                "export": "true"
+                "export": "true",
+                "graph": "true"
             }
         },
         {
@@ -105,10 +104,10 @@ mmy{
             "request": "launch",
             "name": "router - parser",
             "program": "${workspaceFolder}/app.js",
-            "env":{
+            "env": {
                 "input": "charleston_road rue_de_londres opera lets_go_higher",
                 "solvers": "dummy-solver",
-                "task": "router",                
+                "task": "router",
                 "graph": "true"
             }
         },
@@ -117,37 +116,173 @@ mmy{
             "request": "launch",
             "name": "pizza - just graph",
             "program": "${workspaceFolder}/app.js",
-            "env":{                            
-                "task": "pizza",                
-                "graph": "true"                
-            }            
+            "env": {
+                "task": "pizza",
+                "graph": "true"
+            }
         },
         {
             "type": "node",
             "request": "launch",
             "name": "pizza - example small allmagics",
             "program": "${workspaceFolder}/app.js",
-            "env":{                
+            "env": {
                 "solvers": "hut",
                 "input": "example small medium",
                 "allmagics": "true",
-                "task": "pizza",                
-                "graph": "true"                
+                "task": "pizza",
+                "graph": "true"
             },
             "console": "integratedTerminal"
-        }
-        ,
+        },
         {
             "type": "node",
             "request": "launch",
             "name": "pizza - all",
             "program": "${workspaceFolder}/app.js",
-            "env":{                
+            "env": {
                 "solvers": "hut",
                 "input": "example small medium big",
                 "allmagics": "false",
-                "task": "pizza",                                
+                "task": "pizza",
                 "output": "hut"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "test mr-math",
+            "program": "${workspaceFolder}/mr-math.js",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "pizza - just output",
+            "program": "${workspaceFolder}/app.js",
+            "env": {
+                "solvers": "hut",
+                "input": "example small",
+                "allmagics": "false",
+                "task": "pizza",
+                "output": "hut"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - parser",
+            "program": "${workspaceFolder}/app.js",
+            "env": {
+                "solvers": "roadster",
+                "task": "tesla",
+                "force": "true",
+                "graph": "true",
+                "output": "roadster"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - parser - smarter",
+            "program": "${workspaceFolder}/app.js",
+            "env": {
+                "input": "c_no_hurry",
+                "solvers": "roadster_smarter",
+                "task": "tesla",
+                "force": "true",
+                "graph": "true",
+                "output": "roadster_smarter"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - parser - high-bonus",
+            "program": "${workspaceFolder}/app.js",
+            "env": {
+                "input": "e_high_bonus",
+                "solvers": "roadster_smarter",
+                "task": "tesla",
+                "graph": "true",
+                "output": "roadster_smarter"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - graph",
+            "program": "${workspaceFolder}/app.js",
+            "env": {
+                "task": "tesla",
+                "graph": "true"
+            }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - polski",
+            "program": "${workspaceFolder}/app.js",
+            "env": {
+                "solvers": "polski",
+                "task": "tesla",
+                "output": "polski",
+                "input": "a_example b_should_be_easy"
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - dummy",
+            "program": "${workspaceFolder}/app.js",
+            "env": {                
+                "solvers": "dummy",
+                "task": "tesla",
+                "output": "dummy"
+            },
+            "console": "integratedTerminal"
+            
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - fiat",
+            "program": "${workspaceFolder}/app.js",
+            "env": {                
+                "solvers": "fiat",
+                "task": "tesla",
+                "output": "fiat"                
+            },
+            "console": "integratedTerminal"
+            
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - lento",
+            "program": "${workspaceFolder}/app.js",
+            "env": {                
+                "solvers": "lento",
+                "task": "tesla",
+                "output": "lento"                
+            },
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "tesla - lento - should-be-easy",
+            "program": "${workspaceFolder}/app.js",
+            "env": {              
+                "input": "b_should_be_easy",
+                "solvers": "lento",
+                "task": "tesla",
+                "graph": "true"
             },
             "console": "integratedTerminal"
         }
@@ -155,38 +290,12 @@ mmy{
         {
             "type": "node",
             "request": "launch",
-            "name": "test mr-math",
-            "program": "${workspaceFolder}/mr-math.js",            
-        },
-
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "pizza - just output",
-            "program": "${workspaceFolder}/app.js",
-            "env":{                
-                "solvers": "hut",
-                "input": "example small",
-                "allmagics": "false",
-                "task": "pizza",                                
-                "output": "hut"                
-            },
-            "console": "integratedTerminal"
-        },
-
-
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "tesla - parser",
-            "program": "${workspaceFolder}/app.js",
-            "env":{                  
-                "input": "a_example",
-                "solvers": "dummy",
-                "task": "tesla",                
-                "force": "true",
-                "graph": "true",
-                "output": "dummy"
+            "name": "GRAPH",
+            "program": "${workspaceFolder}/graph-toolkit/graph-server.js",
+            "env": {              
+                "input": "b_should_be_easy",
+                "solvers": "lento",
+                "task": "tesla"                
             },
             "console": "integratedTerminal"
         }

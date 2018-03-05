@@ -18,8 +18,8 @@
  * 
  */
 
- // The current task you are working on. It is used to identify the working folder where
- // the task specific files go into.
+// The current task you are working on. It is used to identify the working folder where
+// the task specific files go into.
 let currentTask = process.env.task
 if (!currentTask) throw new Error('Please provide a task name! (env variables task, see launch.json)')
 
@@ -63,6 +63,7 @@ const packer = require('./packer')
 
 const cores = os.cpus().length
 
+
 // If no input files are provided, search for all the input files in the input dir.
 if (!input.length) {
     input = fs.readdirSync(`./${currentTask}/${consts.inputFolder}/`)
@@ -86,44 +87,53 @@ if (solvers.length === 1 && solvers[0] === 'all') {
 // Load the actual solvers for 
 const solverAlgorithms = solvers.map((name) => require(`./${currentTask}/${consts.solversFolderName}/${name}`))
 
+// Start graphic frontend for debugging and nice algo version handling.
+if (graph) {
+    const graphServer = require('./graph-toolkit/graph-server-async')
+
+    graphServer(runSolvers)
+
+    console.log('[graph-server] Started GUI')
+}
+else{
+    runSolvers()
+}
+// runSolvers()
+
+
 // If we have export set, do clean the output folder so we 
 // do not have old compilations in place.
-if (doExport) {
-    packer.cleanOutputFolder(currentTask)
+// if (doExport) {
+//     packer.cleanOutputFolder(currentTask)
+// }
+
+function runSolvers(){
+    if (!paralell) {
+        // Iterate over the provided/found inputs.
+        for (var i = 0; i < input.length; i++) {
+            solverRunner(currentTask, input[i], solvers, doOutput, force, allmagics)
+        }
+        // If we are done, and the output property is set, do ourself 
+        // a favor, and pack the 
+        if (doExport) {
+    
+            // Yeah, this does not really work just yet...
+            // packer.packCode(currentTask)
+            packer.packOutputFolder(currentTask)
+        }
+    
+        console.log('============================================')
+    
+    }
+    // else {
+    //     for (let i in input) {
+    
+    //         solverRunner(currentTask, input[i], solvers, doOutput, force)
+    //     }
+    // }
+    
 }
 
-if (!paralell){
-    // Iterate over the provided/found inputs.
-    for (var i=0; i<input.length; i++) {
-        solverRunner(currentTask, input[i], solvers, doOutput, force, allmagics)
-    }
-    // If we are done, and the output property is set, do ourself 
-    // a favor, and pack the 
-    if (doExport) {
-
-        // Yeah, this does not really work just yet...
-        // packer.packCode(currentTask)
-        packer.packOutputFolder(currentTask)
-    }
-
-    // Start graphic frontend for debugging and nice algo version handling.
-    if (graph) {
-        const graphServer = require('./graph-toolkit/graph-server')
-        graphServer(currentTask, solvers, input);
-        console.log('Started GUI')
-    }
-    else {
-        // process.exit(); // Writes do not finish by the time this runs.    
-    }
-    console.log('============================================')
-
-}
-else {
-    for (let i in input) {
-
-        solverRunner(currentTask, input[i], solvers, doOutput, force)
-    }
-}
 
 // const { spawn } = require('child_process');
 
